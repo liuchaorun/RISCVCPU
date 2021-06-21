@@ -1,7 +1,0 @@
-Vivado Simulator 2018.3
-Time resolution is 1 ps
- Block Memory Generator module loading initial data...
- Block Memory Generator data initialization complete.
-Block Memory Generator module IFID_sim.if_unit.instMem.inst.native_mem_module.blk_mem_gen_v8_4_2_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
-at time               100000,d=00000000000000000000000000000000000000000000000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0000000000000000000000000000000000000000000000000,rs1=00000000000000000000xxxx0000xxxx,rs2=00000000000000000000xxxx0000xxxx
-at time               150000,d=0000000010000001000000001001001100010000000000100000000000000000000xxxx0000xxxx00000000000000000000xxxx0000xxxx0000000000000000000000000000100000000000000000000,rs1=00000000000000000000xxxx0000xxxx,rs2=00000000000000000000xxxx0000xxxx

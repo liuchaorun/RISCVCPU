@@ -40,8 +40,8 @@ module ID(NPC,IR,clk,rst,wbRd,wbV,wb,decodeInstructionInfo,stall,newPC,pcSel,rs1
     reg[4:0] rs2 = 5'd0;
     reg[4:0] rd = 5'd0;
     reg[31:0] imm = 32'd0;
-    wire[31:0] rs1_v = 32'd0;
-    wire[31:0] rs2_v = 32'd0;
+    wire[31:0] rs1_v;
+    wire[31:0] rs2_v;
     reg[11:0] csr = 12'd0;
     reg[4:0] shamt = 5'd0;
     reg registerStauts[31:0];
