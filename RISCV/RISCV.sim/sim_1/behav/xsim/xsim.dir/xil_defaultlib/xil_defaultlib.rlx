@@ -1,0 +1,12 @@
+0.6
+2018.3
+Dec  7 2018
+00:33:28
+C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/glbl.v,1544155481,verilog,,,,glbl,,,,,,,,
+C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sim_1/new/IFID_sim.v,1624200936,verilog,,,,IFID_sim,,,../../../../RISCV.srcs/sources_1/new,,,,,
+C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sim_1/new/IF_sim.v,1624198437,verilog,,,,IF_sim,,,../../../../../Pipline,,,,,
+C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/sim/prgROM.v,1624200726,verilog,,C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/ID.v,,prgROM,,,../../../../RISCV.srcs/sources_1/new,,,,,
+C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/ID.v,1624238381,verilog,,C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/IF.v,C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RegisterFiles.v;C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/InstructionFormat.vh,ID,,,../../../../RISCV.srcs/sources_1/new,,,,,
+C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/IF.v,1624198562,verilog,,C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RegisterFiles.v,,IF,,,../../../../RISCV.srcs/sources_1/new,,,,,
+C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/InstructionFormat.vh,1624237408,verilog,,,,,,,,,,,,
+C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RegisterFiles.v,1624238383,verilog,,C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sim_1/new/IFID_sim.v,,RegisterFiles,,,../../../../RISCV.srcs/sources_1/new,,,,,
