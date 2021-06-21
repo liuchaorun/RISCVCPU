@@ -32,12 +32,18 @@ module RegisterFiles(clk, rst, rs1, rs2, rd, wb, rd_v, rs1_v, rs2_v);
     output reg[31:0] rs2_v;
     integer i;
 
-    reg[31:0] registers[31:0]; //32¸ö¼Ä´æÆ÷
+    reg[31:0] registers[31:0];
+
+    initial begin
+        for(i = 0; i < 32; i=i+1) begin
+            registers[i] <= 32'h00000000;
+        end
+    end
 
     always @(posedge clk or posedge rst) begin
         if (rst) begin
             for(i = 0; i < 32; i=i+1) begin
-                registers[i] <= 32'h0000;
+                registers[i] <= 32'h00000000;
             end
         end
         else begin

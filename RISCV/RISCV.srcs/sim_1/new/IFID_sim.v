@@ -40,6 +40,8 @@ module IFID_sim(
     
     wire     [159:0]    decodeInstructionInfo;
     wire                stall;
+    wire     [31:0]     rs1_v;
+    wire     [31:0]     rs2_v;
     
     IF if_unit(
         .clk(clk),
@@ -65,13 +67,15 @@ module IFID_sim(
     .decodeInstructionInfo(decodeInstructionInfo),
     .stall(stall),
     .newPC(PC_branch),
-    .pcSel(PC_jump)
+    .pcSel(PC_jump),
+    .rs1_v(rs1_v),
+    .rs2_v(rs2_v)
     );
 
 
     initial begin
         #100   rst = 1'b0;
-        $monitor("at time %t,",$time, "d=%d", decodeInstructionInfo);
+        $monitor("at time %t,",$time, "d=%b,rs1=%b,rs2=%b", decodeInstructionInfo, rs1_v, rs2_v);
     end
     always #50 clk = ~clk;
     
