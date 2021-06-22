@@ -37,29 +37,33 @@ module EX(
         input                               rdpc_sel,
         input                   [11:0]      csr_idx,
   
-        output                  [31:0]      rs1_val_out,        // just forward
-        output                  [31:0]      rs2_val_out,
-        output                  [31:0]      imm_out,
-        output                  [4:0]       rd_idx_out,
-        output                  [4:0]       op_type_out,
-        output                  [11:0]      csr_idx_out,
+        output      reg         [31:0]      rs1_val_out,        // just forward
+        output      reg         [31:0]      rs2_val_out,
+        output      reg         [31:0]      imm_out,
+        output      reg         [4:0]       rd_idx_out,
+        output      reg         [4:0]       op_type_out,
+        output      reg         [11:0]      csr_idx_out,
 
         output      reg         [31:0]      ex_output,           // address or rd_val
-        output      reg                     mem_stall
+        output      reg                     mem_stall,
+        output      reg                     alu_w_rd
     );
-
-    assign rs1_val_out[31:0] = rs1_val[31:0];
-    assign rs2_val_out[31:0] = rs2_val[31:0];
-    assign imm_out[31:0] = imm[31:0];
-    assign rd_idx_out[4:0] = rd_idx[4:0];
-    assign op_type_out[4:0] = op_type[4:0];
-    assign csr_idx_out[11:0] = csr_idx[11:0];
 
     wire [31:0] operand2;
     assign operand2 = operand2_sel ? imm : rs2_val;
+    initial begin
+        alu_w_rd = 1'b0;
+    end
 
     always @(posedge clk or posedge rst) begin
+        rs1_val_out[31:0] = rs1_val[31:0];
+        rs2_val_out[31:0] = rs2_val[31:0];
+        imm_out[31:0] = imm[31:0];
+        rd_idx_out[4:0] = rd_idx[4:0];
+        op_type_out[4:0] = op_type[4:0];
+        csr_idx_out[11:0] = csr_idx[11:0];
         mem_stall = start;
+        alu_w_rd = 1'b0;
         if(rst) begin
             ex_output <= 32'd0;
         end
@@ -81,6 +85,8 @@ module EX(
                     `ALUDIV: ex_output <= rs1_val / operand2;
                     `ALUREM: ex_output <= rs1_val % operand2;
                 endcase
+                if (alu_type != `ALUNO) alu_w_rd <= 1'b1;
+                else alu_w_rd <= 1'b0;
             end
         end
         else begin

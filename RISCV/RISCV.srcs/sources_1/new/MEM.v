@@ -32,24 +32,23 @@ module MEM(
         input                   [31:0]      rs2_val,
         input                   [31:0]      imm,
         input                   [11:0]      csr_idx,
+        input                               alu_w_rd,
 
         output      reg         [31:0]      rd_val,
-        output                  [4:0]       rd_idx_out,
-        output                  [3:0]       op_type_out,
-        output                  [31:0]      rs1_val_out,
-        output                  [31:0]      imm_out,
-        output                  [11:0]      csr_idx_out,
+        output      reg         [4:0]       rd_idx_out,
+        output      reg         [3:0]       op_type_out,
+        output      reg         [31:0]      rs1_val_out,
+        output      reg         [31:0]      imm_out,
+        output      reg         [11:0]      csr_idx_out,
         output      reg                     wb_ena
     );
 
+    initial begin
+        wb_ena <= 1'b0;
+    end
+    
     reg [3:0] mask;
     wire [31:0] r_data;
-    
-    assign rd_idx_out[4:0] = rd_idx[4:0];
-    assign op_type_out[4:0] = op_type[4:0];
-    assign rs1_val_out[31:0] = rs1_val[31:0];
-    assign imm_out[31:0] = imm[31:0];
-    assign csr_idx_out[11:0] = csr_idx[11:0];
     
     assign r_data[31:0] = 32'b0;
 
@@ -71,6 +70,13 @@ module MEM(
     );
 
     always @(posedge clk or posedge rst) begin
+        rd_idx_out[4:0] = rd_idx[4:0];
+        op_type_out[4:0] = op_type[4:0];
+        rs1_val_out[31:0] = rs1_val[31:0];
+        imm_out[31:0] = imm[31:0];
+        csr_idx_out[11:0] = csr_idx[11:0];
+        if (alu_w_rd) wb_ena <= 1'b1;
+        else wb_ena <= 1'b0; 
         if(rst) begin
             rd_val[31:0] <= 32'd0;
             wb_ena = 1'b0;
@@ -109,8 +115,7 @@ module MEM(
                 endcase
             end
             else begin
-                wb_ena = 1'b1;
-                rd_val = ex_output;
+                rd_val[31:0] <= ex_output[31:0];
             end
         end
         else begin

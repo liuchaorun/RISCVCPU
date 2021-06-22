@@ -41,7 +41,7 @@ module WB(clk, rst, start, rd_val, rd_idx, op_type, rs1_val, csr_idx, imm, wb_en
     initial begin
         wb = 1'b0;
         wbRd = 5'b0;
-//        wbV = 32'b0;
+        wbV = 32'b0;
         for (i = 0; i < 4096; i = i+1) csr[i] = 32'b0;
     end
 

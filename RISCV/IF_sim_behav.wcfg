@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="305624715fs"></ZoomStartTime>
-      <ZoomEndTime time="598875058fs"></ZoomEndTime>
-      <Cursor1Time time="550000000fs"></Cursor1Time>
+      <ZoomStartTime time="2807851458fs"></ZoomStartTime>
+      <ZoomEndTime time="3038429709fs"></ZoomEndTime>
+      <Cursor1Time time="3000000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="194"></NameColumnWidth>
-      <ValueColumnWidth column_width="109"></ValueColumnWidth>
+      <ValueColumnWidth column_width="97"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="23" />
+   <WVObjectSize size="21" />
    <wvobject fp_name="/TOP/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -40,10 +40,6 @@
       <obj_property name="ElementShortName">PC_j</obj_property>
       <obj_property name="ObjectShortName">PC_j</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/PC_branch" type="array">
-      <obj_property name="ElementShortName">PC_branch[31:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_branch[31:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="/TOP/PC_plus4" type="array">
       <obj_property name="ElementShortName">PC_plus4[31:0]</obj_property>
       <obj_property name="ObjectShortName">PC_plus4[31:0]</obj_property>
@@ -55,10 +51,6 @@
    <wvobject fp_name="/TOP/instruction" type="array">
       <obj_property name="ElementShortName">instruction[31:0]</obj_property>
       <obj_property name="ObjectShortName">instruction[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/TOP/id_ena" type="logic">
-      <obj_property name="ElementShortName">id_ena</obj_property>
-      <obj_property name="ObjectShortName">id_ena</obj_property>
    </wvobject>
    <wvobject fp_name="/TOP/wbRd_wb_out" type="array">
       <obj_property name="ElementShortName">wbRd_wb_out[4:0]</obj_property>
@@ -96,10 +88,6 @@
       <obj_property name="ElementShortName">alu_type_id_out[3:0]</obj_property>
       <obj_property name="ObjectShortName">alu_type_id_out[3:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/operand_type_id_out" type="logic">
-      <obj_property name="ElementShortName">operand_type_id_out</obj_property>
-      <obj_property name="ObjectShortName">operand_type_id_out</obj_property>
-   </wvobject>
    <wvobject fp_name="/TOP/stall_id_out" type="logic">
       <obj_property name="ElementShortName">stall_id_out</obj_property>
       <obj_property name="ObjectShortName">stall_id_out</obj_property>
@@ -111,5 +99,9 @@
    <wvobject fp_name="/TOP/ex_output_ex_out" type="array">
       <obj_property name="ElementShortName">ex_output_ex_out[31:0]</obj_property>
       <obj_property name="ObjectShortName">ex_output_ex_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/mem_unit/rd_val" type="array">
+      <obj_property name="ElementShortName">rd_val[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_val[31:0]</obj_property>
    </wvobject>
 </wave_config>

@@ -28,6 +28,7 @@ module IF(
     input                   [31:0]          PC,
     input                                   PC_jmp,        // choose PCPlus4 or nextPC
     input                   [31:0]          PC_branch,
+    input                                   flush,
     output      reg         [31:0]          PC_plus4,
     output      reg         [31:0]          next_PC,
     output                  [31:0]          instruction,
@@ -50,8 +51,12 @@ module IF(
     always @(posedge clk or posedge rst) begin
         if(rst)
             PC_plus4[31:0] <= 32'd0;
-        else if(start && ~stall)
+        else if(start && ~stall && ~flush)
             PC_plus4[31:0] <= PC_plus4[31:0] + 3'b100;
+        else if(flush) begin
+            PC_plus4[31:0] <= PC_plus4[31:0] - 4'b1000;
+            next_PC[31:0] <= next_PC[31:0] - 4'b1000;
+        end
         else
             PC_plus4[31:0] <= PC_plus4[31:0];
     end 
@@ -60,9 +65,9 @@ module IF(
     always @(posedge clk or posedge rst) begin
         if(rst)
             next_PC[31:0] <= 32'd0;
-        else if(start && ~stall)
+        else if(start && ~stall && ~flush)
             next_PC[31:0] <= PC_jmp ? PC_branch : PC_plus4;
-        else
+        else if (~flush)
             next_PC[31:0] <= PC_plus4[31:0];
     end
     
@@ -70,7 +75,7 @@ module IF(
     always @(posedge clk or posedge rst) begin
         if(rst)
             id_ena <= 1'b0;
-        else if(start)
+        else if(start && ~stall)
             id_ena <= 1'b1;
         else
             id_ena <= 1'b0;

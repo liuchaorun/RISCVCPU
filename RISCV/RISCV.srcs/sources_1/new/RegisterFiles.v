@@ -20,10 +20,12 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module RegisterFiles(clk, rst, IR, rd, wb, rd_v, rs1_v, rs2_v);
+module RegisterFiles(clk, rst, rs1, rs2, rd, wb, rd_v, rs1_v, rs2_v);
     input clk;
     input rst;
-    input wire[31:0] IR;
+//    input wire[31:0] IR;
+    input [4:0] rs1;
+    input [4:0] rs2;
     input wire[4:0] rd;
     input wb;
     input wire[31:0] rd_v;
@@ -52,12 +54,15 @@ module RegisterFiles(clk, rst, IR, rd, wb, rd_v, rs1_v, rs2_v);
         end    
     end
 
-    // always @(posedge clk) begin
-    //     rs1_v <= registers[IR[19:15]];
-    //     rs2_v <= registers[IR[24:20]];
-    // end
+    reg[31:0] rs1_val;
+    reg[31:0] rs2_val;
+    
+    always @(negedge clk) begin
+        rs1_val = registers[rs1];
+        rs2_val = registers[rs2];
+    end
 
-    assign rs1_v = registers[IR[19:15]];
-    assign rs2_v = registers[IR[24:20]];
+    assign rs1_v = rs1_val;
+    assign rs2_v = rs2_val;
 
 endmodule

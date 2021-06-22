@@ -22,7 +22,7 @@
 `include "InstructionFormat.vh"
 `include "opType.vh"
 
-module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx, op_type, alu_type, operand_type, newpc, pc_sel, rd_pc, rdpc_sel, stall, csr_idx);
+module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx, op_type, alu_type, operand_type, newpc, pc_sel, rd_pc, rdpc_sel, stall, csr_idx, flush);
     input clk;
     input rst;
     input start;
@@ -46,8 +46,9 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
     output reg rdpc_sel;
     output reg stall;
     output reg[11:0] csr_idx;
+    output reg flush;
 
-    reg registerStauts[31:0];
+    reg[31:0] registerStauts;
     reg[4:0] rs1;
     reg[4:0] rs2;
 
@@ -56,10 +57,13 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
     initial begin
         for (i = 0; i < 32; i=i+1) registerStauts[i] <= 1'b0;
         stall = 1'b0;
+        flush = 1'b0;
     end
 
     always @(posedge clk) begin
-        rdpc_sel = 1'b0;
+        flush = 1'b0;
+        if (start && ~stall) begin
+            rdpc_sel = 1'b0;
         pc_sel = 1'b0;
         operand_type = 1'b0;
         casex (IR)
@@ -92,10 +96,13 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `JALR: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
+                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 rd_pc = NPC;
                 newpc = NPC - 4 + imm;
@@ -106,50 +113,65 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `LB: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
+                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPLB;
                 alu_type = `ALUNO;
             end
             `LH: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
+                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPLH;
                 alu_type = `ALUNO;
             end
             `LBU: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
+                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPLBU;
                 alu_type = `ALUNO;
             end
             `LHU: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
+                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPLHU;
                 alu_type = `ALUNO;
             end
             `LW: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
+                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPLW;
                 alu_type = `ALUNO;
@@ -157,9 +179,12 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             `ADDI: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 registerStauts[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
+                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
                 alu_type = `ALUADD;
@@ -167,10 +192,13 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `SLTI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
+                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
                 alu_type = `ALUCMP;
@@ -178,10 +206,12 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `SLTIU: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
-                if (registerStauts[rs1]) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
                 alu_type = `ALUCMP;
@@ -189,11 +219,13 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `XORI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
-                if (registerStauts[rs1]) stall = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
+                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
                 alu_type = `ALUXOR;
@@ -201,11 +233,13 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `ORI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
-                if (registerStauts[rs1]) stall = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
+                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
                 alu_type = `ALUOR;
@@ -213,10 +247,13 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `ANDI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
+                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
                 alu_type = `ALUAND;
@@ -224,9 +261,12 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `SLLI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 imm = {27'b0, IR[24:20]};
                 op_type = `OPNO;
                 alu_type = `ALUSLL;
@@ -234,9 +274,12 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `SRLI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 imm = {27'b0, IR[24:20]};
                 op_type = `OPNO;
                 alu_type = `ALUSRL;
@@ -244,9 +287,12 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `SRAI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 imm = {27'b0, IR[24:20]};
                 op_type = `OPNO;
                 alu_type = `ALUSRA;
@@ -254,27 +300,36 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `CSRRW: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 csr_idx = IR[31:20];
                 op_type = `OPCSRRW;
                 alu_type = `ALUNO;
             end
             `CSRRS: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 csr_idx = IR[31:20];
                 op_type = `OPCSRRS;
                 alu_type = `ALUNO;
             end
             `CSRRC: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 csr_idx = IR[31:20];
                 op_type = `OPCSRRC;
                 alu_type = `ALUNO;
@@ -305,9 +360,15 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `BEQ: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 if (rs1_val == rs2_val) begin
@@ -319,9 +380,15 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `BNE: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 if (rs1_val != rs2_val) begin
@@ -333,9 +400,15 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `BLT: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 if (rs1_val < rs2_val) begin
@@ -347,9 +420,15 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `BGE: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 if (rs1_val >= rs2_val) begin
@@ -361,9 +440,15 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `BLTU: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 if (rs1_val < rs2_val) begin
                     newpc = NPC - 4 + imm;
@@ -374,9 +459,15 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `BGEU: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 if (rs1_val >= rs2_val) begin
                     newpc = NPC - 4 + imm;
@@ -387,119 +478,185 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `ADD: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2] && rs2 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUADD;
                 operand_type = 1'b0;
             end
             `SUB: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2] && rs2 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUSUB;
                 operand_type = 1'b0;
             end
             `SLL: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2] && rs2 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUSLL;
                 operand_type = 1'b0;
             end
             `SLT: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2] && rs2 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUCMP;
                 operand_type = 1'b0;
             end
             `SLTU: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2] && rs2 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUCMP;
                 operand_type = 1'b0;
             end
             `XOR: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2] && rs2 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUXOR;
                 operand_type = 1'b0;
             end
             `SRL: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2] && rs2 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUSRL;
                 operand_type = 1'b0;
             end
             `SRA: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2] && rs2 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUSRA;
                 operand_type = 1'b0;
             end
             `OR: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2] && rs2 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUOR;
                 operand_type = 1'b0;
             end
             `AND: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2] && rs2 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerStauts[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUAND;
                 operand_type = 1'b0;
             end
             `SB: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:25], IR[11:7]};
                 else imm = {20'b0, IR[31:25], IR[11:7]};
                 op_type = `OPSB;
@@ -507,9 +664,15 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `SH: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:25], IR[11:7]};
                 else imm = {20'b0, IR[31:25], IR[11:7]};
                 op_type = `OPSH;
@@ -517,9 +680,15 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `SW: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) stall = 1'b1;
+                if (registerStauts[rs1]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) stall = 1'b1;
+                if (registerStauts[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:25], IR[11:7]};
                 else imm = {20'b0, IR[31:25], IR[11:7]};
                 op_type = `OPSW;
@@ -527,18 +696,26 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             default: begin
                 csr_idx = 12'b0;
+                op_type = `OPNO;
+                alu_type = `ALUNO;
             end
         endcase
+        end
     end
 
     always @(posedge clk) begin
-        if (wb) registerStauts[wbRd] <= 1'b0;
+        if (wb) begin
+            registerStauts[wbRd] <= 1'b0;
+            stall <= |registerStauts;
+        end
+        if (~(|registerStauts)) stall = 1'b0;
     end
 
     RegisterFiles RegisterFiles(
         .clk(clk),
         .rst(rst),
-        .IR(IR),
+        .rs1(rs1),
+        .rs2(rs2),
         .rd(wbRd),
         .wb(wb),
         .rd_v(wbV),

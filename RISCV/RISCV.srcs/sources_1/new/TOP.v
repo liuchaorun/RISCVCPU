@@ -38,6 +38,7 @@ module TOP(
     wire    [31:0]      instruction;
     wire                id_ena;
     wire            stall_id_out;
+    wire            flush;
     
     // IF
     IF if_unit(
@@ -49,6 +50,7 @@ module TOP(
         .PC_jmp(PC_j),        // choose PCPlus4 or nextPC
         .PC_branch(PC_branch),
         .PC_plus4(PC_plus4),
+        .flush(flush),
         .next_PC(next_PC),
         .instruction(instruction),
         .id_ena(id_ena)
@@ -96,7 +98,8 @@ module TOP(
         .rd_pc(rd_pc_id_out),
         .rdpc_sel(rdpc_sel_id_out),
         .stall(stall_id_out),
-        .csr_idx(csr_idx_id_out)
+        .csr_idx(csr_idx_id_out),
+        .flush(flush)
     );
     
     // EX output
@@ -108,6 +111,7 @@ module TOP(
     wire    [3:0]       csr_idx_ex_out;
     wire    [31:0]      ex_output_ex_out;
     wire                mem_stall_ex_out;
+    wire                alu_w_rd_ex_out;
     
     EX ex_unit(
         .clk(clk),
@@ -133,7 +137,8 @@ module TOP(
         .csr_idx_out(csr_idx_ex_out),
 
         .ex_output(ex_output_ex_out),           // address or rd_val
-        .mem_stall(mem_stall_ex_out)
+        .mem_stall(mem_stall_ex_out),
+        .alu_w_rd(alu_w_rd_ex_out)
     );
     
     // MEM output
@@ -157,6 +162,7 @@ module TOP(
         .rs2_val(rs2_val_ex_out),
         .imm(imm_ex_out),
         .csr_idx(csr_idx_ex_out),
+        .alu_w_rd(alu_w_rd_ex_out),
 
         .rd_val(rd_val_mem_out),
         .rd_idx_out(rd_idx_out_mem_out),
