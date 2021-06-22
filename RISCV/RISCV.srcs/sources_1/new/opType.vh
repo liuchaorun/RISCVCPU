@@ -26,4 +26,5 @@
 `define ALUMUL 4'b1000
 `define ALUDIV 4'b1001
 `define ALUREM 4'b1010
+`define ALUSRA 4'b1011
 `define ALUNO 4'b1111
