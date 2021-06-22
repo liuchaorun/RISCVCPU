@@ -32,6 +32,7 @@ module EX(
         input                   [4:0]       rd_idx,
         input                   [3:0]       op_type,
         input                   [3:0]       alu_type,
+        input                   [3:0]       br_type,
         input                               operand2_sel,
         input                   [31:0]      rd_pc,              // lui, auipc, jal, jalr write to rd
         input                               rdpc_sel,

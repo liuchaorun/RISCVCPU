@@ -3,19 +3,19 @@ Copyright 1986-1999, 2001-2018 Xilinx, Inc. All Rights Reserved.
 Running: C:/Xilinx/Vivado/2018.3/bin/unwrapped/win64.o/xelab.exe -wto 325a92c309a84c33a8e58734b077d194 --incr --debug typical --relax --mt 2 -L blk_mem_gen_v8_4_2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot TOP_behav xil_defaultlib.TOP xil_defaultlib.glbl -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
-WARNING: [VRFC 10-3091] actual bit length 1 differs from formal bit length 32 for port 'newpc' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:96]
-WARNING: [VRFC 10-3091] actual bit length 1 differs from formal bit length 32 for port 'rd_pc' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:98]
-WARNING: [VRFC 10-3091] actual bit length 1 differs from formal bit length 12 for port 'csr_idx' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:101]
-WARNING: [VRFC 10-3091] actual bit length 1 differs from formal bit length 32 for port 'rd_pc' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:128]
-WARNING: [VRFC 10-3091] actual bit length 1 differs from formal bit length 12 for port 'csr_idx' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:130]
-WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 5 for port 'op_type_out' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:136]
-WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 12 for port 'csr_idx_out' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:137]
-WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 12 for port 'csr_idx' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:164]
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'data' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:69]
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 5 for port 'rs1_val' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:185]
-WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 13 for port 'csr_idx' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:187]
-WARNING: [VRFC 10-3283] element index 4 into 'op_type' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/EX.v:63]
-WARNING: [VRFC 10-3283] element index 4 into 'op_type_out' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:74]
+WARNING: [VRFC 10-3091] actual bit length 1 differs from formal bit length 32 for port 'newpc' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:96]
+WARNING: [VRFC 10-3091] actual bit length 1 differs from formal bit length 32 for port 'rd_pc' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:98]
+WARNING: [VRFC 10-3091] actual bit length 1 differs from formal bit length 12 for port 'csr_idx' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:101]
+WARNING: [VRFC 10-3091] actual bit length 1 differs from formal bit length 32 for port 'rd_pc' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:128]
+WARNING: [VRFC 10-3091] actual bit length 1 differs from formal bit length 12 for port 'csr_idx' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:130]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 5 for port 'op_type_out' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:136]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 12 for port 'csr_idx_out' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:137]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 12 for port 'csr_idx' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:164]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'data' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:69]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 5 for port 'rs1_val' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:185]
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 13 for port 'csr_idx' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:187]
+WARNING: [VRFC 10-3283] element index 4 into 'op_type' is out of bounds [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/EX.v:63]
+WARNING: [VRFC 10-3283] element index 4 into 'op_type_out' is out of bounds [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:74]
 Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis

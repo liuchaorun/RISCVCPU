@@ -22,32 +22,30 @@
 `include "InstructionFormat.vh"
 `include "opType.vh"
 
-module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx, op_type, alu_type, operand_type, newpc, pc_sel, rd_pc, rdpc_sel, stall, csr_idx, flush);
-    input clk;
-    input rst;
-    input start;
-    input [31:0]NPC;
-    input [31:0]IR;
-    input [4:0]wbRd;
-    input [31:0]wbV;
-    input wb;
-    output [31:0] rs1_val;
-    output [31:0] rs2_val;
-    output reg[31:0] imm;
-    output reg[4:0] rd_idx;
+module ID(
+    input clk,
+    input rst,
+    input start,
+    input [31:0]NPC,
+    input [31:0]IR,
+    input [4:0]wbRd,
+    input [31:0]wbV,
+    input wb,
+    output [31:0] rs1_val,
+    output [31:0] rs2_val,
+    output reg[31:0] imm,
+    output reg[4:0] rd_idx,
     // no op(1), load(5), store(3), write rd(1), csr(6)
-    output reg[3:0] op_type;
+    output reg[3:0] op_type,
     // << >> + - ^ & | cmp(<) * / %
-    output reg[3:0] alu_type;
-    output reg operand_type;
-    output reg[31:0] newpc;
-    output reg pc_sel;
-    output reg[31:0] rd_pc;
-    output reg rdpc_sel;
-    output reg stall;
-    output reg[11:0] csr_idx;
-    output reg flush;
-
+    output reg[3:0] alu_type,
+    output reg[3:0] br_type,
+    output reg operand_type,
+    output reg[31:0] npc,
+    output reg stall,
+    output reg[11:0] csr_idx,
+    output reg flush
+);
     reg[31:0] registerStauts;
     reg[4:0] rs1;
     reg[4:0] rs2;
@@ -62,9 +60,6 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
 
     always @(posedge clk) begin
         flush = 1'b0;
-        if (start && ~stall) begin
-            rdpc_sel = 1'b0;
-        pc_sel = 1'b0;
         operand_type = 1'b0;
         casex (IR)
             `LUI: begin
@@ -78,7 +73,8 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
                 rd_idx = IR[11:7];
                 registerStauts[rd_idx] = 1'b1;
                 imm = {IR[31:12], 12'b0};
-                rd_pc = NPC - 4 + imm;
+                npc = NPC;
+                
                 op_type = `OPWRD;
                 alu_type = `ALUNO;
             end
@@ -87,10 +83,7 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
                 registerStauts[rd_idx] = 1'b1;
                 if (IR[31]) imm = {12'b1111_1111_1111, IR[31], IR[10:1], IR[11], IR[19:12]};
                 else imm = {11'b0, IR[31], IR[19:12], IR[20], IR[30:21], 1'b0};
-                newpc = imm;
-                pc_sel = 1'b1;
-                rd_pc = NPC;
-                rdpc_sel = 1'b1;
+                npc = NPC;
                 op_type = `OPWRD;
                 alu_type = `ALUNO;
             end
@@ -104,10 +97,7 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
                 registerStauts[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
-                rd_pc = NPC;
-                newpc = NPC - 4 + imm;
-                pc_sel = 1'b1;
-                rdpc_sel = 1'b1;
+                npc = `BRJAR;
                 op_type = `OPWRD;
                 alu_type = `ALUNO;
             end
@@ -375,6 +365,7 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
                     newpc = NPC - 4 + imm;
                     pc_sel = 1'b1;
                 end
+                br_type = `BRBEQ;
                 op_type = `OPNO;
                 alu_type = `ALUNO;
             end
@@ -698,6 +689,7 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
                 csr_idx = 12'b0;
                 op_type = `OPNO;
                 alu_type = `ALUNO;
+                br_type = `BRNO;
             end
         endcase
         end

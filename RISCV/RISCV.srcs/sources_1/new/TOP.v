@@ -67,6 +67,7 @@ module TOP(
     wire    [4:0]   rd_idx_id_out;
     wire    [3:0]   op_type_id_out;
     wire    [3:0]   alu_type_id_out;
+    wire    [3:0]   br_type_id_out;
     wire            operand_type_id_out;
     wire            newpc_id_out;
     wire            pc_sel_id_out;
@@ -92,6 +93,7 @@ module TOP(
         .op_type(op_type_id_out),
     // << >> + - ^ & | cmp(<) * / %
         .alu_type(alu_type_id_out),
+        .br_type(br_type_id_out),
         .operand_type(operand_type_id_out),
         .newpc(newpc_id_out),
         .pc_sel(pc_sel_id_out),
@@ -124,6 +126,7 @@ module TOP(
         .rd_idx(rd_idx_id_out),
         .op_type(op_type_id_out),
         .alu_type(alu_type_id_out),
+        .br_type(br_type_id_out),
         .operand2_sel(operand_type_id_out),
         .rd_pc(rd_pc_id_out),              // lui, auipc, jal, jalr write to rd
         .rdpc_sel(rdpc_sel_id_out),
