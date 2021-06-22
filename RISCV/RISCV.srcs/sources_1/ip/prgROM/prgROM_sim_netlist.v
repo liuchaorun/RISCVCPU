@@ -1,10 +1,10 @@
 // Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-// Date        : Tue Jun 22 18:55:56 2021
+// Date        : Tue Jun 22 18:55:55 2021
 // Host        : DESKTOP-JDL9JAK running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim
-//               C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_sim_netlist.v
+// Command     : write_verilog -force -mode funcsim -rename_top prgROM -prefix
+//               prgROM_ prgROM_sim_netlist.v
 // Design      : prgROM
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -197,7 +197,6 @@ module prgROM
         .web(1'b0));
 endmodule
 
-(* ORIG_REF_NAME = "bindec" *) 
 module prgROM_bindec
    (ena_array,
     ena,
@@ -233,7 +232,6 @@ module prgROM_bindec
         .O(ena_array[2]));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_generic_cstr" *) 
 module prgROM_blk_mem_gen_generic_cstr
    (douta,
     addra,
@@ -518,7 +516,6 @@ module prgROM_blk_mem_gen_generic_cstr
         .wea(wea));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_mux" *) 
 module prgROM_blk_mem_gen_mux
    (douta,
     addra,
@@ -913,7 +910,6 @@ module prgROM_blk_mem_gen_mux
         .R(1'b0));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_prim_width" *) 
 module prgROM_blk_mem_gen_prim_width
    (douta,
     clka,
@@ -1431,7 +1427,6 @@ module prgROM_blk_mem_gen_prim_width__parameterized9
         .wea(wea));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_prim_wrapper_init" *) 
 module prgROM_blk_mem_gen_prim_wrapper_init
    (douta,
     clka,
@@ -5046,7 +5041,6 @@ module prgROM_blk_mem_gen_prim_wrapper_init__parameterized9
         .WEBWE({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_top" *) 
 module prgROM_blk_mem_gen_top
    (douta,
     addra,
@@ -5102,7 +5096,7 @@ endmodule
 (* C_WEA_WIDTH = "1" *) (* C_WEB_WIDTH = "1" *) (* C_WRITE_DEPTH_A = "16384" *) 
 (* C_WRITE_DEPTH_B = "16384" *) (* C_WRITE_MODE_A = "WRITE_FIRST" *) (* C_WRITE_MODE_B = "WRITE_FIRST" *) 
 (* C_WRITE_WIDTH_A = "32" *) (* C_WRITE_WIDTH_B = "32" *) (* C_XDEVICEFAMILY = "virtex7" *) 
-(* ORIG_REF_NAME = "blk_mem_gen_v8_4_2" *) (* downgradeipidentifiedwarnings = "yes" *) 
+(* downgradeipidentifiedwarnings = "yes" *) 
 module prgROM_blk_mem_gen_v8_4_2
    (clka,
     rsta,
@@ -5366,7 +5360,6 @@ module prgROM_blk_mem_gen_v8_4_2
         .wea(wea));
 endmodule
 
-(* ORIG_REF_NAME = "blk_mem_gen_v8_4_2_synth" *) 
 module prgROM_blk_mem_gen_v8_4_2_synth
    (douta,
     addra,

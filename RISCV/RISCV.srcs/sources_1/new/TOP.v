@@ -40,6 +40,10 @@ module TOP(
     wire            stall_id_out;
     wire            flush;
     
+    wire                newpc_ex_out;
+    wire                pc_sel_ex_out;
+    wire                br_flush_ex_out;
+    
     // IF
     IF if_unit(
         .clk(clk),
@@ -47,10 +51,11 @@ module TOP(
         .start(IF_start),
         .stall(stall_id_out),
         .PC(PC),
-        .PC_jmp(PC_j),        // choose PCPlus4 or nextPC
-        .PC_branch(PC_branch),
+        .PC_jmp(pc_sel_ex_out),        // choose PCPlus4 or nextPC
+        .PC_branch(newpc_ex_out),
         .PC_plus4(PC_plus4),
         .flush(flush),
+        .br_flush(br_flush_ex_out),
         .next_PC(next_PC),
         .instruction(instruction),
         .id_ena(id_ena)
@@ -85,6 +90,7 @@ module TOP(
         .wbRd(wbRd_wb_out),
         .wbV(wbV_wb_out),
         .wb(wb_wb_out),
+        .br_flush(br_flush_ex_out),
         .rs1_val(rs1_val_id_out),
         .rs2_val(rs2_val_id_out),
         .imm(imm_id_out),
@@ -95,10 +101,7 @@ module TOP(
         .alu_type(alu_type_id_out),
         .br_type(br_type_id_out),
         .operand_type(operand_type_id_out),
-        .newpc(newpc_id_out),
-        .pc_sel(pc_sel_id_out),
-        .rd_pc(rd_pc_id_out),
-        .rdpc_sel(rdpc_sel_id_out),
+        .npc(newpc_id_out),
         .stall(stall_id_out),
         .csr_idx(csr_idx_id_out),
         .flush(flush)
@@ -123,13 +126,12 @@ module TOP(
         .rs1_val(rs1_val_id_out),
         .rs2_val(rs2_val_id_out),
         .imm(imm_id_out),
+        .npc(newpc_id_out),
         .rd_idx(rd_idx_id_out),
         .op_type(op_type_id_out),
         .alu_type(alu_type_id_out),
         .br_type(br_type_id_out),
         .operand2_sel(operand_type_id_out),
-        .rd_pc(rd_pc_id_out),              // lui, auipc, jal, jalr write to rd
-        .rdpc_sel(rdpc_sel_id_out),
         .csr_idx(csr_idx_id_out),
   
         .rs1_val_out(rs1_val_ex_out),        // just forward
@@ -141,7 +143,10 @@ module TOP(
 
         .ex_output(ex_output_ex_out),           // address or rd_val
         .mem_stall(mem_stall_ex_out),
-        .alu_w_rd(alu_w_rd_ex_out)
+        .alu_w_rd(alu_w_rd_ex_out),
+        .newpc(newpc_ex_out),
+        .pc_sel(pc_sel_ex_out),
+        .br_flush(br_flush_ex_out)
     );
     
     // MEM output

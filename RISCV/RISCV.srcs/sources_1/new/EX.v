@@ -29,13 +29,12 @@ module EX(
         input                   [31:0]      rs1_val,
         input                   [31:0]      rs2_val,
         input                   [31:0]      imm,
+        input                   [31:0]      npc,
         input                   [4:0]       rd_idx,
         input                   [3:0]       op_type,
         input                   [3:0]       alu_type,
         input                   [3:0]       br_type,
         input                               operand2_sel,
-        input                   [31:0]      rd_pc,              // lui, auipc, jal, jalr write to rd
-        input                               rdpc_sel,
         input                   [11:0]      csr_idx,
   
         output      reg         [31:0]      rs1_val_out,        // just forward
@@ -47,13 +46,18 @@ module EX(
 
         output      reg         [31:0]      ex_output,           // address or rd_val
         output      reg                     mem_stall,
-        output      reg                     alu_w_rd
+        output      reg                     alu_w_rd,
+        output      reg         [31:0]      newpc,
+        output      reg                     pc_sel,
+        output      reg                     br_flush
     );
 
     wire [31:0] operand2;
     assign operand2 = operand2_sel ? imm : rs2_val;
     initial begin
         alu_w_rd = 1'b0;
+        pc_sel = 1'b0;
+        br_flush = 1'b0;
     end
 
     always @(posedge clk or posedge rst) begin
@@ -69,8 +73,73 @@ module EX(
             ex_output <= 32'd0;
         end
         else if(start) begin
-            if(rdpc_sel) begin
-                ex_output <= rd_pc;
+            if(br_type != `BRNO) begin
+                pc_sel = 1'b1;
+                br_flush = 1'b1;
+                case(br_type)
+                    `BRBEQ: begin
+                        if (rs1_val == rs2_val) begin
+                            newpc = npc + imm;
+                            pc_sel = 1'b1;
+                            br_flush = 1'b1;
+                            mem_stall = 1'b0;
+                        end
+                    end
+                    `BRBNE: begin
+                        if (rs1_val != rs2_val) begin
+                            newpc = npc + imm;
+                            pc_sel = 1'b1;
+                            br_flush = 1'b1;
+                            mem_stall = 1'b0;
+                        end
+                    end
+                    `BRBLT: begin
+                        if (rs1_val < rs2_val) begin
+                            newpc = npc + imm;
+                            pc_sel = 1'b1;
+                            br_flush = 1'b1;
+                            mem_stall = 1'b0;
+                        end
+                    end
+                    `BRBGE: begin
+                        if (rs1_val >= rs2_val) begin
+                            newpc = npc + imm;
+                            pc_sel = 1'b1;
+                            br_flush = 1'b1;
+                            mem_stall = 1'b0;
+                        end
+                    end
+                    `BRBLTU: begin
+                        if (rs1_val < rs2_val) begin
+                            newpc = npc + imm;
+                            pc_sel = 1'b1;
+                            br_flush = 1'b1;
+                            mem_stall = 1'b0;
+                        end
+                    end
+                    `BRBGEU: begin
+                        if (rs1_val >= rs2_val) begin
+                            newpc = npc + imm;
+                            pc_sel = 1'b1;
+                            br_flush = 1'b1;
+                            mem_stall = 1'b0;
+                        end
+                    end
+                    `BRJAL: begin
+                        newpc = npc + imm;
+                        pc_sel = 1'b1;
+                        br_flush = 1'b1;
+                        ex_output = npc;
+                        alu_w_rd = 1'b1;
+                    end
+                    `BRJALR: begin
+                        newpc = rs1_val + imm;
+                        pc_sel = 1'b1;
+                        br_flush = 1'b1;
+                        ex_output = npc;
+                        alu_w_rd = 1'b1;
+                    end
+                endcase
             end
             else begin                  // ALU compute
                 case(alu_type)
@@ -85,6 +154,7 @@ module EX(
                     `ALUMUL: ex_output <= rs1_val * operand2;
                     `ALUDIV: ex_output <= rs1_val / operand2;
                     `ALUREM: ex_output <= rs1_val % operand2;
+                    `ALUAUIPC: ex_output <= npc + imm;
                 endcase
                 if (alu_type != `ALUNO) alu_w_rd <= 1'b1;
                 else alu_w_rd <= 1'b0;
