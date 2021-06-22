@@ -23,19 +23,26 @@
 module IF(
     input                                   clk,
     input                                   rst,
+    input                                   start,
+    input                                   stall,
     input                   [31:0]          PC,
     input                                   PC_jmp,        // choose PCPlus4 or nextPC
     input                   [31:0]          PC_branch,
     output      reg         [31:0]          PC_plus4,
     output      reg         [31:0]          next_PC,
-    output                  [31:0]          instruction
+    output                  [31:0]          instruction,
+    output      reg                         id_ena
     );
+    
+    initial begin
+        PC_plus4[31:0] = 32'b0;
+    end
    
     // 64KB program ROM, fetch instruction
     prgROM instMem(
         .clka(clk),             // input wire clka
-        .ena(1'b1),
-        .addra(PC[15:2]),       // input wire [13:0] addra
+        .ena(start),
+        .addra(PC_plus4[15:2]),       // input wire [13:0] addra
         .douta(instruction)     // output wire [31:0] douta
     ); 
 
@@ -43,17 +50,30 @@ module IF(
     always @(posedge clk or posedge rst) begin
         if(rst)
             PC_plus4[31:0] <= 32'd0;
-        else 
-            PC_plus4[31:0] <= PC[31:0] + 3'b100;
+        else if(start && ~stall)
+            PC_plus4[31:0] <= PC_plus4[31:0] + 3'b100;
+        else
+            PC_plus4[31:0] <= PC_plus4[31:0];
     end 
     
     // next PC
     always @(posedge clk or posedge rst) begin
         if(rst)
             next_PC[31:0] <= 32'd0;
-        else begin
+        else if(start && ~stall)
             next_PC[31:0] <= PC_jmp ? PC_branch : PC_plus4;
-        end
+        else
+            next_PC[31:0] <= PC_plus4[31:0];
+    end
+    
+    // ID enable
+    always @(posedge clk or posedge rst) begin
+        if(rst)
+            id_ena <= 1'b0;
+        else if(start)
+            id_ena <= 1'b1;
+        else
+            id_ena <= 1'b0;
     end
 
 endmodule

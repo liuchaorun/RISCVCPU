@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 `include "opType.vh"
 
-module WB(clk, rst, start, rd_val, rd_idx, op_type, rs1_val, csr_idx, imm, wb, wbRd, wbV);
+module WB(clk, rst, start, rd_val, rd_idx, op_type, rs1_val, csr_idx, imm, wb_ena, wb, wbRd, wbV);
     input clk;
     input rst;
     input start;
@@ -30,6 +30,7 @@ module WB(clk, rst, start, rd_val, rd_idx, op_type, rs1_val, csr_idx, imm, wb, w
     input [4:0] rs1_val;
     input [31:0] imm;
     input [12:0] csr_idx;
+    input wb_ena;
     output reg wb;
     output reg[4:0] wbRd;
     output reg[31:0] wbV;
@@ -40,7 +41,7 @@ module WB(clk, rst, start, rd_val, rd_idx, op_type, rs1_val, csr_idx, imm, wb, w
     initial begin
         wb = 1'b0;
         wbRd = 5'b0;
-        wbV = 32'b0;
+//        wbV = 32'b0;
         for (i = 0; i < 4096; i = i+1) csr[i] = 32'b0;
     end
 
@@ -114,9 +115,16 @@ module WB(clk, rst, start, rd_val, rd_idx, op_type, rs1_val, csr_idx, imm, wb, w
                 wbV = rd_val;
             end
             default: begin
-                wb = 1'b0;
-                wbRd = 5'b0;
-                wbV = 32'b0;
+                if (wb_ena) begin
+                    wb = 1'b1;
+                    wbRd = rd_idx;
+                    wbV = rd_val;
+                end
+                else begin
+                    wb = 1'b0;
+                    wbRd = 5'b0;
+                    wbV = 32'b0;
+                end
             end 
         endcase
         end

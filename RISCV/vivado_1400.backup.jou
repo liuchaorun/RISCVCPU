@@ -1,0 +1,23 @@
+#-----------------------------------------------------------
+# Vivado v2018.3 (64-bit)
+# SW Build 2405991 on Thu Dec  6 23:38:27 MST 2018
+# IP Build 2404404 on Fri Dec  7 01:43:56 MST 2018
+# Start of session at: Mon Jun 21 14:23:46 2021
+# Process ID: 1400
+# Current directory: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent17380 C:\Users\X\Documents\GitHub\RISCVCPU\RISCV\RISCV.xpr
+# Log file: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/vivado.log
+# Journal file: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.xpr
+update_compile_order -fileset sources_1
+generate_target Simulation [get_files C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.xci]
+export_ip_user_files -of_objects [get_files C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.xci] -directory C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files -ipstatic_source_dir C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files/ipstatic -lib_map_path [list {modelsim=C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.cache/compile_simlib/modelsim} {questa=C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.cache/compile_simlib/questa} {riviera=C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.cache/compile_simlib/riviera} {activehdl=C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+launch_simulation
+open_wave_config C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/IF_sim_behav.wcfg
+source IFID_sim.tcl
+close_sim
+export_ip_user_files -of_objects  [get_files C:/Users/X/Documents/GitHub/RISCVCPU/Pipline/ALU.v] -no_script -reset -force -quiet
+remove_files  C:/Users/X/Documents/GitHub/RISCVCPU/Pipline/ALU.v

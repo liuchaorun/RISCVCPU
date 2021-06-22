@@ -156,9 +156,9 @@ module ID(clk, rst, start, NPC, IR, wbRd, wbV, wb, rs1_val, rs2_val, imm, rd_idx
             end
             `ADDI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
                 rs1 = IR[19:15];
-                if (registerStauts[rs1] && rs1 != rd_idx) stall = 1'b1;
+                if (registerStauts[rs1]) stall = 1'b1;
+                registerStauts[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[11:0]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;

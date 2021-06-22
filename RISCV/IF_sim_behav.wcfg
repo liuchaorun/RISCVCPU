@@ -3,45 +3,113 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="IFID_sim_behav.wdb" id="1">
+      <db_ref path="TOP_behav.wdb" id="1">
          <top_modules>
-            <top_module name="IFID_sim" />
+            <top_module name="TOP" />
             <top_module name="glbl" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="286045489fs"></ZoomEndTime>
-      <Cursor1Time time="74895000fs"></Cursor1Time>
+      <ZoomStartTime time="305624715fs"></ZoomStartTime>
+      <ZoomEndTime time="598875058fs"></ZoomEndTime>
+      <Cursor1Time time="550000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="127"></ValueColumnWidth>
+      <NameColumnWidth column_width="194"></NameColumnWidth>
+      <ValueColumnWidth column_width="109"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="6" />
-   <wvobject fp_name="/IFID_sim/clk" type="logic">
+   <WVObjectSize size="23" />
+   <wvobject fp_name="/TOP/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject fp_name="/IFID_sim/PC" type="array">
+   <wvobject fp_name="/TOP/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/IF_start" type="logic">
+      <obj_property name="ElementShortName">IF_start</obj_property>
+      <obj_property name="ObjectShortName">IF_start</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/PC" type="array">
       <obj_property name="ElementShortName">PC[31:0]</obj_property>
       <obj_property name="ObjectShortName">PC[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/IFID_sim/instruction" type="array">
-      <obj_property name="ElementShortName">instruction[31:0]</obj_property>
-      <obj_property name="ObjectShortName">instruction[31:0]</obj_property>
+   <wvobject fp_name="/TOP/PC_j" type="logic">
+      <obj_property name="ElementShortName">PC_j</obj_property>
+      <obj_property name="ObjectShortName">PC_j</obj_property>
    </wvobject>
-   <wvobject fp_name="/IFID_sim/next_PC" type="array">
-      <obj_property name="ElementShortName">next_PC[31:0]</obj_property>
-      <obj_property name="ObjectShortName">next_PC[31:0]</obj_property>
+   <wvobject fp_name="/TOP/PC_branch" type="array">
+      <obj_property name="ElementShortName">PC_branch[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_branch[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/IFID_sim/PC_plus4" type="array">
+   <wvobject fp_name="/TOP/PC_plus4" type="array">
       <obj_property name="ElementShortName">PC_plus4[31:0]</obj_property>
       <obj_property name="ObjectShortName">PC_plus4[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/IFID_sim/decodeInstructionInfo" type="array">
-      <obj_property name="ElementShortName">decodeInstructionInfo[159:0]</obj_property>
-      <obj_property name="ObjectShortName">decodeInstructionInfo[159:0]</obj_property>
+   <wvobject fp_name="/TOP/next_PC" type="array">
+      <obj_property name="ElementShortName">next_PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">next_PC[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/instruction" type="array">
+      <obj_property name="ElementShortName">instruction[31:0]</obj_property>
+      <obj_property name="ObjectShortName">instruction[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/id_ena" type="logic">
+      <obj_property name="ElementShortName">id_ena</obj_property>
+      <obj_property name="ObjectShortName">id_ena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/wbRd_wb_out" type="array">
+      <obj_property name="ElementShortName">wbRd_wb_out[4:0]</obj_property>
+      <obj_property name="ObjectShortName">wbRd_wb_out[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/wbV_wb_out" type="array">
+      <obj_property name="ElementShortName">wbV_wb_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wbV_wb_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/wb_wb_out" type="logic">
+      <obj_property name="ElementShortName">wb_wb_out</obj_property>
+      <obj_property name="ObjectShortName">wb_wb_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/rs1_val_id_out" type="array">
+      <obj_property name="ElementShortName">rs1_val_id_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rs1_val_id_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/rs2_val_id_out" type="array">
+      <obj_property name="ElementShortName">rs2_val_id_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rs2_val_id_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/imm_id_out" type="array">
+      <obj_property name="ElementShortName">imm_id_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">imm_id_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/rd_idx_id_out" type="array">
+      <obj_property name="ElementShortName">rd_idx_id_out[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_idx_id_out[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/op_type_id_out" type="array">
+      <obj_property name="ElementShortName">op_type_id_out[3:0]</obj_property>
+      <obj_property name="ObjectShortName">op_type_id_out[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/alu_type_id_out" type="array">
+      <obj_property name="ElementShortName">alu_type_id_out[3:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_type_id_out[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/operand_type_id_out" type="logic">
+      <obj_property name="ElementShortName">operand_type_id_out</obj_property>
+      <obj_property name="ObjectShortName">operand_type_id_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/stall_id_out" type="logic">
+      <obj_property name="ElementShortName">stall_id_out</obj_property>
+      <obj_property name="ObjectShortName">stall_id_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/operand_type_id_out" type="logic">
+      <obj_property name="ElementShortName">operand_type_id_out</obj_property>
+      <obj_property name="ObjectShortName">operand_type_id_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/ex_output_ex_out" type="array">
+      <obj_property name="ElementShortName">ex_output_ex_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ex_output_ex_out[31:0]</obj_property>
    </wvobject>
 </wave_config>

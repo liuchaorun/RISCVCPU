@@ -32,7 +32,7 @@ set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property ip_output_repo c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
-read_ip -quiet c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.xci
+read_ip -quiet C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.xci
 set_property used_in_implementation false [get_files -all c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_ooc.xdc]
 
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -88,32 +88,32 @@ write_checkpoint -force -noxdef prgROM.dcp
 create_report "prgROM_synth_1_synth_report_utilization_0" "report_utilization -file prgROM_utilization_synth.rpt -pb prgROM_utilization_synth.pb"
 
 if { [catch {
-  file copy -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM.dcp c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.dcp
+  file copy -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM.dcp C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.dcp
 } _RESULT ] } { 
   send_msg_id runtcl-3 error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
   error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
 }
 
 if { [catch {
-  write_verilog -force -mode synth_stub c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.v
+  write_verilog -force -mode synth_stub C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a Verilog synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_vhdl -force -mode synth_stub c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.vhdl
+  write_vhdl -force -mode synth_stub C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a VHDL synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_verilog -force -mode funcsim c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_sim_netlist.v
+  write_verilog -force -mode funcsim C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_sim_netlist.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the Verilog functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_vhdl -force -mode funcsim c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_sim_netlist.vhdl
+  write_vhdl -force -mode funcsim C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_sim_netlist.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the VHDL functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
@@ -123,32 +123,32 @@ if { [catch {
 
 
 if { [catch {
-  file copy -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM.dcp c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.dcp
+  file copy -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM.dcp C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.dcp
 } _RESULT ] } { 
   send_msg_id runtcl-3 error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
   error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
 }
 
 if { [catch {
-  file rename -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM_stub.v c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.v
+  file rename -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM_stub.v C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a Verilog synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM_stub.vhdl c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.vhdl
+  file rename -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM_stub.vhdl C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a VHDL synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM_sim_netlist.v c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_sim_netlist.v
+  file rename -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM_sim_netlist.v C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_sim_netlist.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the Verilog functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM_sim_netlist.vhdl c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_sim_netlist.vhdl
+  file rename -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM_sim_netlist.vhdl C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_sim_netlist.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the VHDL functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
@@ -157,13 +157,13 @@ if { [catch {
 
 if {[file isdir C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files/ip/prgROM]} {
   catch { 
-    file copy -force c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.v C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files/ip/prgROM
+    file copy -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.v C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files/ip/prgROM
   }
 }
 
 if {[file isdir C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files/ip/prgROM]} {
   catch { 
-    file copy -force c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.vhdl C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files/ip/prgROM
+    file copy -force C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_stub.vhdl C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files/ip/prgROM
   }
 }
 file delete __synthesis_is_running__

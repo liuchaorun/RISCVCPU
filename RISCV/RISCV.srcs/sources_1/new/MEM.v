@@ -33,21 +33,24 @@ module MEM(
         input                   [31:0]      imm,
         input                   [11:0]      csr_idx,
 
-        output                  [31:0]      rd_val,
+        output      reg         [31:0]      rd_val,
         output                  [4:0]       rd_idx_out,
         output                  [3:0]       op_type_out,
         output                  [31:0]      rs1_val_out,
         output                  [31:0]      imm_out,
         output                  [11:0]      csr_idx_out,
-        output                              wb_ena,
+        output      reg                     wb_ena
     );
 
+    reg [3:0] mask;
+    wire [31:0] r_data;
+    
     assign rd_idx_out[4:0] = rd_idx[4:0];
     assign op_type_out[4:0] = op_type[4:0];
     assign rs1_val_out[31:0] = rs1_val[31:0];
     assign imm_out[31:0] = imm[31:0];
-    assign csr_idx_out[11:0] = crs_idx[11:0];
-    assign mask[3:0] = 4'b0000;
+    assign csr_idx_out[11:0] = csr_idx[11:0];
+    
     assign r_data[31:0] = 32'b0;
 
     wire    store_ena;
@@ -59,17 +62,17 @@ module MEM(
     RAM ram(
         .clk(clk),
         .rst(rst),
-        .r_addr(ex_output)
+        .r_addr(ex_output),
         .w_addr(ex_output),
         .w_data(rs2_val),
         .wen(store_ena),
         .mask(mask),
-        .data(r_data),
+        .data(r_data)
     );
 
     always @(posedge clk or posedge rst) begin
         if(rst) begin
-            rd_val_out[31:0] <= 32'd0;
+            rd_val[31:0] <= 32'd0;
             wb_ena = 1'b0;
         end
         else if(start) begin
@@ -80,7 +83,7 @@ module MEM(
                     `OPSB: mask = 4'b0001;
                     `OPSH: mask = 4'b0011;
                     `OPSW: mask = 4'b1111;
-                    default: 
+                    default: ;
                 endcase
             end
             else if(load_ena) begin
@@ -107,7 +110,7 @@ module MEM(
             end
             else begin
                 wb_ena = 1'b1;
-                rd_val[31:0] <= ex_output[31:0];
+                rd_val = ex_output;
             end
         end
         else begin

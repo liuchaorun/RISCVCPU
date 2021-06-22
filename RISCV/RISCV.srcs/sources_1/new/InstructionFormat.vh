@@ -45,3 +45,4 @@
 `define SB 32'bxxxxxxxxxxxxxxxxx000xxxxx0100011
 `define SH 32'bxxxxxxxxxxxxxxxxx001xxxxx0100011
 `define SW 32'bxxxxxxxxxxxxxxxxx010xxxxx0100011
+

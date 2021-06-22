@@ -44,7 +44,8 @@ module EX(
         output                  [4:0]       op_type_out,
         output                  [11:0]      csr_idx_out,
 
-        output      reg         [31:0]      ex_output           // address or rd_val
+        output      reg         [31:0]      ex_output,           // address or rd_val
+        output      reg                     mem_stall
     );
 
     assign rs1_val_out[31:0] = rs1_val[31:0];
@@ -52,12 +53,13 @@ module EX(
     assign imm_out[31:0] = imm[31:0];
     assign rd_idx_out[4:0] = rd_idx[4:0];
     assign op_type_out[4:0] = op_type[4:0];
-    assign csr_idx_out[11:0] = crs_idx[11:0];
+    assign csr_idx_out[11:0] = csr_idx[11:0];
 
     wire [31:0] operand2;
     assign operand2 = operand2_sel ? imm : rs2_val;
 
     always @(posedge clk or posedge rst) begin
+        mem_stall = start;
         if(rst) begin
             ex_output <= 32'd0;
         end

@@ -28,7 +28,7 @@ module RAM(
     input[31:0] w_data,
     input wen,
     input [3:0] mask,
-    output data,
+    output data
     );
 
     reg[7:0] ram[65534:0];
