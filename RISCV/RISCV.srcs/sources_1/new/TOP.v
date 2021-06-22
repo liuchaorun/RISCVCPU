@@ -40,7 +40,7 @@ module TOP(
     wire            stall_id_out;
     wire            flush;
     
-    wire                newpc_ex_out;
+    wire     [31:0]           newpc_ex_out;
     wire                pc_sel_ex_out;
     wire                br_flush_ex_out;
     
@@ -74,7 +74,7 @@ module TOP(
     wire    [3:0]   alu_type_id_out;
     wire    [3:0]   br_type_id_out;
     wire            operand_type_id_out;
-    wire            newpc_id_out;
+    wire    [31:0]   newpc_id_out;
     wire            pc_sel_id_out;
     wire            rd_pc_id_out;
     wire            rdpc_sel_id_out;
@@ -101,7 +101,7 @@ module TOP(
         .alu_type(alu_type_id_out),
         .br_type(br_type_id_out),
         .operand_type(operand_type_id_out),
-        .npc(newpc_id_out),
+        .npc_id(newpc_id_out),
         .stall(stall_id_out),
         .csr_idx(csr_idx_id_out),
         .flush(flush)
@@ -126,7 +126,7 @@ module TOP(
         .rs1_val(rs1_val_id_out),
         .rs2_val(rs2_val_id_out),
         .imm(imm_id_out),
-        .npc(newpc_id_out),
+        .npc_ex(newpc_id_out),
         .rd_idx(rd_idx_id_out),
         .op_type(op_type_id_out),
         .alu_type(alu_type_id_out),

@@ -28,7 +28,7 @@ module RAM(
     input[31:0] w_data,
     input wen,
     input [3:0] mask,
-    output data
+    output [31:0] data
     );
 
     reg[7:0] ram[65534:0];
@@ -36,7 +36,7 @@ module RAM(
 
     initial begin
         for (i = 0; i < 65535; i = i + 1) ram[i] = 32'b0;
-        ram[0] = 8'b00000010; 
+        ram[0] = 8'b00000110; 
         ram[1] = 8'b0;
         ram[2] = 8'b0;
         ram[3] = 8'b0;

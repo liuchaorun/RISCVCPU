@@ -38,6 +38,7 @@ module IF(
     
     initial begin
         PC_plus4[31:0] = 32'b0;
+        next_PC = 32'b0;
     end
    
     // 64KB program ROM, fetch instruction
@@ -73,6 +74,8 @@ module IF(
         else if(start && ~stall && ~flush && ~br_flush)
             next_PC[31:0] <= PC_jmp ? PC_branch : PC_plus4;
         else if (~flush)
+            next_PC[31:0] <= PC_plus4[31:0];
+        else if (~br_flush)
             next_PC[31:0] <= PC_plus4[31:0];
     end
     

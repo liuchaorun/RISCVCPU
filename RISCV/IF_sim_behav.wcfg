@@ -11,30 +11,22 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="2807851458fs"></ZoomStartTime>
-      <ZoomEndTime time="3038429709fs"></ZoomEndTime>
-      <Cursor1Time time="3000000000fs"></Cursor1Time>
+      <ZoomStartTime time="6843333333fs"></ZoomStartTime>
+      <ZoomEndTime time="7271333334fs"></ZoomEndTime>
+      <Cursor1Time time="7020833000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="194"></NameColumnWidth>
-      <ValueColumnWidth column_width="97"></ValueColumnWidth>
+      <NameColumnWidth column_width="216"></NameColumnWidth>
+      <ValueColumnWidth column_width="169"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="21" />
+   <WVObjectSize size="19" />
    <wvobject fp_name="/TOP/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/rst" type="logic">
-      <obj_property name="ElementShortName">rst</obj_property>
-      <obj_property name="ObjectShortName">rst</obj_property>
-   </wvobject>
    <wvobject fp_name="/TOP/IF_start" type="logic">
       <obj_property name="ElementShortName">IF_start</obj_property>
       <obj_property name="ObjectShortName">IF_start</obj_property>
-   </wvobject>
-   <wvobject fp_name="/TOP/PC" type="array">
-      <obj_property name="ElementShortName">PC[31:0]</obj_property>
-      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/TOP/PC_j" type="logic">
       <obj_property name="ElementShortName">PC_j</obj_property>
@@ -51,14 +43,6 @@
    <wvobject fp_name="/TOP/instruction" type="array">
       <obj_property name="ElementShortName">instruction[31:0]</obj_property>
       <obj_property name="ObjectShortName">instruction[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/TOP/wbRd_wb_out" type="array">
-      <obj_property name="ElementShortName">wbRd_wb_out[4:0]</obj_property>
-      <obj_property name="ObjectShortName">wbRd_wb_out[4:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/TOP/wbV_wb_out" type="array">
-      <obj_property name="ElementShortName">wbV_wb_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">wbV_wb_out[31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/TOP/wb_wb_out" type="logic">
       <obj_property name="ElementShortName">wb_wb_out</obj_property>
@@ -96,12 +80,20 @@
       <obj_property name="ElementShortName">operand_type_id_out</obj_property>
       <obj_property name="ObjectShortName">operand_type_id_out</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/ex_output_ex_out" type="array">
-      <obj_property name="ElementShortName">ex_output_ex_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ex_output_ex_out[31:0]</obj_property>
+   <wvobject fp_name="/TOP/id_unit/NPC" type="array">
+      <obj_property name="ElementShortName">NPC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NPC[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/mem_unit/rd_val" type="array">
-      <obj_property name="ElementShortName">rd_val[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_val[31:0]</obj_property>
+   <wvobject fp_name="/TOP/id_unit/npc_id" type="array">
+      <obj_property name="ElementShortName">npc_id[31:0]</obj_property>
+      <obj_property name="ObjectShortName">npc_id[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/ex_unit/npc_ex" type="array">
+      <obj_property name="ElementShortName">npc_ex[31:0]</obj_property>
+      <obj_property name="ObjectShortName">npc_ex[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/id_unit/RegisterFiles/registers[1]" type="array">
+      <obj_property name="ElementShortName">[1][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[1][31:0]</obj_property>
    </wvobject>
 </wave_config>

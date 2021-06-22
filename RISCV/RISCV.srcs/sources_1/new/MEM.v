@@ -49,8 +49,6 @@ module MEM(
     
     reg [3:0] mask;
     wire [31:0] r_data;
-    
-    assign r_data[31:0] = 32'b0;
 
     wire    store_ena;
     wire    load_ena;
@@ -83,7 +81,7 @@ module MEM(
         end
         else if(start) begin
             // Loads
-            if(store_ena) begin
+            if(op_type == `OPSB || op_type == `OPSH || op_type == `OPSW) begin
                 wb_ena = 1'b0;
                 case (op_type)
                     `OPSB: mask = 4'b0001;
@@ -92,7 +90,7 @@ module MEM(
                     default: ;
                 endcase
             end
-            else if(load_ena) begin
+            else if(op_type == `OPLB || op_type == `OPLH || op_type == `OPLBU || op_type == `OPLHU || op_type == `OPLW) begin
                 wb_ena = 1'b1;
                 case (op_type)
                     `OPLB: begin

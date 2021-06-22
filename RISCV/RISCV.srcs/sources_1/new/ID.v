@@ -42,7 +42,7 @@ module ID(
     output reg[3:0] alu_type,
     output reg[3:0] br_type,
     output reg operand_type,
-    output reg[31:0] npc,
+    output reg[31:0] npc_id,
     output reg stall,
     output reg[11:0] csr_idx,
     output reg flush
@@ -57,11 +57,13 @@ module ID(
         for (i = 0; i < 32; i=i+1) registerStauts[i] <= 1'b0;
         stall = 1'b0;
         flush = 1'b0;
+        npc_id = 32'b0;
     end
 
     always @(posedge clk) begin
         flush = 1'b0;
         operand_type = 1'b0;
+        npc_id = 32'b0;
         if (br_flush) begin
                 csr_idx = 12'b0;
                 op_type = `OPNO;
@@ -82,7 +84,7 @@ module ID(
                 rd_idx = IR[11:7];
                 registerStauts[rd_idx] = 1'b1;
                 imm = {IR[31:12], 12'b0};
-                npc = NPC;
+                npc_id = NPC;
                 br_type = `BRNO;
                 op_type = `OPWRD;
                 alu_type = `ALUAUIPC;
@@ -92,7 +94,7 @@ module ID(
                 registerStauts[rd_idx] = 1'b1;
                 if (IR[31]) imm = {12'b1111_1111_1111, IR[31], IR[10:1], IR[11], IR[19:12]};
                 else imm = {11'b0, IR[31], IR[19:12], IR[20], IR[30:21], 1'b0};
-                npc = NPC;
+                npc_id = NPC;
                 br_type = `BRJAL;
                 op_type = `OPWRD;
                 alu_type = `ALUNO;
@@ -107,7 +109,7 @@ module ID(
                 registerStauts[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
-                npc = NPC;
+                npc_id = NPC;
                 br_type = `BRJALR;
                 op_type = `OPWRD;
                 alu_type = `ALUNO;
@@ -174,6 +176,7 @@ module ID(
                 registerStauts[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
+                operand_type = 1'b1;
                 op_type = `OPLW;
                 alu_type = `ALUNO;
             end
@@ -372,7 +375,7 @@ module ID(
                 end
                 if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc = NPC;
+                npc_id = NPC;
                 br_type = `BRBEQ;
                 op_type = `OPNO;
                 alu_type = `ALUNO;
@@ -390,7 +393,7 @@ module ID(
                 end
                 if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc = NPC;
+                npc_id = NPC;
                 br_type = `BRBNE;
                 op_type = `OPNO;
                 alu_type = `ALUNO;
@@ -408,7 +411,7 @@ module ID(
                 end
                 if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc = NPC;
+                npc_id = NPC;
                 br_type = `BRBLT;
                 op_type = `OPNO;
                 alu_type = `ALUNO;
@@ -426,7 +429,7 @@ module ID(
                 end
                 if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc = NPC;
+                npc_id = NPC;
                 br_type = `BRBGE;
                 op_type = `OPNO;
                 alu_type = `ALUNO;
@@ -443,7 +446,7 @@ module ID(
                     flush = 1'b1;
                 end
                 imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc = NPC;
+                npc_id = NPC;
                 br_type = `BRBLTU;
                 op_type = `OPNO;
                 alu_type = `ALUNO;
@@ -460,7 +463,7 @@ module ID(
                     flush = 1'b1;
                 end
                 imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc = NPC;
+                npc_id = NPC;
                 br_type = `BRBGEU;
                 op_type = `OPNO;
                 alu_type = `ALUNO;
@@ -688,6 +691,7 @@ module ID(
                 op_type = `OPNO;
                 alu_type = `ALUNO;
                 br_type = `BRNO;
+                npc_id = NPC;
             end
         endcase
         end
@@ -695,8 +699,10 @@ module ID(
 
     always @(posedge clk) begin
         if (wb) begin
-            registerStauts[wbRd] <= 1'b0;
-            stall <= |registerStauts;
+            registerStauts[wbRd] = 1'b0;
+            registerStauts[rd_idx] = 1'b0;
+            stall = |registerStauts;
+            registerStauts[rd_idx] = 1'b1;
         end
         if (~(|registerStauts)) stall = 1'b0;
     end

@@ -2,11 +2,11 @@
 `define AUIPC 32'bxxxxxxxxxxxxxxxxxxxxxxxxx0010111
 `define JAL 32'bxxxxxxxxxxxxxxxxxxxxxxxxx1101111
 `define JALR 32'bxxxxxxxxxxxxxxxxxxxxxxxxx1100111
-`define LB 32'bxxxxxxxxxxxxxxxxx000xxxxx0000111
-`define LH 32'bxxxxxxxxxxxxxxxxx001xxxxx0000111
-`define LW 32'bxxxxxxxxxxxxxxxxx010xxxxx0000111
-`define LBU 32'bxxxxxxxxxxxxxxxxx100xxxxx0000111
-`define LHU 32'bxxxxxxxxxxxxxxxxx101xxxxx0000111
+`define LB 32'bxxxxxxxxxxxxxxxxx000xxxxx0000011
+`define LH 32'bxxxxxxxxxxxxxxxxx001xxxxx0000011
+`define LW 32'bxxxxxxxxxxxxxxxxx010xxxxx0000011
+`define LBU 32'bxxxxxxxxxxxxxxxxx100xxxxx0000011
+`define LHU 32'bxxxxxxxxxxxxxxxxx101xxxxx0000011
 `define ADDI 32'bxxxxxxxxxxxxxxxxx000xxxxx0010011
 `define SLTI 32'bxxxxxxxxxxxxxxxxx010xxxxx0010011
 `define SLTIU 32'bxxxxxxxxxxxxxxxxx011xxxxx0010011
