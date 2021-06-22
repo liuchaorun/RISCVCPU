@@ -17,12 +17,13 @@
 
 `define ALUSLL 4'b0000
 `define ALUSRL 4'b0001
-`define OPADD 4'b0010
-`define OPSUB 4'b0011
-`define OPXOR 4'b0100
-`define OPAND 4'b0101
-`define OPOR 4'b0110
-`define OPCMP 4'b0111
-`define OPMUL 4'b1000
-`define OPDIV 4'b1001
-`define OPREM 4'b1010
+`define ALUADD 4'b0010
+`define ALUSUB 4'b0011
+`define ALUXOR 4'b0100
+`define ALUAND 4'b0101
+`define ALUOR 4'b0110
+`define ALUCMP 4'b0111
+`define ALUMUL 4'b1000
+`define ALUDIV 4'b1001
+`define ALUREM 4'b1010
+`define ALUNO 4'b1111
