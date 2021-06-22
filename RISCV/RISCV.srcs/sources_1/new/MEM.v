@@ -68,6 +68,7 @@ module MEM(
         .mask(mask),
         .data(r_data)
     );
+    $readmemh("C:\\Users\\pqc\\Desktop\\rv32imf\\rv32imf.srcs\\sources_1\\new\\data_ram.hex", ram);
 
     always @(posedge clk or posedge rst) begin
         rd_idx_out[4:0] = rd_idx[4:0];
