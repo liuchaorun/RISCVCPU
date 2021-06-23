@@ -49,7 +49,9 @@ module EX(
         output      reg                     alu_w_rd,
         output      reg         [31:0]      newpc,
         output      reg                     pc_sel,
-        output      reg                     br_flush
+        output      reg                     br_flush,
+        output      reg         [3:0]       mask,
+        output      reg                     store_ena
     );
 
     wire [31:0] operand2;
@@ -58,6 +60,7 @@ module EX(
         alu_w_rd = 1'b0;
         pc_sel = 1'b0;
         br_flush = 1'b0;
+        store_ena = 1'b0;
     end
 
     always @(posedge clk or posedge rst) begin
@@ -65,11 +68,12 @@ module EX(
         rs2_val_out[31:0] = rs2_val[31:0];
         imm_out[31:0] = imm[31:0];
         rd_idx_out[4:0] = rd_idx[4:0];
-        op_type_out[4:0] = op_type[4:0];
+        op_type_out[3:0] = op_type[3:0];
         csr_idx_out[11:0] = csr_idx[11:0];
         br_flush = 1'b0;
         mem_stall = start;
         alu_w_rd = 1'b0;
+        store_ena = 1'b0;
         if(rst) begin
             ex_output <= 32'd0;
         end
@@ -148,9 +152,39 @@ module EX(
                         ex_output <= rs1_val + operand2;
                         alu_w_rd <= 1'b1;
                     end
-                    `OPSW: begin
+                    `OPLB: begin
                         ex_output <= rs1_val + operand2;
                         alu_w_rd <= 1'b1;
+                    end
+                    `OPLBU: begin
+                        ex_output <= rs1_val + operand2;
+                        alu_w_rd <= 1'b1;
+                    end
+                    `OPLH: begin
+                        ex_output <= rs1_val + operand2;
+                        alu_w_rd <= 1'b1;
+                    end
+                    `OPLHU: begin
+                        ex_output <= rs1_val + operand2;
+                        alu_w_rd <= 1'b1;
+                    end
+                    `OPSW: begin
+                        ex_output <= rs1_val + operand2;
+                        alu_w_rd <= 1'b0;
+                        mask <= 4'b1111;
+                        store_ena <= 1'b1;
+                    end
+                    `OPSH: begin
+                        ex_output <= rs1_val + operand2;
+                        alu_w_rd <= 1'b0;
+                        mask <= 4'b0011;
+                        store_ena <= 1'b1;
+                    end
+                    `OPSB: begin
+                        ex_output <= rs1_val + operand2;
+                        alu_w_rd <= 1'b0;
+                        mask <= 4'b0001;
+                        store_ena <= 1'b1;
                     end
                     default: begin
                         alu_w_rd <= 1'b0;

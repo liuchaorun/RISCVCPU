@@ -47,9 +47,9 @@ module RAM(
     always @(posedge clk) begin
         if (wen) begin
             if (mask[0]) ram[{r_addr[15:2], 2'b00}] <= w_data[7:0];
-            if (mask[1]) ram[{r_addr[15:2], 2'b00}] <= w_data[15:8];
-            if (mask[2]) ram[{r_addr[15:2], 2'b00}] <= w_data[23:16];
-            if (mask[3]) ram[{r_addr[15:2], 2'b00}] <= w_data[31:24];
+            if (mask[1]) ram[{r_addr[15:2], 2'b01}] <= w_data[15:8];
+            if (mask[2]) ram[{r_addr[15:2], 2'b10}] <= w_data[23:16];
+            if (mask[3]) ram[{r_addr[15:2], 2'b11}] <= w_data[31:24];
         end
     end
 

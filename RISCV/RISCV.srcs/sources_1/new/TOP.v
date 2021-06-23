@@ -29,7 +29,6 @@ module TOP(
     
     // IF input
     reg                IF_start;
-    reg     [31:0]      PC;
     reg                 PC_j;
     reg     [31:0]      PC_branch;
     // IF output
@@ -50,7 +49,6 @@ module TOP(
         .rst(rst),
         .start(IF_start),
         .stall(stall_id_out),
-        .PC(PC),
         .PC_jmp(pc_sel_ex_out),        // choose PCPlus4 or nextPC
         .PC_branch(newpc_ex_out),
         .PC_plus4(PC_plus4),
@@ -117,6 +115,8 @@ module TOP(
     wire    [31:0]      ex_output_ex_out;
     wire                mem_stall_ex_out;
     wire                alu_w_rd_ex_out;
+    wire     [3:0]      mask_ex_out;
+    wire                store_ena_ex_out;
     
     EX ex_unit(
         .clk(clk),
@@ -146,7 +146,9 @@ module TOP(
         .alu_w_rd(alu_w_rd_ex_out),
         .newpc(newpc_ex_out),
         .pc_sel(pc_sel_ex_out),
-        .br_flush(br_flush_ex_out)
+        .br_flush(br_flush_ex_out),
+        .mask(mask_ex_out),
+        .store_ena(store_ena_ex_out)
     );
     
     // MEM output
@@ -171,6 +173,8 @@ module TOP(
         .imm(imm_ex_out),
         .csr_idx(csr_idx_ex_out),
         .alu_w_rd(alu_w_rd_ex_out),
+        .mask(mask_ex_out),
+        .store_ena(store_ena_ex_out),
 
         .rd_val(rd_val_mem_out),
         .rd_idx_out(rd_idx_out_mem_out),
@@ -205,7 +209,6 @@ module TOP(
         clk = 1'b0;
         rst = 1'b0;
         IF_start = 1'b1;
-        PC = 32'd0;
         PC_j = 1'b0;
         PC_branch = 32'd0;   
     end

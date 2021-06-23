@@ -25,7 +25,6 @@ module IF(
     input                                   rst,
     input                                   start,
     input                                   stall,
-    input                   [31:0]          PC,
     input                                   PC_jmp,        // choose PCPlus4 or nextPC
     input                   [31:0]          PC_branch,
     input                                   flush,

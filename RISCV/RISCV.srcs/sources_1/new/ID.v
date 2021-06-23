@@ -125,6 +125,7 @@ module ID(
                 registerStauts[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
+                operand_type = 1'b1;
                 op_type = `OPLB;
                 alu_type = `ALUNO;
             end
@@ -138,6 +139,7 @@ module ID(
                 registerStauts[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
+                operand_type = 1'b1;
                 op_type = `OPLH;
                 alu_type = `ALUNO;
             end
@@ -151,6 +153,7 @@ module ID(
                 registerStauts[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
+                operand_type = 1'b1;
                 op_type = `OPLBU;
                 alu_type = `ALUNO;
             end
@@ -164,6 +167,7 @@ module ID(
                 registerStauts[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
+                operand_type = 1'b1;
                 op_type = `OPLHU;
                 alu_type = `ALUNO;
             end
@@ -652,6 +656,7 @@ module ID(
                 end
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:25], IR[11:7]};
                 else imm = {20'b0, IR[31:25], IR[11:7]};
+                operand_type = 1'b1;
                 op_type = `OPSB;
                 alu_type = `ALUADD;
             end
@@ -668,6 +673,7 @@ module ID(
                 end
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:25], IR[11:7]};
                 else imm = {20'b0, IR[31:25], IR[11:7]};
+                operand_type = 1'b1;
                 op_type = `OPSH;
                 alu_type = `ALUADD;
             end
@@ -684,7 +690,7 @@ module ID(
                 end
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:25], IR[11:7]};
                 else imm = {20'b0, IR[31:25], IR[11:7]};
-                operand_type = 1'b0;
+                operand_type = 1'b1;
                 op_type = `OPSW;
                 alu_type = `ALUADD;
             end

@@ -33,6 +33,8 @@ module MEM(
         input                   [31:0]      imm,
         input                   [11:0]      csr_idx,
         input                               alu_w_rd,
+        input                               store_ena,
+        input                   [3:0]       mask,
 
         output      reg         [31:0]      rd_val,
         output      reg         [4:0]       rd_idx_out,
@@ -47,14 +49,8 @@ module MEM(
         wb_ena <= 1'b0;
     end
     
-    reg [3:0] mask;
+//    reg [3:0] mask;
     wire [31:0] r_data;
-
-    wire    store_ena;
-    wire    load_ena;
-
-    assign store_ena = (op_type == (`OPSB || `OPSH || `OPSW)) ? 1'b1 : 1'b0;
-    assign load_ena = (op_type == (`OPLB || `OPLH || `OPLBU || `OPLHU || `OPLW)) ? 1'b1 : 1'b0;
 
     RAM ram(
         .clk(clk),
@@ -62,7 +58,7 @@ module MEM(
         .r_addr(ex_output),
         .w_addr(ex_output),
         .w_data(rs2_val),
-        .wen(op_type == `OPSB || op_type == `OPSH || op_type == `OPSW),
+        .wen(store_ena),
         .mask(mask),
         .data(r_data)
     );
@@ -84,12 +80,12 @@ module MEM(
             // Loads
             if(op_type == `OPSB || op_type == `OPSH || op_type == `OPSW) begin
                 wb_ena = 1'b0;
-                case (op_type)
-                    `OPSB: mask = 4'b0001;
-                    `OPSH: mask = 4'b0011;
-                    `OPSW: mask = 4'b1111;
-                    default: ;
-                endcase
+//                case (op_type)
+//                    `OPSB: mask = 4'b0001;
+//                    `OPSH: mask = 4'b0011;
+//                    `OPSW: mask = 4'b1111;
+//                    default: ;
+//                endcase
             end
             else if(op_type == `OPLB || op_type == `OPLH || op_type == `OPLBU || op_type == `OPLHU || op_type == `OPLW) begin
                 wb_ena = 1'b1;
