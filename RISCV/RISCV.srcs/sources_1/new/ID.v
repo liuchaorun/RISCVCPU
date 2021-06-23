@@ -64,6 +64,7 @@ module ID(
         flush = 1'b0;
         operand_type = 1'b0;
         npc_id = 32'b0;
+        br_type = `BRNO;
         if (br_flush) begin
                 csr_idx = 12'b0;
                 op_type = `OPNO;
@@ -683,6 +684,7 @@ module ID(
                 end
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:25], IR[11:7]};
                 else imm = {20'b0, IR[31:25], IR[11:7]};
+                operand_type = 1'b0;
                 op_type = `OPSW;
                 alu_type = `ALUADD;
             end
@@ -700,9 +702,12 @@ module ID(
     always @(posedge clk) begin
         if (wb) begin
             registerStauts[wbRd] = 1'b0;
-            registerStauts[rd_idx] = 1'b0;
-            stall = |registerStauts;
-            registerStauts[rd_idx] = 1'b1;
+            if(registerStauts[rd_idx]) begin
+                registerStauts[rd_idx] = 1'b0;
+                if (~(|registerStauts)) stall = 1'b0; 
+                registerStauts[rd_idx] = 1'b1;
+            end
+//            else stall = |registerStauts;
         end
         if (~(|registerStauts)) stall = 1'b0;
     end

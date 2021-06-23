@@ -75,8 +75,8 @@ module EX(
         end
         else if(start) begin
             if(br_type != `BRNO) begin
-                pc_sel = 1'b1;
-                br_flush = 1'b1;
+                pc_sel = 1'b0;
+                br_flush = 1'b0;
                 case(br_type)
                     `BRBEQ: begin
                         if (rs1_val == rs2_val) begin
@@ -145,6 +145,10 @@ module EX(
             else if (op_type != `OPNO) begin
                 case(op_type)
                     `OPLW: begin
+                        ex_output <= rs1_val + operand2;
+                        alu_w_rd <= 1'b1;
+                    end
+                    `OPSW: begin
                         ex_output <= rs1_val + operand2;
                         alu_w_rd <= 1'b1;
                     end

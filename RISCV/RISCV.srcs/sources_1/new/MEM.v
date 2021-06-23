@@ -62,10 +62,11 @@ module MEM(
         .r_addr(ex_output),
         .w_addr(ex_output),
         .w_data(rs2_val),
-        .wen(store_ena),
+        .wen(op_type == `OPSB || op_type == `OPSH || op_type == `OPSW),
         .mask(mask),
         .data(r_data)
     );
+
 
     always @(posedge clk or posedge rst) begin
         rd_idx_out[4:0] = rd_idx[4:0];
