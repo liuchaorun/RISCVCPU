@@ -36,7 +36,7 @@ module RAM(
 
     initial begin
         for (i = 0; i < 65535; i = i + 1) ram[i] = 32'b0;
-        ram[0] = 8'b00000110; 
+        ram[0] = 8'b00000111; 
         ram[1] = 8'b0;
         ram[2] = 8'b0;
         ram[3] = 8'b0;

@@ -70,17 +70,16 @@ module EX(
         rd_idx_out[4:0] = rd_idx[4:0];
         op_type_out[3:0] = op_type[3:0];
         csr_idx_out[11:0] = csr_idx[11:0];
-        br_flush = 1'b0;
         mem_stall = start;
         alu_w_rd = 1'b0;
         store_ena = 1'b0;
-        if(rst) begin
+        if(rst || br_flush) begin
             ex_output <= 32'd0;
+            br_flush = 1'b0;
         end
         else if(start) begin
             if(br_type != `BRNO) begin
                 pc_sel = 1'b0;
-                br_flush = 1'b0;
                 case(br_type)
                     `BRBEQ: begin
                         if (rs1_val == rs2_val) begin

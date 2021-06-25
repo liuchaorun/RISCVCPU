@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="198333333fs"></ZoomStartTime>
-      <ZoomEndTime time="680333334fs"></ZoomEndTime>
-      <Cursor1Time time="600000000fs"></Cursor1Time>
+      <ZoomStartTime time="1655618301fs"></ZoomStartTime>
+      <ZoomEndTime time="2128876340fs"></ZoomEndTime>
+      <Cursor1Time time="2050000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="216"></NameColumnWidth>
-      <ValueColumnWidth column_width="158"></ValueColumnWidth>
+      <ValueColumnWidth column_width="153"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="17" />
+   <WVObjectSize size="23" />
    <wvobject fp_name="/TOP/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -87,5 +87,29 @@
    <wvobject fp_name="/TOP/id_unit/RegisterFiles/registers[5]" type="array">
       <obj_property name="ElementShortName">[5][31:0]</obj_property>
       <obj_property name="ObjectShortName">[5][31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/ex_unit/newpc" type="array">
+      <obj_property name="ElementShortName">newpc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">newpc[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/if_unit/PC_branch" type="array">
+      <obj_property name="ElementShortName">PC_branch[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_branch[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/if_unit/PC_jmp" type="logic">
+      <obj_property name="ElementShortName">PC_jmp</obj_property>
+      <obj_property name="ObjectShortName">PC_jmp</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/id_unit/wb" type="logic">
+      <obj_property name="ElementShortName">wb</obj_property>
+      <obj_property name="ObjectShortName">wb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/id_unit/wbV" type="array">
+      <obj_property name="ElementShortName">wbV[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wbV[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/id_unit/wbRd" type="array">
+      <obj_property name="ElementShortName">wbRd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">wbRd[4:0]</obj_property>
    </wvobject>
 </wave_config>

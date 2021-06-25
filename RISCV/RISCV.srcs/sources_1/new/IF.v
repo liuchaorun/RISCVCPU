@@ -55,8 +55,8 @@ module IF(
         else if(start && ~stall && ~flush && ~br_flush)
             PC_plus4[31:0] <= PC_plus4[31:0] + 3'b100;
         else if(flush) begin
-            PC_plus4[31:0] <= PC_plus4[31:0] - 4'b1000;
-            next_PC[31:0] <= next_PC[31:0] - 4'b1000;
+            PC_plus4[31:0] <= PC_plus4[31:0] - 4'b100;
+            next_PC[31:0] <= next_PC[31:0] - 4'b100;
         end
         else if(br_flush) begin
             PC_plus4[31:0] <= PC_branch + 3'b100;

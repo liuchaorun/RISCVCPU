@@ -47,14 +47,16 @@ module ID(
     output reg[11:0] csr_idx,
     output reg flush
 );
-    reg[31:0] registerStauts;
+    reg[31:0] registerWriteStatus;
+    reg[31:0] registerReadStatus;
     reg[4:0] rs1;
     reg[4:0] rs2;
 
     integer i;
 
     initial begin
-        for (i = 0; i < 32; i=i+1) registerStauts[i] <= 1'b0;
+        registerWriteStatus = 32'b0;
+        registerReadStatus = 32'b0;
         stall = 1'b0;
         flush = 1'b0;
         npc_id = 32'b0;
@@ -62,28 +64,32 @@ module ID(
 
     always @(posedge clk) begin
         flush = 1'b0;
-        operand_type = 1'b0;
-        npc_id = 32'b0;
-        br_type = `BRNO;
         if (br_flush) begin
                 csr_idx = 12'b0;
                 op_type = `OPNO;
                 alu_type = `ALUNO;
                 br_type = `BRNO;
-                registerStauts = 32'b0;
+                registerWriteStatus = 32'b0; 
         end
-        if (~stall && ~br_flush) begin
+        if (~stall && ~br_flush && start) begin
+        registerReadStatus = 32'b0;
+        op_type = `OPNO;
+        alu_type = `ALUNO;
+        br_type = `BRNO;
+        npc_id = 32'b0;
+        rd_idx = 5'b0;
+        operand_type = 1'b0;
         casex (IR)
             `LUI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 imm = {IR[31:12], 12'b0};
                 op_type = `OPWRD;
                 alu_type = `ALUNO;
             end
             `AUIPC: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 imm = {IR[31:12], 12'b0};
                 npc_id = NPC;
                 br_type = `BRNO;
@@ -92,7 +98,7 @@ module ID(
             end
             `JAL: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {12'b1111_1111_1111, IR[31], IR[10:1], IR[11], IR[19:12]};
                 else imm = {11'b0, IR[31], IR[19:12], IR[20], IR[30:21], 1'b0};
                 npc_id = NPC;
@@ -103,11 +109,12 @@ module ID(
             `JALR: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 npc_id = NPC;
@@ -118,11 +125,12 @@ module ID(
             `LB: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 operand_type = 1'b1;
@@ -132,11 +140,12 @@ module ID(
             `LH: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 operand_type = 1'b1;
@@ -146,11 +155,12 @@ module ID(
             `LBU: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 operand_type = 1'b1;
@@ -160,11 +170,12 @@ module ID(
             `LHU: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 operand_type = 1'b1;
@@ -174,11 +185,12 @@ module ID(
             `LW: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 operand_type = 1'b1;
@@ -188,11 +200,12 @@ module ID(
             `ADDI: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
@@ -202,11 +215,12 @@ module ID(
             `SLTI: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
@@ -216,11 +230,12 @@ module ID(
             `SLTIU: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
                 alu_type = `ALUCMP;
@@ -229,11 +244,12 @@ module ID(
             `XORI: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
@@ -243,11 +259,12 @@ module ID(
             `ORI: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
@@ -257,11 +274,12 @@ module ID(
             `ANDI: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
                 else imm = {20'd0, IR[31:20]};
                 op_type = `OPNO;
@@ -271,11 +289,12 @@ module ID(
             `SLLI: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 imm = {27'b0, IR[24:20]};
                 op_type = `OPNO;
                 alu_type = `ALUSLL;
@@ -284,11 +303,12 @@ module ID(
             `SRLI: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 imm = {27'b0, IR[24:20]};
                 op_type = `OPNO;
                 alu_type = `ALUSRL;
@@ -297,11 +317,12 @@ module ID(
             `SRAI: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 imm = {27'b0, IR[24:20]};
                 op_type = `OPNO;
                 alu_type = `ALUSRA;
@@ -310,11 +331,12 @@ module ID(
             `CSRRW: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 csr_idx = IR[31:20];
                 op_type = `OPCSRRW;
                 alu_type = `ALUNO;
@@ -322,11 +344,12 @@ module ID(
             `CSRRS: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 csr_idx = IR[31:20];
                 op_type = `OPCSRRS;
                 alu_type = `ALUNO;
@@ -334,18 +357,19 @@ module ID(
             `CSRRC: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 csr_idx = IR[31:20];
                 op_type = `OPCSRRC;
                 alu_type = `ALUNO;
             end
             `CSRRWI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 imm = {27'b0, IR[19:15]};
                 csr_idx = IR[31:20];
                 op_type = `OPCSRRWI;
@@ -353,7 +377,7 @@ module ID(
             end
             `CSRRSI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 imm = {27'b0, IR[19:15]};
                 csr_idx = IR[31:20];
                 op_type = `OPCSRRSI;
@@ -361,7 +385,7 @@ module ID(
             end
             `CSRRCI: begin
                 rd_idx = IR[11:7];
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 imm = {27'b0, IR[19:15]};
                 csr_idx = IR[31:20];
                 op_type = `OPCSRRCI;
@@ -369,12 +393,14 @@ module ID(
             end
             `BEQ: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
@@ -387,12 +413,14 @@ module ID(
             end
             `BNE: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
@@ -405,12 +433,14 @@ module ID(
             end
             `BLT: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
@@ -423,12 +453,14 @@ module ID(
             end
             `BGE: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
@@ -441,12 +473,14 @@ module ID(
             end
             `BLTU: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
@@ -458,12 +492,14 @@ module ID(
             end
             `BGEU: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
@@ -476,16 +512,18 @@ module ID(
             `ADD: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUADD;
                 operand_type = 1'b0;
@@ -493,16 +531,18 @@ module ID(
             `SUB: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUSUB;
                 operand_type = 1'b0;
@@ -510,16 +550,18 @@ module ID(
             `SLL: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUSLL;
                 operand_type = 1'b0;
@@ -527,16 +569,18 @@ module ID(
             `SLT: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUCMP;
                 operand_type = 1'b0;
@@ -544,16 +588,18 @@ module ID(
             `SLTU: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUCMP;
                 operand_type = 1'b0;
@@ -561,16 +607,18 @@ module ID(
             `XOR: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
+                registerReadStatus[rs1] = 1'b1;
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerWriteStatus[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUXOR;
                 operand_type = 1'b0;
@@ -578,16 +626,18 @@ module ID(
             `SRL: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
+                registerReadStatus[rs1] = 1'b1;
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerWriteStatus[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUSRL;
                 operand_type = 1'b0;
@@ -595,16 +645,18 @@ module ID(
             `SRA: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
+                registerReadStatus[rs1] = 1'b1;
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerWriteStatus[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUSRA;
                 operand_type = 1'b0;
@@ -612,16 +664,18 @@ module ID(
             `OR: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
+                registerReadStatus[rs1] = 1'b1;
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerWriteStatus[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUOR;
                 operand_type = 1'b0;
@@ -629,28 +683,32 @@ module ID(
             `AND: begin
                 rd_idx = IR[11:7];
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
+                registerReadStatus[rs1] = 1'b1;
                 rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                registerStauts[rd_idx] = 1'b1;
+                if (registerWriteStatus[rs2]) begin
+                    stall = 1'b1;
+                    flush = 1'b1;
+                end
+                registerWriteStatus[rd_idx] = 1'b1;
                 op_type = `OPNO;
                 alu_type = `ALUAND;
                 operand_type = 1'b0;
             end
             `SB: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                rs2 = IR[24:20];
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
@@ -662,12 +720,14 @@ module ID(
             end
             `SH: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                rs2 = IR[24:20];
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
@@ -679,12 +739,14 @@ module ID(
             end
             `SW: begin
                 rs1 = IR[19:15];
-                if (registerStauts[rs1]) begin
+                registerReadStatus[rs1] = 1'b1;
+                rs2 = IR[24:20];
+                registerReadStatus[rs2] = 1'b1;
+                if (registerWriteStatus[rs1]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
-                rs2 = IR[24:20];
-                if (registerStauts[rs2]) begin
+                if (registerWriteStatus[rs2]) begin
                     stall = 1'b1;
                     flush = 1'b1;
                 end
@@ -707,15 +769,16 @@ module ID(
 
     always @(posedge clk) begin
         if (wb) begin
-            registerStauts[wbRd] = 1'b0;
-            if(registerStauts[rd_idx]) begin
-                registerStauts[rd_idx] = 1'b0;
-                if (~(|registerStauts)) stall = 1'b0; 
-                registerStauts[rd_idx] = 1'b1;
-            end
-//            else stall = |registerStauts;
+            registerWriteStatus[wbRd] = 1'b0;
+//            if(registerWriteStatus[rd_idx]) begin
+//                registerWriteStatus[rd_idx] = 1'b0;
+//                if (~(|registerWriteStatus)) stall = 1'b0; 
+//                registerWriteStatus[rd_idx] = 1'b1;
+//            end
+            stall = |(registerWriteStatus & registerReadStatus);
+            if (~stall && wbRd == rd_idx) registerWriteStatus[rd_idx] = 1'b1;
+            if (~stall) registerReadStatus = 32'b0;
         end
-        if (~(|registerStauts)) stall = 1'b0;
     end
 
     RegisterFiles RegisterFiles(

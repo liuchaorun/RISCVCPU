@@ -1,10 +1,10 @@
 -- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
--- Date        : Wed Jun 23 01:25:58 2021
+-- Date        : Fri Jun 25 20:40:30 2021
 -- Host        : DESKTOP-JDL9JAK running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim -rename_top prgROM -prefix
---               prgROM_ prgROM_sim_netlist.vhdl
+-- Command     : write_vhdl -force -mode funcsim
+--               C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM_sim_netlist.vhdl
 -- Design      : prgROM
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -20,6 +20,8 @@ entity prgROM_bindec is
     ena : in STD_LOGIC;
     addra : in STD_LOGIC_VECTOR ( 1 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of prgROM_bindec : entity is "bindec";
 end prgROM_bindec;
 
 architecture STRUCTURE of prgROM_bindec is
@@ -90,6 +92,8 @@ entity prgROM_blk_mem_gen_mux is
     \douta[12]_1\ : in STD_LOGIC_VECTOR ( 7 downto 0 );
     \douta[12]_2\ : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of prgROM_blk_mem_gen_mux : entity is "blk_mem_gen_mux";
 end prgROM_blk_mem_gen_mux;
 
 architecture STRUCTURE of prgROM_blk_mem_gen_mux is
@@ -507,6 +511,8 @@ entity prgROM_blk_mem_gen_prim_wrapper_init is
     dina : in STD_LOGIC_VECTOR ( 0 to 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of prgROM_blk_mem_gen_prim_wrapper_init : entity is "blk_mem_gen_prim_wrapper_init";
 end prgROM_blk_mem_gen_prim_wrapper_init;
 
 architecture STRUCTURE of prgROM_blk_mem_gen_prim_wrapper_init is
@@ -4223,6 +4229,8 @@ entity prgROM_blk_mem_gen_prim_width is
     dina : in STD_LOGIC_VECTOR ( 0 to 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of prgROM_blk_mem_gen_prim_width : entity is "blk_mem_gen_prim_width";
 end prgROM_blk_mem_gen_prim_width;
 
 architecture STRUCTURE of prgROM_blk_mem_gen_prim_width is
@@ -4684,6 +4692,8 @@ entity prgROM_blk_mem_gen_generic_cstr is
     dina : in STD_LOGIC_VECTOR ( 31 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of prgROM_blk_mem_gen_generic_cstr : entity is "blk_mem_gen_generic_cstr";
 end prgROM_blk_mem_gen_generic_cstr;
 
 architecture STRUCTURE of prgROM_blk_mem_gen_generic_cstr is
@@ -5165,6 +5175,8 @@ entity prgROM_blk_mem_gen_top is
     dina : in STD_LOGIC_VECTOR ( 31 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of prgROM_blk_mem_gen_top : entity is "blk_mem_gen_top";
 end prgROM_blk_mem_gen_top;
 
 architecture STRUCTURE of prgROM_blk_mem_gen_top is
@@ -5192,6 +5204,8 @@ entity prgROM_blk_mem_gen_v8_4_2_synth is
     dina : in STD_LOGIC_VECTOR ( 31 downto 0 );
     wea : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of prgROM_blk_mem_gen_v8_4_2_synth : entity is "blk_mem_gen_v8_4_2_synth";
 end prgROM_blk_mem_gen_v8_4_2_synth;
 
 architecture STRUCTURE of prgROM_blk_mem_gen_v8_4_2_synth is
@@ -5426,6 +5440,8 @@ entity prgROM_blk_mem_gen_v8_4_2 is
   attribute C_WRITE_WIDTH_B of prgROM_blk_mem_gen_v8_4_2 : entity is 32;
   attribute C_XDEVICEFAMILY : string;
   attribute C_XDEVICEFAMILY of prgROM_blk_mem_gen_v8_4_2 : entity is "virtex7";
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of prgROM_blk_mem_gen_v8_4_2 : entity is "blk_mem_gen_v8_4_2";
   attribute downgradeipidentifiedwarnings : string;
   attribute downgradeipidentifiedwarnings of prgROM_blk_mem_gen_v8_4_2 : entity is "yes";
 end prgROM_blk_mem_gen_v8_4_2;
