@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="6090496000fs"></ZoomStartTime>
-      <ZoomEndTime time="6474510300fs"></ZoomEndTime>
-      <Cursor1Time time="7400000000fs"></Cursor1Time>
+      <ZoomStartTime time="198333333fs"></ZoomStartTime>
+      <ZoomEndTime time="680333334fs"></ZoomEndTime>
+      <Cursor1Time time="600000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="216"></NameColumnWidth>
-      <ValueColumnWidth column_width="163"></ValueColumnWidth>
+      <ValueColumnWidth column_width="158"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="18" />
+   <WVObjectSize size="17" />
    <wvobject fp_name="/TOP/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -72,14 +72,6 @@
       <obj_property name="ElementShortName">stall_id_out</obj_property>
       <obj_property name="ObjectShortName">stall_id_out</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/id_unit/RegisterFiles/registers[4]" type="array">
-      <obj_property name="ElementShortName">[4][31:0]</obj_property>
-      <obj_property name="ObjectShortName">[4][31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/TOP/id_unit/RegisterFiles/registers[3]" type="array">
-      <obj_property name="ElementShortName">[3][31:0]</obj_property>
-      <obj_property name="ObjectShortName">[3][31:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="/TOP/mem_unit/store_ena" type="logic">
       <obj_property name="ElementShortName">store_ena</obj_property>
       <obj_property name="ObjectShortName">store_ena</obj_property>
@@ -91,5 +83,9 @@
    <wvobject fp_name="/TOP/mem_unit/rs2_val" type="array">
       <obj_property name="ElementShortName">rs2_val[31:0]</obj_property>
       <obj_property name="ObjectShortName">rs2_val[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/id_unit/RegisterFiles/registers[5]" type="array">
+      <obj_property name="ElementShortName">[5][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[5][31:0]</obj_property>
    </wvobject>
 </wave_config>

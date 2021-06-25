@@ -1,0 +1,19 @@
+main:
+	addi 	x5,x0,6	// n=6
+	addi	x1,x0,0	// x1=0 / a[i]
+	addi	x2,x0,1	// x2=1 / a[i+1]
+	addi	x3,x0,2	// x3=count=2
+	addi	x4,x1,0	// x4=x1=0
+	beq	x5,x2,.L2	// if(x5(n)==x2(1)) goto .L2
+	addi	x4,x2,0	// x4=x2+0=1
+	beq	x5,x3,.L2	// if(x5(n)==x3(2)) goto .L2
+	// j	.L1	不添加 j 的话，程序是否会按顺序继续执行到.L1？
+.L1:
+	add	x4,x1,x2	// x4=fib=x1(a[i])+x2(a[i+1])
+	bge	x5,x3,.L2	// if(x5(n)>=x3(count)) goto .L2
+	addi	x3,x3,1	// x3(count)++
+	addi	x1,x2,0	// x1(a[i])=x2(a[i+1])
+	addi	x2,x3,0	// x2(a[i+1])=fib
+	j	.L1
+.L2:
+	sw	x0,0(x4)	//mem[x0+0]=x4
