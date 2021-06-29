@@ -11,105 +11,185 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="1655618301fs"></ZoomStartTime>
-      <ZoomEndTime time="2128876340fs"></ZoomEndTime>
-      <Cursor1Time time="2050000000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="414340228fs"></ZoomEndTime>
+      <Cursor1Time time="4525500000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="216"></NameColumnWidth>
-      <ValueColumnWidth column_width="153"></ValueColumnWidth>
+      <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="23" />
+   <WVObjectSize size="43" />
    <wvobject fp_name="/TOP/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/PC_j" type="logic">
-      <obj_property name="ElementShortName">PC_j</obj_property>
-      <obj_property name="ObjectShortName">PC_j</obj_property>
+   <wvobject fp_name="/TOP/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/PC_plus4" type="array">
-      <obj_property name="ElementShortName">PC_plus4[31:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_plus4[31:0]</obj_property>
+   <wvobject fp_name="/TOP/IF_start_in" type="logic">
+      <obj_property name="ElementShortName">IF_start_in</obj_property>
+      <obj_property name="ObjectShortName">IF_start_in</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/next_PC" type="array">
-      <obj_property name="ElementShortName">next_PC[31:0]</obj_property>
-      <obj_property name="ObjectShortName">next_PC[31:0]</obj_property>
+   <wvobject fp_name="/TOP/IF_PC_in" type="array">
+      <obj_property name="ElementShortName">IF_PC_in[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IF_PC_in[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/instruction" type="array">
-      <obj_property name="ElementShortName">instruction[31:0]</obj_property>
-      <obj_property name="ObjectShortName">instruction[31:0]</obj_property>
+   <wvobject fp_name="/TOP/EX_pc_sel_out" type="logic">
+      <obj_property name="ElementShortName">EX_pc_sel_out</obj_property>
+      <obj_property name="ObjectShortName">EX_pc_sel_out</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/wb_wb_out" type="logic">
-      <obj_property name="ElementShortName">wb_wb_out</obj_property>
-      <obj_property name="ObjectShortName">wb_wb_out</obj_property>
+   <wvobject fp_name="/TOP/EX_new_pc_out" type="array">
+      <obj_property name="ElementShortName">EX_new_pc_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">EX_new_pc_out[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/rs1_val_id_out" type="array">
-      <obj_property name="ElementShortName">rs1_val_id_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rs1_val_id_out[31:0]</obj_property>
+   <wvobject fp_name="/TOP/ID_data_conflict_out" type="logic">
+      <obj_property name="ElementShortName">ID_data_conflict_out</obj_property>
+      <obj_property name="ObjectShortName">ID_data_conflict_out</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/rs2_val_id_out" type="array">
-      <obj_property name="ElementShortName">rs2_val_id_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rs2_val_id_out[31:0]</obj_property>
+   <wvobject fp_name="/TOP/ID_flush_out" type="logic">
+      <obj_property name="ElementShortName">ID_flush_out</obj_property>
+      <obj_property name="ObjectShortName">ID_flush_out</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/imm_id_out" type="array">
-      <obj_property name="ElementShortName">imm_id_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">imm_id_out[31:0]</obj_property>
+   <wvobject fp_name="/TOP/IF_next_PC_out" type="array">
+      <obj_property name="ElementShortName">IF_next_PC_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IF_next_PC_out[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/rd_idx_id_out" type="array">
-      <obj_property name="ElementShortName">rd_idx_id_out[4:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_idx_id_out[4:0]</obj_property>
+   <wvobject fp_name="/TOP/IF_instruction_out" type="array">
+      <obj_property name="ElementShortName">IF_instruction_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IF_instruction_out[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/op_type_id_out" type="array">
-      <obj_property name="ElementShortName">op_type_id_out[3:0]</obj_property>
-      <obj_property name="ObjectShortName">op_type_id_out[3:0]</obj_property>
+   <wvobject fp_name="/TOP/IF_next_ena_out" type="array">
+      <obj_property name="ElementShortName">IF_next_ena_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IF_next_ena_out[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/alu_type_id_out" type="array">
-      <obj_property name="ElementShortName">alu_type_id_out[3:0]</obj_property>
-      <obj_property name="ObjectShortName">alu_type_id_out[3:0]</obj_property>
+   <wvobject fp_name="/TOP/ID_rs1_val_out" type="array">
+      <obj_property name="ElementShortName">ID_rs1_val_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_rs1_val_out[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/stall_id_out" type="logic">
-      <obj_property name="ElementShortName">stall_id_out</obj_property>
-      <obj_property name="ObjectShortName">stall_id_out</obj_property>
+   <wvobject fp_name="/TOP/ID_PC_out" type="array">
+      <obj_property name="ElementShortName">ID_PC_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_PC_out[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/mem_unit/store_ena" type="logic">
-      <obj_property name="ElementShortName">store_ena</obj_property>
-      <obj_property name="ObjectShortName">store_ena</obj_property>
+   <wvobject fp_name="/TOP/ID_operand1_sel_out" type="logic">
+      <obj_property name="ElementShortName">ID_operand1_sel_out</obj_property>
+      <obj_property name="ObjectShortName">ID_operand1_sel_out</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/mem_unit/ex_output" type="array">
-      <obj_property name="ElementShortName">ex_output[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ex_output[31:0]</obj_property>
+   <wvobject fp_name="/TOP/ID_rs2_val_out" type="array">
+      <obj_property name="ElementShortName">ID_rs2_val_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_rs2_val_out[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/mem_unit/rs2_val" type="array">
-      <obj_property name="ElementShortName">rs2_val[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rs2_val[31:0]</obj_property>
+   <wvobject fp_name="/TOP/ID_imm_out" type="array">
+      <obj_property name="ElementShortName">ID_imm_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_imm_out[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/id_unit/RegisterFiles/registers[5]" type="array">
-      <obj_property name="ElementShortName">[5][31:0]</obj_property>
-      <obj_property name="ObjectShortName">[5][31:0]</obj_property>
+   <wvobject fp_name="/TOP/ID_operand2_sel_out" type="logic">
+      <obj_property name="ElementShortName">ID_operand2_sel_out</obj_property>
+      <obj_property name="ObjectShortName">ID_operand2_sel_out</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/ex_unit/newpc" type="array">
-      <obj_property name="ElementShortName">newpc[31:0]</obj_property>
-      <obj_property name="ObjectShortName">newpc[31:0]</obj_property>
+   <wvobject fp_name="/TOP/ID_rd_idx_out" type="array">
+      <obj_property name="ElementShortName">ID_rd_idx_out[4:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_rd_idx_out[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/if_unit/PC_branch" type="array">
-      <obj_property name="ElementShortName">PC_branch[31:0]</obj_property>
-      <obj_property name="ObjectShortName">PC_branch[31:0]</obj_property>
+   <wvobject fp_name="/TOP/ID_op_type_out" type="array">
+      <obj_property name="ElementShortName">ID_op_type_out[4:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_op_type_out[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/if_unit/PC_jmp" type="logic">
-      <obj_property name="ElementShortName">PC_jmp</obj_property>
-      <obj_property name="ObjectShortName">PC_jmp</obj_property>
+   <wvobject fp_name="/TOP/ID_alu_type_out" type="array">
+      <obj_property name="ElementShortName">ID_alu_type_out[3:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_alu_type_out[3:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/id_unit/wb" type="logic">
-      <obj_property name="ElementShortName">wb</obj_property>
-      <obj_property name="ObjectShortName">wb</obj_property>
+   <wvobject fp_name="/TOP/ID_csr_idx_out" type="array">
+      <obj_property name="ElementShortName">ID_csr_idx_out[11:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_csr_idx_out[11:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/id_unit/wbV" type="array">
-      <obj_property name="ElementShortName">wbV[31:0]</obj_property>
-      <obj_property name="ObjectShortName">wbV[31:0]</obj_property>
+   <wvobject fp_name="/TOP/ID_next_ena_out" type="logic">
+      <obj_property name="ElementShortName">ID_next_ena_out</obj_property>
+      <obj_property name="ObjectShortName">ID_next_ena_out</obj_property>
    </wvobject>
-   <wvobject fp_name="/TOP/id_unit/wbRd" type="array">
-      <obj_property name="ElementShortName">wbRd[4:0]</obj_property>
-      <obj_property name="ObjectShortName">wbRd[4:0]</obj_property>
+   <wvobject fp_name="/TOP/WB_wb_out" type="logic">
+      <obj_property name="ElementShortName">WB_wb_out</obj_property>
+      <obj_property name="ObjectShortName">WB_wb_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/WB_wb_idx_out" type="array">
+      <obj_property name="ElementShortName">WB_wb_idx_out[4:0]</obj_property>
+      <obj_property name="ObjectShortName">WB_wb_idx_out[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/WB_wb_val_out" type="array">
+      <obj_property name="ElementShortName">WB_wb_val_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">WB_wb_val_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/EX_rs1_val_out" type="array">
+      <obj_property name="ElementShortName">EX_rs1_val_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">EX_rs1_val_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/EX_PC_out" type="array">
+      <obj_property name="ElementShortName">EX_PC_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">EX_PC_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/EX_rs2_val_out" type="array">
+      <obj_property name="ElementShortName">EX_rs2_val_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">EX_rs2_val_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/EX_imm_out" type="array">
+      <obj_property name="ElementShortName">EX_imm_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">EX_imm_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/EX_rd_idx_out" type="array">
+      <obj_property name="ElementShortName">EX_rd_idx_out[4:0]</obj_property>
+      <obj_property name="ObjectShortName">EX_rd_idx_out[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/EX_op_type_out" type="array">
+      <obj_property name="ElementShortName">EX_op_type_out[4:0]</obj_property>
+      <obj_property name="ObjectShortName">EX_op_type_out[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/EX_csr_idx_out" type="array">
+      <obj_property name="ElementShortName">EX_csr_idx_out[11:0]</obj_property>
+      <obj_property name="ObjectShortName">EX_csr_idx_out[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/EX_ex_output_out" type="array">
+      <obj_property name="ElementShortName">EX_ex_output_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">EX_ex_output_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/EX_mask_out" type="array">
+      <obj_property name="ElementShortName">EX_mask_out[3:0]</obj_property>
+      <obj_property name="ObjectShortName">EX_mask_out[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/EX_next_ena_out" type="logic">
+      <obj_property name="ElementShortName">EX_next_ena_out</obj_property>
+      <obj_property name="ObjectShortName">EX_next_ena_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/EX_store_ena_out" type="logic">
+      <obj_property name="ElementShortName">EX_store_ena_out</obj_property>
+      <obj_property name="ObjectShortName">EX_store_ena_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/MEM_rd_val_out" type="array">
+      <obj_property name="ElementShortName">MEM_rd_val_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">MEM_rd_val_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/MEM_rd_idx_out" type="array">
+      <obj_property name="ElementShortName">MEM_rd_idx_out[4:0]</obj_property>
+      <obj_property name="ObjectShortName">MEM_rd_idx_out[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/MEM_op_type_out" type="array">
+      <obj_property name="ElementShortName">MEM_op_type_out[4:0]</obj_property>
+      <obj_property name="ObjectShortName">MEM_op_type_out[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/MEM_rs1_val_out" type="array">
+      <obj_property name="ElementShortName">MEM_rs1_val_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">MEM_rs1_val_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/MEM_imm_out" type="array">
+      <obj_property name="ElementShortName">MEM_imm_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">MEM_imm_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/MEM_csr_idx_out" type="array">
+      <obj_property name="ElementShortName">MEM_csr_idx_out[11:0]</obj_property>
+      <obj_property name="ObjectShortName">MEM_csr_idx_out[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP/MEM_next_ena_out" type="logic">
+      <obj_property name="ElementShortName">MEM_next_ena_out</obj_property>
+      <obj_property name="ObjectShortName">MEM_next_ena_out</obj_property>
    </wvobject>
 </wave_config>

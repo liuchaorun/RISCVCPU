@@ -19,777 +19,369 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 `include "RegisterFiles.v"
-`include "InstructionFormat.vh"
 `include "opType.vh"
 
 module ID(
-    input clk,
-    input rst,
-    input start,
-    input [31:0]NPC,
-    input [31:0]IR,
-    input [4:0]wbRd,
-    input [31:0]wbV,
-    input wb,
-    input br_flush,
-    output [31:0] rs1_val,
-    output [31:0] rs2_val,
-    output reg[31:0] imm,
-    output reg[4:0] rd_idx,
-    // no op(1), load(5), store(3), write rd(1), csr(6)
-    output reg[3:0] op_type,
-    // << >> + - ^ & | cmp(<) * / %
-    output reg[3:0] alu_type,
-    output reg[3:0] br_type,
-    output reg operand_type,
-    output reg[31:0] npc_id,
-    output reg stall,
-    output reg[11:0] csr_idx,
-    output reg flush
-);
-    reg[31:0] registerWriteStatus;
-    reg[31:0] registerReadStatus;
-    reg[4:0] rs1;
-    reg[4:0] rs2;
+    input                           clk,
+    input                           rst,
+    input                           start,
 
+    input               [31:0]      next_PC,
+    input               [31:0]      IR,
+    input               [4:0]       wb_idx,
+    input               [31:0]      wb_val,
+    input                           wb,
+    input                           pc_sel,
+
+    output              [31:0]      rs1_val,
+    output      reg     [31:0]      PC,
+    output      reg                 operand1_sel,
+    output              [31:0]      rs2_val,
+    output      reg     [31:0]      imm,
+    output      reg                 operand2_sel,
+    output      reg     [4:0]       rd_idx,
+    // no op(1), load(5), store(3), branch(8), write rd(1), csr(6)
+    output      reg     [4:0]       op_type,
+    // << >> + - ^ & | cmp(<) * / %
+    output      reg     [3:0]       alu_type,
+    output      reg     [11:0]      csr_idx,
+    output      reg                 data_conflict,
+    output      reg                 next_ena,
+    output      reg                 flush
+);
+
+    reg    [4:0]       rs1_idx;
+    reg    [4:0]       rs2_idx;
+ 
+    // register write table to detect data conflict
+    reg [31:0]  registerWriteStatus;
+    reg [31:0]  registerReadStatus;
+    reg [31:0]  registerWriteStatusLast;
+    reg [31:0]  registerReadStatusLast;
     integer i;
 
-    initial begin
-        registerWriteStatus = 32'b0;
-        registerReadStatus = 32'b0;
-        stall = 1'b0;
-        flush = 1'b0;
-        npc_id = 32'b0;
-    end
+    RegisterFiles RegisterFiles(
+        .clk(clk),
+        .rst(rst),
+        // read
+        .rs1_idx(rs1_idx),
+        .rs2_idx(rs2_idx),
+        .rs1_val(rs1_val),
+        .rs2_val(rs2_val),
+        // write
+        .wb(wb),
+        .wb_idx(wb_idx),
+        .wb_val(wb_val)
+    );
 
-    always @(posedge clk) begin
+    always @(posedge clk or posedge rst) begin
         flush = 1'b0;
-        if (br_flush) begin
-                csr_idx = 12'b0;
-                op_type = `OPNO;
-                alu_type = `ALUNO;
-                br_type = `BRNO;
-                registerWriteStatus = 32'b0; 
+        if(rst) begin
+            PC[31:0]        = 32'h0000_0000;
+            operand1_sel    = 1'b0;
+            imm[31:0]       = 32'h0000_0000;
+            operand2_sel    = 1'b0;
+            op_type[4:0]    = `OPNO;
+            alu_type[3:0]   = `ALUNO;
+            csr_idx[11:0]   = 12'b0000_0000_0000;
+            data_conflict   = 1'b0;
+            next_ena        = 1'b0;
+            registerWriteStatus = 32'b0;
+            registerReadStatus = 32'b0;
+            registerWriteStatusLast = registerWriteStatus;
+            registerReadStatusLast = registerReadStatus;
         end
-        if (~stall && ~br_flush && start) begin
-        registerReadStatus = 32'b0;
-        op_type = `OPNO;
-        alu_type = `ALUNO;
-        br_type = `BRNO;
-        npc_id = 32'b0;
-        rd_idx = 5'b0;
-        operand_type = 1'b0;
-        casex (IR)
-            `LUI: begin
-                rd_idx = IR[11:7];
-                registerWriteStatus[rd_idx] = 1'b1;
-                imm = {IR[31:12], 12'b0};
-                op_type = `OPWRD;
-                alu_type = `ALUNO;
+        else if (pc_sel) begin
+            for (i=0;i<32;i=i+1) begin
+                if (registerWriteStatus[i] == 1 && registerWriteStatusLast[i] == 0) registerWriteStatus[i] = 0;
             end
-            `AUIPC: begin
-                rd_idx = IR[11:7];
-                registerWriteStatus[rd_idx] = 1'b1;
-                imm = {IR[31:12], 12'b0};
-                npc_id = NPC;
-                br_type = `BRNO;
-                op_type = `OPWRD;
-                alu_type = `ALUAUIPC;
+            PC[31:0]        = 32'h0000_0000;
+            operand1_sel    = 1'b0;
+            imm[31:0]       = 32'h0000_0000;
+            operand2_sel    = 1'b0;
+            op_type[4:0]    = `OPNO;
+            alu_type[3:0]   = `ALUNO;
+            csr_idx[11:0]   = 12'b0000_0000_0000;
+            data_conflict   = 1'b0;
+            next_ena        = 1'b0;
+        end 
+        else if (data_conflict) flush = 1'b0;
+        else if(start && ~data_conflict && ~pc_sel) begin
+            registerWriteStatusLast = registerWriteStatus;
+            registerReadStatusLast = registerReadStatus;
+            rs1_idx = IR[19:15];
+            rs2_idx = IR[24:20];
+            rd_idx  = IR[11:7];
+            PC[31:0]        = next_PC[31:0] -3'b100;
+            csr_idx         = IR[31:20];
+            next_ena        = 1'b1;
+            registerReadStatus  = 32'b0;
+            
+            if (IR == 32'b0) begin
+                next_ena = 1'b0;
+                op_type[4:0]    = `OPNO;
+                alu_type[3:0]   = `ALUNO;
             end
-            `JAL: begin
-                rd_idx = IR[11:7];
-                registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {12'b1111_1111_1111, IR[31], IR[10:1], IR[11], IR[19:12]};
-                else imm = {11'b0, IR[31], IR[19:12], IR[20], IR[30:21], 1'b0};
-                npc_id = NPC;
-                br_type = `BRJAL;
-                op_type = `OPWRD;
-                alu_type = `ALUNO;
-            end
-            `JALR: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
+            // lb lh lw lbu lhu
+            else if(IR[6:2] == 5'b00000) begin
+                operand1_sel    = 1'b0;   // select rs1
+                operand2_sel    = 1'b1;   // select imm
+                imm[31:0]       = {{20{IR[31]}}, IR[31:20]};
+                alu_type[3:0]   = `ALUADD;
+                // data_conflict
+                registerReadStatus[rs1_idx] = 1'b1;
+                if(registerWriteStatus[rs1_idx]) begin
+                    data_conflict = 1'b1;
                     flush = 1'b1;
+                    next_ena = 1'b0;
                 end
+                else data_conflict = 1'b0;
                 registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
-                else imm = {20'd0, IR[31:20]};
-                npc_id = NPC;
-                br_type = `BRJALR;
-                op_type = `OPWRD;
-                alu_type = `ALUNO;
+                case(IR[14:12])
+                    3'b000: op_type[4:0] = `OPLB;
+                    3'b001: op_type[4:0] = `OPLH;
+                    3'b010: op_type[4:0] = `OPLW;
+                    3'b100: op_type[4:0] = `OPLBU;
+                    3'b101: op_type[4:0] = `OPLHU;
+                    default: op_type[4:0] = `OPALU;
+                endcase
             end
-            `LB: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
+            //addi slti sltiu xori ori andi slli srli srai
+            else if(IR[6:2] == 5'b00100) begin
+                operand1_sel    = 1'b0;   // select rs1
+                operand2_sel    = 1'b1;   // select imm
+                // data_conflict
+                registerReadStatus[rs1_idx] = 1'b1;
+                if(registerWriteStatus[rs1_idx]) begin
+                    data_conflict = 1'b1;
                     flush = 1'b1;
+                    next_ena = 1'b0;
                 end
+                else data_conflict = 1'b0;
                 registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
-                else imm = {20'd0, IR[31:20]};
-                operand_type = 1'b1;
-                op_type = `OPLB;
-                alu_type = `ALUNO;
+                // slli srli srai
+                if(IR[14:12] == 3'b001 || IR[14:12] == 3'b101) begin
+                    imm[31:0]       = {27'b0, IR[24:20]};
+                    op_type[4:0]    = `OPALU;
+                    // slli
+                    if(IR[14:12] == 3'b001) begin
+                        alu_type[3:0] = `ALUSL;
+                    end
+                    // srli srai
+                    else begin
+                        alu_type[3:0] = `ALUSR;
+                    end
+                end
+                //addi slti sltiu xori ori andi
+                else begin
+                    imm[31:0] = {{20{IR[31]}}, IR[31:20]};
+                    op_type[4:0] = `OPALU;
+                    case(IR[14:12])
+                        3'b000: alu_type[3:0] = `ALUADD;
+                        3'b010: alu_type[3:0] = `ALUCMP;
+                        3'b011: alu_type[3:0] = `ALUCMP;
+                        3'b100: alu_type[3:0] = `ALUXOR;
+                        3'b110: alu_type[3:0] = `ALUOR;
+                        3'b111: alu_type[3:0] = `ALUAND;
+                        default:alu_type[3:0] <= `ALUNO;
+                    endcase
+                end
             end
-            `LH: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
-                else imm = {20'd0, IR[31:20]};
-                operand_type = 1'b1;
-                op_type = `OPLH;
-                alu_type = `ALUNO;
-            end
-            `LBU: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
-                else imm = {20'd0, IR[31:20]};
-                operand_type = 1'b1;
-                op_type = `OPLBU;
-                alu_type = `ALUNO;
-            end
-            `LHU: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
-                else imm = {20'd0, IR[31:20]};
-                operand_type = 1'b1;
-                op_type = `OPLHU;
-                alu_type = `ALUNO;
-            end
-            `LW: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
-                else imm = {20'd0, IR[31:20]};
-                operand_type = 1'b1;
-                op_type = `OPLW;
-                alu_type = `ALUNO;
-            end
-            `ADDI: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
-                else imm = {20'd0, IR[31:20]};
-                op_type = `OPNO;
+            // U - auipc
+            else if(IR[6:2] == 5'b00101) begin
+                operand1_sel    = 1'b1;   
+                operand2_sel    = 1'b1;   // select imm
+                imm[31:0]       = {IR[31:12], 12'b0};
+                op_type = `OPALU;
                 alu_type = `ALUADD;
-                operand_type = 1'b1;
-            end
-            `SLTI: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
+                // data_conflict
                 registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
-                else imm = {20'd0, IR[31:20]};
-                op_type = `OPNO;
-                alu_type = `ALUCMP;
-                operand_type = 1'b1;
             end
-            `SLTIU: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
+            // S sb sh sw
+            else if(IR[6:2] == 5'b01000) begin
+                operand1_sel    = 1'b0;   // select rs1
+                operand2_sel    = 1'b1;   // select imm
+                imm[31:0]       = {{20{IR[31]}}, IR[31:25], IR[11:7]};
+                alu_type[3:0]   = `ALUADD;
+                registerReadStatus[rs1_idx] = 1'b1;
+                if(registerWriteStatus[rs1_idx]) begin
+                    data_conflict = 1'b1;
                     flush = 1'b1;
+                    next_ena = 1'b0;
                 end
+                else data_conflict = 1'b0;
                 registerWriteStatus[rd_idx] = 1'b1;
-                imm = {20'd0, IR[31:20]};
-                op_type = `OPNO;
-                alu_type = `ALUCMP;
-                operand_type = 1'b1;
+                case(IR[14:12])
+                    3'b000: op_type[4:0] = `OPSB;
+                    3'b001: op_type[4:0] = `OPSH;
+                    3'b010: op_type[4:0] = `OPSW;
+                    default:op_type[4:0] = `OPALU;
+                endcase
             end
-            `XORI: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
+            // R add sub sll slt sltu xor srl sra or and mul mulh mulhsu mulhu div divu rem remu
+            else if(IR[6:2] == 5'b01100) begin
+                operand1_sel    = 1'b0;   
+                operand2_sel    = 1'b0;
+                // data conflict
+                registerReadStatus[rs1_idx] = 1'b1;
+                registerReadStatus[rs2_idx] = 1'b1;
+                if(registerWriteStatus[rs1_idx] || registerWriteStatus[rs2_idx]) begin
+                    data_conflict = 1'b1;
                     flush = 1'b1;
+                    next_ena = 1'b0;
                 end
+                else data_conflict = 1'b0;
                 registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
-                else imm = {20'd0, IR[31:20]};
-                op_type = `OPNO;
-                alu_type = `ALUXOR;
-                operand_type = 1'b1;
+                // RVM
+                if(IR[31:25] == 7'b0000001) begin
+                    // MUL
+                    if(IR[14] == 1'b0) begin
+                        alu_type[3:0] = `ALUMUL;
+                        case(IR[13:12])
+                            2'b00: op_type = `OPMUL;
+                            2'b01: op_type = `OPMULH;
+                            2'b10: op_type = `OPMULHSU;
+                            2'b11: op_type = `OPMULHU;
+                        endcase
+                    end
+                    else begin
+                        // DIV
+                        if(IR[13:12] == 2'b00 || IR[13:12] == 2'b01) begin
+                            alu_type[3:0] = `ALUDIV;
+                            if(IR[13:12] == 2'b00) op_type[4:0] <= `OPDIV;
+                            else op_type[4:0] = `OPDIVU;
+                        end
+                        // REM
+                        else begin
+                            alu_type[3:0] = `ALUREM;
+                            if(IR[13:12] == 2'b10) op_type[4:0] = `OPREM;
+                            else op_type[4:0] = `OPREMU;
+                        end
+                    end
+                end
+                // add sub sll slt sltu xor srl sra or and
+                else begin
+                    op_type[4:0] = `OPALU;
+                    case(IR[14:12])
+                        3'b000: begin
+                            if(IR[31:25] == 7'b0000000) alu_type[3:0] = `ALUADD;
+                            else alu_type[3:0] = `ALUSUB;
+                        end
+                        3'b001: alu_type[3:0] = `ALUSL;
+                        3'b010: alu_type[3:0] = `ALUCMP;
+                        3'b011: alu_type[3:0] = `ALUCMP;
+                        3'b100: alu_type[3:0] = `ALUXOR;
+                        3'b101: alu_type[3:0] = `ALUSR;
+                        3'b110: alu_type[3:0] = `ALUOR;
+                        3'b111: alu_type[3:0] = `ALUAND;
+                        default: alu_type[3:0] = `ALUNO;
+                    endcase
+                end
             end
-            `ORI: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
-                else imm = {20'd0, IR[31:20]};
-                op_type = `OPNO;
-                alu_type = `ALUOR;
-                operand_type = 1'b1;
-            end
-            `ANDI: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:20]};
-                else imm = {20'd0, IR[31:20]};
-                op_type = `OPNO;
-                alu_type = `ALUAND;
-                operand_type = 1'b1;
-            end
-            `SLLI: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                imm = {27'b0, IR[24:20]};
-                op_type = `OPNO;
-                alu_type = `ALUSLL;
-                operand_type = 1'b1;
-            end
-            `SRLI: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                imm = {27'b0, IR[24:20]};
-                op_type = `OPNO;
-                alu_type = `ALUSRL;
-                operand_type = 1'b1;
-            end
-            `SRAI: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                imm = {27'b0, IR[24:20]};
-                op_type = `OPNO;
-                alu_type = `ALUSRA;
-                operand_type = 1'b1;
-            end
-            `CSRRW: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                csr_idx = IR[31:20];
-                op_type = `OPCSRRW;
+            // U - lui
+            else if(IR[6:2] == 5'b01101) begin
+                operand1_sel    = 1'b0;
+                operand2_sel    = 1'b1;   // select imm
+                imm[31:0]       = {IR[31:12], 12'b0};
+                op_type = `OPALU;
                 alu_type = `ALUNO;
-            end
-            `CSRRS: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
+                // data_conflict
                 registerWriteStatus[rd_idx] = 1'b1;
-                csr_idx = IR[31:20];
-                op_type = `OPCSRRS;
-                alu_type = `ALUNO;
             end
-            `CSRRC: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                csr_idx = IR[31:20];
-                op_type = `OPCSRRC;
-                alu_type = `ALUNO;
-            end
-            `CSRRWI: begin
-                rd_idx = IR[11:7];
-                registerWriteStatus[rd_idx] = 1'b1;
-                imm = {27'b0, IR[19:15]};
-                csr_idx = IR[31:20];
-                op_type = `OPCSRRWI;
-                alu_type = `ALUNO;
-            end
-            `CSRRSI: begin
-                rd_idx = IR[11:7];
-                registerWriteStatus[rd_idx] = 1'b1;
-                imm = {27'b0, IR[19:15]};
-                csr_idx = IR[31:20];
-                op_type = `OPCSRRSI;
-                alu_type = `ALUNO;
-            end
-            `CSRRCI: begin
-                rd_idx = IR[11:7];
-                registerWriteStatus[rd_idx] = 1'b1;
-                imm = {27'b0, IR[19:15]};
-                csr_idx = IR[31:20];
-                op_type = `OPCSRRCI;
-                alu_type = `ALUNO;
-            end
-            `BEQ: begin
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc_id = NPC;
-                br_type = `BRBEQ;
-                op_type = `OPNO;
-                alu_type = `ALUNO;
-            end
-            `BNE: begin
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc_id = NPC;
-                br_type = `BRBNE;
-                op_type = `OPNO;
-                alu_type = `ALUNO;
-            end
-            `BLT: begin
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc_id = NPC;
-                br_type = `BRBLT;
-                op_type = `OPNO;
-                alu_type = `ALUNO;
-            end
-            `BGE: begin
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (IR[31]) imm = {19'b111_1111_1111_1111_1111, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                else imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc_id = NPC;
-                br_type = `BRBGE;
-                op_type = `OPNO;
-                alu_type = `ALUNO;
-            end
-            `BLTU: begin
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc_id = NPC;
-                br_type = `BRBLTU;
-                op_type = `OPNO;
-                alu_type = `ALUNO;
-            end
-            `BGEU: begin
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                imm = {19'b0, IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
-                npc_id = NPC;
-                br_type = `BRBGEU;
-                op_type = `OPNO;
-                alu_type = `ALUNO;
-            end
-            `ADD: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                op_type = `OPNO;
+            // B
+            else if(IR[6:2] == 5'b11000) begin
+                operand1_sel    = 1'b1;
+                operand2_sel    = 1'b1;   // select imm
+                imm = {{20{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
                 alu_type = `ALUADD;
-                operand_type = 1'b0;
+                case(IR[14:12])
+                    3'b000: op_type = `OPBEQ;
+                    3'b001: op_type = `OPBNE;
+                    3'b100: op_type = `OPBLT;
+                    3'b101: op_type = `OPBGE;
+                    3'b110: op_type = `OPBLTU;
+                    3'b111: op_type = `OPBGEU;
+                endcase
             end
-            `SUB: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                op_type = `OPNO;
-                alu_type = `ALUSUB;
-                operand_type = 1'b0;
-            end
-            `SLL: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                op_type = `OPNO;
-                alu_type = `ALUSLL;
-                operand_type = 1'b0;
-            end
-            `SLT: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                op_type = `OPNO;
-                alu_type = `ALUCMP;
-                operand_type = 1'b0;
-            end
-            `SLTU: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                op_type = `OPNO;
-                alu_type = `ALUCMP;
-                operand_type = 1'b0;
-            end
-            `XOR: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                op_type = `OPNO;
-                alu_type = `ALUXOR;
-                operand_type = 1'b0;
-            end
-            `SRL: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                op_type = `OPNO;
-                alu_type = `ALUSRL;
-                operand_type = 1'b0;
-            end
-            `SRA: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                op_type = `OPNO;
-                alu_type = `ALUSRA;
-                operand_type = 1'b0;
-            end
-            `OR: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                op_type = `OPNO;
-                alu_type = `ALUOR;
-                operand_type = 1'b0;
-            end
-            `AND: begin
-                rd_idx = IR[11:7];
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                registerWriteStatus[rd_idx] = 1'b1;
-                op_type = `OPNO;
-                alu_type = `ALUAND;
-                operand_type = 1'b0;
-            end
-            `SB: begin
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:25], IR[11:7]};
-                else imm = {20'b0, IR[31:25], IR[11:7]};
-                operand_type = 1'b1;
-                op_type = `OPSB;
+            // jalr
+            else if(IR[6:2] == 5'b11001) begin
+                operand1_sel    = 1'b0;
+                operand2_sel    = 1'b1;   // select imm
+                imm[31:0] = {{20{IR[31]}}, IR[31:20]};
+                op_type = `OPJALR;
                 alu_type = `ALUADD;
+                // data_conflict
+                if(registerWriteStatus[rs1_idx]) data_conflict = 1'b1;
+                else data_conflict = 1'b0;
+                registerWriteStatus[rd_idx] = 1'b1;
             end
-            `SH: begin
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:25], IR[11:7]};
-                else imm = {20'b0, IR[31:25], IR[11:7]};
-                operand_type = 1'b1;
-                op_type = `OPSH;
+            // jal
+            else if(IR[6:2] == 5'b11011) begin
+                operand1_sel    = 1'b1;
+                operand2_sel    = 1'b1;   // select imm
+                imm = {{12{IR[31]}}, IR[19:12], IR[20], IR[30:21], 1'b0};
+                op_type = `OPJAL;
                 alu_type = `ALUADD;
+                registerWriteStatus[IR[11:7]] = 1'b1;
             end
-            `SW: begin
-                rs1 = IR[19:15];
-                registerReadStatus[rs1] = 1'b1;
-                rs2 = IR[24:20];
-                registerReadStatus[rs2] = 1'b1;
-                if (registerWriteStatus[rs1]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (registerWriteStatus[rs2]) begin
-                    stall = 1'b1;
-                    flush = 1'b1;
-                end
-                if (IR[31]) imm = {20'b1111_1111_1111_1111_1111, IR[31:25], IR[11:7]};
-                else imm = {20'b0, IR[31:25], IR[11:7]};
-                operand_type = 1'b1;
-                op_type = `OPSW;
-                alu_type = `ALUADD;
-            end
-            default: begin
-                csr_idx = 12'b0;
-                op_type = `OPNO;
+            // ebreak ecall csr
+            else if (IR[6:2] == 5'b11100) begin
+                operand1_sel = 1'b0;
                 alu_type = `ALUNO;
-                br_type = `BRNO;
-                npc_id = NPC;
+                // data_conflict
+                if(registerWriteStatus[rs1_idx]) begin
+                    data_conflict = 1'b1;
+                    flush = 1'b1;
+                    next_ena = 1'b0;
+                end
+                else data_conflict = 1'b0;
+                registerWriteStatus[rd_idx] = 1'b1;
+                // csrrwi cssrrsi csrrci
+                if(IR[14] == 1'b1) begin
+                    operand2_sel = 1'b1;
+                    imm = {27'b0, IR[24:20]};
+                    case(IR[13:12])
+                        2'b01: op_type = `OPCSRRWI;
+                        2'b10: op_type = `OPCSRRSI;
+                        2'b11: op_type = `OPCSRRCI;
+                        default: op_type = `OPALU;
+                    endcase
+                end
+                else begin
+                    operand2_sel = 1'b0;
+                    case(IR[13:12])
+                        //2'b00: op_type <= `OPCSRRWI;
+                        2'b01: op_type = `OPCSRRW;
+                        2'b10: op_type = `OPCSRRS;
+                        2'b11: op_type = `OPCSRRC;
+                        default: op_type = `OPALU;
+                    endcase
+                end
             end
-        endcase
+            else begin
+                next_ena = 1'b0;
+                op_type[4:0]    = `OPNO;
+                alu_type[3:0]   = `ALUNO;
+            end
+        end
+        // stall
+        else begin
+            // other signals to keep
+            next_ena = 1'b0;
+            op_type[4:0]    = `OPNO;
+            alu_type[3:0]   = `ALUNO;
         end
     end
 
     always @(posedge clk) begin
         if (wb) begin
-            registerWriteStatus[wbRd] = 1'b0;
-//            if(registerWriteStatus[rd_idx]) begin
-//                registerWriteStatus[rd_idx] = 1'b0;
-//                if (~(|registerWriteStatus)) stall = 1'b0; 
-//                registerWriteStatus[rd_idx] = 1'b1;
-//            end
-            stall = |(registerWriteStatus & registerReadStatus);
-            if (~stall && wbRd == rd_idx) registerWriteStatus[rd_idx] = 1'b1;
-            if (~stall) registerReadStatus = 32'b0;
+            registerWriteStatus[wb_idx] = 1'b0;
+            if (data_conflict) begin
+                data_conflict = |(registerWriteStatus & registerReadStatus);
+                if (~data_conflict && wb_idx == rd_idx) registerWriteStatus[rd_idx] = 1'b1;
+                if (~data_conflict) registerReadStatus = 32'b0;
+            end
         end
     end
 
-    RegisterFiles RegisterFiles(
-        .clk(clk),
-        .rst(rst),
-        .rs1(rs1),
-        .rs2(rs2),
-        .rd(wbRd),
-        .wb(wb),
-        .rd_v(wbV),
-        .rs1_v(rs1_val),
-        .rs2_v(rs2_val)
-    );
 endmodule
