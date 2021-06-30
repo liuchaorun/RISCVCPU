@@ -1,0 +1,1 @@
+bltu,bgtz,beq,sw,bne,beqz,rem,lw,zext.b,sb,sub,bgez,fsd,j,snez,ret,jr,div,li,and,seqz,fdiv.d,sltiu,neg,bge,blez,xori,sltu,frrm,csrs,lh,csrsi,fmul.d,not,remu,bltz,bnez,lb,jalr,xor,add,sra,jal,blt,slli,srli,addi,divu,sh,srl,auipc,srai,mulhu,ori,bgeu,mul,mv,or,slt,lbu,ecall,sll,fld,andi,lhu,lui

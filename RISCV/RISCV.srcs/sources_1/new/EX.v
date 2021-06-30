@@ -130,6 +130,7 @@ module EX(
                 end
                 `OPBLTU: begin    
                     pc_sel <= (rs1_val < rs2_val) ? 1'b1 : 1'b0;
+                    if (rs1_val < rs2_val) new_pc = PC + imm;
                     mask <= 4'b0000;
                 end
                 `OPBGE: begin     
@@ -144,6 +145,7 @@ module EX(
                 end
                 `OPBGEU: begin    
                     pc_sel <= (rs1_val >= rs2_val) ? 1'b1 : 1'b0;
+                    if (rs1_val >= rs2_val) new_pc = PC + imm;
                     mask <= 4'b0000;
                 end
                 `OPJAL: begin     

@@ -293,6 +293,14 @@ module ID(
                 operand1_sel    = 1'b1;
                 operand2_sel    = 1'b1;   // select imm
                 imm = {{20{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
+                registerReadStatus[rs1_idx] = 1'b1;
+                registerReadStatus[rs2_idx] = 1'b1;
+                if(registerWriteStatus[rs1_idx] || registerWriteStatus[rs2_idx]) begin
+                    data_conflict = 1'b1;
+                    flush = 1'b1;
+                    next_ena = 1'b0;
+                end
+                else data_conflict = 1'b0;
                 alu_type = `ALUADD;
                 case(IR[14:12])
                     3'b000: op_type = `OPBEQ;

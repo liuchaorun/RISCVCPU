@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="414340228fs"></ZoomEndTime>
-      <Cursor1Time time="4525500000fs"></Cursor1Time>
+      <ZoomEndTime time="808000001fs"></ZoomEndTime>
+      <Cursor1Time time="207429000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="216"></NameColumnWidth>
-      <ValueColumnWidth column_width="128"></ValueColumnWidth>
+      <ValueColumnWidth column_width="122"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="43" />
+   <WVObjectSize size="42" />
    <wvobject fp_name="/TOP/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -59,10 +59,6 @@
    <wvobject fp_name="/TOP/IF_instruction_out" type="array">
       <obj_property name="ElementShortName">IF_instruction_out[31:0]</obj_property>
       <obj_property name="ObjectShortName">IF_instruction_out[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/TOP/IF_next_ena_out" type="array">
-      <obj_property name="ElementShortName">IF_next_ena_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">IF_next_ena_out[31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/TOP/ID_rs1_val_out" type="array">
       <obj_property name="ElementShortName">ID_rs1_val_out[31:0]</obj_property>

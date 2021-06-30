@@ -1,1 +1,0 @@
-li,frrm,add,andi,neg,bne,rem,bnez,ret,lw,seqz,beqz,sw,or,lh,sb,csrs,blt,and,sub,jr,slli,div,lbu,sll,mulhu,bltz,lhu,jal,jalr,ori,slt,xor,srai,divu,fmul.d,srl,ecall,bgez,not,mv,xori,fdiv.d,blez,remu,j,sltiu,lb,lui,sh,mul,fld,bge,beq,addi,zext.b,bltu,csrsi,srli,sra,auipc,bgeu,fsd,sltu,bgtz,snez
