@@ -1,0 +1,16 @@
+#-----------------------------------------------------------
+# Vivado v2018.3 (64-bit)
+# SW Build 2405991 on Thu Dec  6 23:38:27 MST 2018
+# IP Build 2404404 on Fri Dec  7 01:43:56 MST 2018
+# Start of session at: Mon Jun 28 22:25:53 2021
+# Process ID: 6344
+# Current directory: C:/Users/X/Desktop/RISCVCPU/RISCV
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent6952 C:\Users\X\Desktop\RISCVCPU\RISCV\RISCV.xpr
+# Log file: C:/Users/X/Desktop/RISCVCPU/RISCV/vivado.log
+# Journal file: C:/Users/X/Desktop/RISCVCPU/RISCV\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/X/Desktop/RISCVCPU/RISCV/RISCV.xpr
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1

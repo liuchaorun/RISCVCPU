@@ -1,0 +1,27 @@
+
+Fibonacci_ass.o:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <main>:
+   0:	4619                	li	a2,6
+   2:	4681                	li	a3,0
+   4:	4705                	li	a4,1
+   6:	4789                	li	a5,2
+   8:	00060813          	mv	a6,a2
+   c:	02e60063          	beq	a2,a4,2c <.L1>
+  10:	00070813          	mv	a6,a4
+  14:	00f60c63          	beq	a2,a5,2c <.L1>
+
+00000018 <.L0>:
+  18:	00e68833          	add	a6,a3,a4
+  1c:	00f65863          	bge	a2,a5,2c <.L1>
+  20:	0785                	addi	a5,a5,1
+  22:	00070693          	mv	a3,a4
+  26:	00078713          	mv	a4,a5
+  2a:	b7fd                	j	18 <.L0>
+
+0000002c <.L1>:
+  2c:	01002023          	sw	a6,0(zero) # 0 <main>
+  30:	8082                	ret
