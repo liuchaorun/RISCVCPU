@@ -31,19 +31,25 @@ module ID(
     input               [4:0]       wb_idx,
     input               [31:0]      wb_val,
     input                           wb,
+    input               [4:0]       wb_float_idx,
+    input               [63:0]      wb_float_val,
+    input                           wb_float,
     input                           pc_sel,
 
     output              [31:0]      rs1_val,
+    output              [63:0]      float_rs1_val,
     output      reg     [31:0]      PC,
     output      reg                 operand1_sel,
     output              [31:0]      rs2_val,
+    output              [63:0]      float_rs2_val,
     output      reg     [31:0]      imm,
     output      reg                 operand2_sel,
     output      reg     [4:0]       rd_idx,
     // no op(1), load(5), store(3), branch(8), write rd(1), csr(6)
-    output      reg     [4:0]       op_type,
+    output      reg     [5:0]       op_type,
     // << >> + - ^ & | cmp(<) * / %
     output      reg     [3:0]       alu_type,
+    output      reg     [2:0]       float_rm,
     output      reg     [11:0]      csr_idx,
     output      reg                 data_conflict,
     output      reg                 next_ena,
@@ -54,10 +60,10 @@ module ID(
     reg    [4:0]       rs2_idx;
  
     // register write table to detect data conflict
-    reg [31:0]  registerWriteStatus;
-    reg [31:0]  registerReadStatus;
-    reg [31:0]  registerWriteStatusLast;
-    reg [31:0]  registerReadStatusLast;
+    reg [63:0]  registerWriteStatus;
+    reg [63:0]  registerReadStatus;
+    reg [63:0]  registerWriteStatusLast;
+    reg [63:0]  registerReadStatusLast;
     integer i;
 
     RegisterFiles RegisterFiles(
@@ -73,6 +79,20 @@ module ID(
         .wb_idx(wb_idx),
         .wb_val(wb_val)
     );
+    
+    FloatRegisterFiles FloatRegisterFiles(
+        .clk(clk),
+        .rst(rst),
+        // read
+        .rs1_idx(rs1_idx),
+        .rs2_idx(rs2_idx),
+        .rs1_val(float_rs1_val),
+        .rs2_val(float_rs2_val),
+        // write
+        .wb(wb_float),
+        .wb_idx(wb_float_idx),
+        .wb_val(wb_float_val)
+    );
 
     always @(posedge clk or posedge rst) begin
         flush = 1'b0;
@@ -81,7 +101,7 @@ module ID(
             operand1_sel    = 1'b0;
             imm[31:0]       = 32'h0000_0000;
             operand2_sel    = 1'b0;
-            op_type[4:0]    = `OPNO;
+            op_type[5:0]    = `OPNO;
             alu_type[3:0]   = `ALUNO;
             csr_idx[11:0]   = 12'b0000_0000_0000;
             data_conflict   = 1'b0;
@@ -92,14 +112,14 @@ module ID(
             registerReadStatusLast = registerReadStatus;
         end
         else if (pc_sel) begin
-            for (i=0;i<32;i=i+1) begin
+            for (i=0;i<64;i=i+1) begin
                 if (registerWriteStatus[i] == 1 && registerWriteStatusLast[i] == 0) registerWriteStatus[i] = 0;
             end
             PC[31:0]        = 32'h0000_0000;
             operand1_sel    = 1'b0;
             imm[31:0]       = 32'h0000_0000;
             operand2_sel    = 1'b0;
-            op_type[4:0]    = `OPNO;
+            op_type[5:0]    = `OPNO;
             alu_type[3:0]   = `ALUNO;
             csr_idx[11:0]   = 12'b0000_0000_0000;
             data_conflict   = 1'b0;
@@ -112,14 +132,14 @@ module ID(
             rs1_idx = IR[19:15];
             rs2_idx = IR[24:20];
             rd_idx  = IR[11:7];
-            PC[31:0]        = next_PC[31:0] -3'b100;
-            csr_idx         = IR[31:20];
-            next_ena        = 1'b1;
+            PC[31:0] = next_PC[31:0] -3'b100;
+            csr_idx  = IR[31:20];
+            next_ena = 1'b1;
             registerReadStatus  = 32'b0;
             
             if (IR == 32'b0) begin
                 next_ena = 1'b0;
-                op_type[4:0]    = `OPNO;
+                op_type[5:0]    = `OPNO;
                 alu_type[3:0]   = `ALUNO;
             end
             // lb lh lw lbu lhu
@@ -138,12 +158,12 @@ module ID(
                 else data_conflict = 1'b0;
                 registerWriteStatus[rd_idx] = 1'b1;
                 case(IR[14:12])
-                    3'b000: op_type[4:0] = `OPLB;
-                    3'b001: op_type[4:0] = `OPLH;
-                    3'b010: op_type[4:0] = `OPLW;
-                    3'b100: op_type[4:0] = `OPLBU;
-                    3'b101: op_type[4:0] = `OPLHU;
-                    default: op_type[4:0] = `OPALU;
+                    3'b000: op_type[5:0] = `OPLB;
+                    3'b001: op_type[5:0] = `OPLH;
+                    3'b010: op_type[5:0] = `OPLW;
+                    3'b100: op_type[5:0] = `OPLBU;
+                    3'b101: op_type[5:0] = `OPLHU;
+                    default: op_type[5:0] = `OPALU;
                 endcase
             end
             //addi slti sltiu xori ori andi slli srli srai
@@ -162,7 +182,7 @@ module ID(
                 // slli srli srai
                 if(IR[14:12] == 3'b001 || IR[14:12] == 3'b101) begin
                     imm[31:0]       = {27'b0, IR[24:20]};
-                    op_type[4:0]    = `OPALU;
+                    op_type[5:0]    = `OPALU;
                     // slli
                     if(IR[14:12] == 3'b001) begin
                         alu_type[3:0] = `ALUSL;
@@ -175,7 +195,7 @@ module ID(
                 //addi slti sltiu xori ori andi
                 else begin
                     imm[31:0] = {{20{IR[31]}}, IR[31:20]};
-                    op_type[4:0] = `OPALU;
+                    op_type[5:0] = `OPALU;
                     case(IR[14:12])
                         3'b000: alu_type[3:0] = `ALUADD;
                         3'b010: alu_type[3:0] = `ALUCMP;
@@ -204,18 +224,18 @@ module ID(
                 imm[31:0]       = {{20{IR[31]}}, IR[31:25], IR[11:7]};
                 alu_type[3:0]   = `ALUADD;
                 registerReadStatus[rs1_idx] = 1'b1;
-                if(registerWriteStatus[rs1_idx]) begin
+                registerReadStatus[rs2_idx] = 1'b1;
+                if(registerWriteStatus[rs1_idx] || registerWriteStatus[rs2_idx]) begin
                     data_conflict = 1'b1;
                     flush = 1'b1;
                     next_ena = 1'b0;
                 end
                 else data_conflict = 1'b0;
-                registerWriteStatus[rd_idx] = 1'b1;
                 case(IR[14:12])
-                    3'b000: op_type[4:0] = `OPSB;
-                    3'b001: op_type[4:0] = `OPSH;
-                    3'b010: op_type[4:0] = `OPSW;
-                    default:op_type[4:0] = `OPALU;
+                    3'b000: op_type[5:0] = `OPSB;
+                    3'b001: op_type[5:0] = `OPSH;
+                    3'b010: op_type[5:0] = `OPSW;
+                    default:op_type[5:0] = `OPALU;
                 endcase
             end
             // R add sub sll slt sltu xor srl sra or and mul mulh mulhsu mulhu div divu rem remu
@@ -248,20 +268,20 @@ module ID(
                         // DIV
                         if(IR[13:12] == 2'b00 || IR[13:12] == 2'b01) begin
                             alu_type[3:0] = `ALUDIV;
-                            if(IR[13:12] == 2'b00) op_type[4:0] <= `OPDIV;
-                            else op_type[4:0] = `OPDIVU;
+                            if(IR[13:12] == 2'b00) op_type[5:0] = `OPDIV;
+                            else op_type[5:0] = `OPDIVU;
                         end
                         // REM
                         else begin
                             alu_type[3:0] = `ALUREM;
-                            if(IR[13:12] == 2'b10) op_type[4:0] = `OPREM;
-                            else op_type[4:0] = `OPREMU;
+                            if(IR[13:12] == 2'b10) op_type[5:0] = `OPREM;
+                            else op_type[5:0] = `OPREMU;
                         end
                     end
                 end
                 // add sub sll slt sltu xor srl sra or and
                 else begin
-                    op_type[4:0] = `OPALU;
+                    op_type[5:0] = `OPALU;
                     case(IR[14:12])
                         3'b000: begin
                             if(IR[31:25] == 7'b0000000) alu_type[3:0] = `ALUADD;
@@ -366,9 +386,68 @@ module ID(
                     endcase
                 end
             end
+            //fld
+            else if (IR[6:0] == 7'b0000111) begin
+                operand1_sel    = 1'b0;   // select rs1
+                operand2_sel    = 1'b1;   // select imm
+                imm[31:0]       = {{20{IR[31]}}, IR[31:20]};
+                alu_type[3:0]   = `ALUADD;
+                // data_conflict
+                registerReadStatus[rs1_idx] = 1'b1;
+                if(registerWriteStatus[rs1_idx]) begin
+                    data_conflict = 1'b1;
+                    flush = 1'b1;
+                    next_ena = 1'b0;
+                end
+                else data_conflict = 1'b0;
+                registerWriteStatus[rd_idx + 32] = 1'b1;
+                op_type[5:0] = `OPFLD;
+            end
+            //fsd
+            else if (IR[6:0] == 7'b0100111) begin
+                operand1_sel    = 1'b0;   // select rs1
+                operand2_sel    = 1'b1;   // select imm
+                imm[31:0]       = {{20{IR[31]}}, IR[31:25], IR[11:7]};
+                alu_type[3:0]   = `ALUADD;
+                registerReadStatus[rs1_idx] = 1'b1;
+                registerReadStatus[rs2_idx + 32] = 1'b1;
+                if(registerWriteStatus[rs1_idx] || registerWriteStatus[rs2_idx + 32]) begin
+                    data_conflict = 1'b1;
+                    flush = 1'b1;
+                    next_ena = 1'b0;
+                end
+                else data_conflict = 1'b0;
+                op_type[5:0] = `OPFSD;
+            end
+            //fdivd fmuld
+            else if (IR[6:0] == 7'b1010011) begin
+                operand1_sel    = 1'b0;   
+                operand2_sel    = 1'b0;
+                // data conflict
+                registerReadStatus[rs1_idx + 32] = 1'b1;
+                registerReadStatus[rs2_idx + 32] = 1'b1;
+                if(registerWriteStatus[rs1_idx + 32] || registerWriteStatus[rs2_idx + 32]) begin
+                    data_conflict = 1'b1;
+                    flush = 1'b1;
+                    next_ena = 1'b0;
+                end
+                else data_conflict = 1'b0;
+                registerWriteStatus[rd_idx + 32] = 1'b1;
+                float_rm = IR[14:12];
+                //fmuld
+                if (IR[31:25] == 7'b0001001) begin
+                    op_type = `OPFMULD;
+                    alu_type = `ALUNO;
+                end
+                //fdivd
+                else if (IR[31:25] == 7'b0001100) begin
+                    op_type = `OPFDIVD;
+                    alu_type = `ALUNO;
+                end
+            end
             else begin
                 next_ena = 1'b0;
-                op_type[4:0]    = `OPNO;
+                op_type[5:0]    = `OPNO;
                 alu_type[3:0]   = `ALUNO;
             end
         end
@@ -376,7 +455,7 @@ module ID(
         else begin
             // other signals to keep
             next_ena = 1'b0;
-            op_type[4:0]    = `OPNO;
+            op_type[5:0]    = `OPNO;
             alu_type[3:0]   = `ALUNO;
         end
     end

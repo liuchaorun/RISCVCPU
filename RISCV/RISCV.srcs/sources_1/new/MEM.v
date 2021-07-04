@@ -26,19 +26,29 @@ module MEM(
         input                               start,
 
         input                   [31:0]      ex_output,
+        input                   [63:0]      ex_float_output,
+        input                   [2:0]       float_rm,
+        input                   [2:0]       float_rm_val,
+        input                   [4:0]       fflags_accured_exceptions,
         input                   [4:0]       rd_idx,
-        input                   [4:0]       op_type,
+        input                   [5:0]       op_type,
         input                   [31:0]      rs1_val,
+        input                   [63:0]      rs1_float_val,
         input                   [31:0]      rs2_val,
+        input                   [63:0]      rs2_float_val,
         input                   [31:0]      imm,
         input                   [31:0]      PC,
         input                   [11:0]      csr_idx,
-        input                   [3:0]       mask,
+        input                   [7:0]       mask,
         input                               store_ena,
 
         output      reg         [31:0]      rd_val,
+        output      reg         [63:0]      rd_float_val,
+        output      reg         [2:0]       float_rm_out,
+        output      reg         [2:0]       float_rm_val_out,
+        output      reg         [4:0]       fflags_accured_exceptions_out,
         output      reg         [4:0]       rd_idx_out,
-        output      reg         [3:0]       op_type_out,
+        output      reg         [5:0]       op_type_out,
         output      reg         [31:0]      rs1_val_out,
         output      reg         [31:0]      imm_out,
         output      reg         [11:0]      csr_idx_out,
@@ -53,6 +63,7 @@ module MEM(
         .r_addr(ex_output),
         .w_addr(ex_output),
         .w_data(rs2_val),
+        .w_float_data(rs2_float_val),
         .wen(store_ena),
         .mask(mask),
         .data(read_data)
@@ -68,15 +79,19 @@ module MEM(
             rd_idx_out = rd_idx;
             op_type_out = op_type;
             rs1_val_out = rs1_val;
+            rd_float_val = ex_float_output;
+            float_rm_out = float_rm;
+            float_rm_val_out = float_rm_val;
+            fflags_accured_exceptions_out = fflags_accured_exceptions;
             imm_out = imm;
             csr_idx_out = csr_idx;
             // store
-            if(op_type == `OPSB || op_type == `OPSH || op_type == `OPSW) begin
+            if(op_type == `OPSB || op_type == `OPSH || op_type == `OPSW || op_type == `OPFSD) begin
                 rd_val[31:0] <= 32'd0;
                 next_ena = 1'b0;
             end
             // Loads
-            else if(op_type == `OPLB || op_type == `OPLH || op_type == `OPLBU || op_type == `OPLHU || op_type == `OPLW) begin
+            else if(op_type == `OPLB || op_type == `OPLH || op_type == `OPLBU || op_type == `OPLHU || op_type == `OPLW || op_type == `OPFLD) begin
                 next_ena = 1'b1;
                 case (op_type)
                     `OPLB: begin
@@ -90,6 +105,9 @@ module MEM(
                     end
                     `OPLHU: begin
                         rd_val = {16'b0, read_data[15:0]};
+                    end
+                    `OPFLD: begin
+                        rd_float_val = read_data[63:0];
                     end
                     default: begin
                         rd_val = read_data;

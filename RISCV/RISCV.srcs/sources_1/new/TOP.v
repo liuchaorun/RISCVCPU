@@ -58,13 +58,15 @@ module TOP(
     
     // ID output
     wire    [31:0]      ID_rs1_val_out;
+    wire    [31:0]      ID_rs1_float_val_out;
     wire    [31:0]      ID_PC_out;
     wire                ID_operand1_sel_out;
     wire    [31:0]      ID_rs2_val_out;
+    wire    [31:0]      ID_rs2_float_val_out;
     wire    [31:0]      ID_imm_out;
     wire                ID_operand2_sel_out;
     wire    [4:0]       ID_rd_idx_out;
-    wire    [4:0]       ID_op_type_out;
+    wire    [5:0]       ID_op_type_out;
     wire    [3:0]       ID_alu_type_out;
     wire    [11:0]      ID_csr_idx_out;
     wire                ID_next_ena_out;
@@ -72,6 +74,9 @@ module TOP(
     wire                WB_wb_out;
     wire    [4:0]       WB_wb_idx_out;
     wire    [31:0]      WB_wb_val_out;
+    wire                WB_wb_float_out;
+    wire    [4:0]       WB_wb_float_idx_out;
+    wire    [63:0]      WB_wb_float_val_out;
 
     ID id_unit(
         .clk(clk),
@@ -82,12 +87,17 @@ module TOP(
         .wb_idx(WB_wb_idx_out),
         .wb_val(WB_wb_val_out),
         .wb(WB_wb_out),
+        .wb_float_idx(WB_wb_float_idx_out),
+        .wb_float_val(WB_wb_float_val_out),
+        .wb_float(WB_wb_float_out),
         .pc_sel(EX_pc_sel_out),
 
         .rs1_val(ID_rs1_val_out),
+        .rs1_float_val(ID_rs1_float_val_out),
         .PC(ID_PC_out),
         .operand1_sel(ID_operand1_sel_out),
         .rs2_val(ID_rs2_val_out),
+        .rs2_float_val(ID_rs2_float_val_out),
         .imm(ID_imm_out),
         .operand2_sel(ID_operand2_sel_out),
         .rd_idx(ID_rd_idx_out),
@@ -100,26 +110,34 @@ module TOP(
     );
 
     // EX output
-    wire    [31:0]      EX_rs1_val_out;        
+    wire    [31:0]      EX_rs1_val_out;
+    wire    [63:0]      EX_rs1_float_val_out;        
     wire    [31:0]      EX_PC_out;
     wire    [31:0]      EX_rs2_val_out;
+    wire    [63:0]      EX_rs2_float_val_out;
     wire    [31:0]      EX_imm_out;
     wire    [4:0]       EX_rd_idx_out;
-    wire    [4:0]       EX_op_type_out;
+    wire    [5:0]       EX_op_type_out;
     wire    [11:0]      EX_csr_idx_out;
     wire    [31:0]      EX_ex_output_out;
-    wire    [3:0]       EX_mask_out;
+    wire    [7:0]       EX_mask_out;
     wire                EX_next_ena_out;
     wire                EX_store_ena_out;
+    wire    [63:0]      EX_ex_float_output;
+    wire    [2:0]       EX_float_rm_out;
+    wire    [2:0]       EX_float_rm_val;
+    wire    [4:0]       EX_fflags_accured_exceptions;
 
     EX ex_unit(
         .clk(clk),
         .rst(rst),
         .start(~ID_data_conflict_out),
         .rs1_val(ID_rs1_val_out),
+        .rs1_float_val(ID_rs1_float_val_out),
         .PC(ID_PC_out),
         .operand1_sel(ID_operand1_sel_out),
         .rs2_val(ID_rs2_val_out),
+        .rs2_float_val(ID_rs2_float_val_out),
         .imm(ID_imm_out),
         .operand2_sel(ID_operand2_sel_out),
         .rd_idx(ID_rd_idx_out),
@@ -127,15 +145,21 @@ module TOP(
         .alu_type(ID_alu_type_out),
         .csr_idx(ID_csr_idx_out),
   
-        .rs1_val_out(EX_rs1_val_out),        
+        .rs1_val_out(EX_rs1_val_out),
+        .rs1_float_val_out(EX_rs1_float_val_out),        
         .PC_out(EX_PC_out),
         .rs2_val_out(EX_rs2_val_out),
+        .rs2_float_val_out(EX_rs2_float_val_out),
         .imm_out(EX_imm_out),
         .rd_idx_out(EX_rd_idx_out),
         .op_type_out(EX_op_type_out),
         .csr_idx_out(EX_csr_idx_out),
 
         .ex_output(EX_ex_output_out),
+        .ex_float_output(EX_ex_float_output),
+        .float_rm_out(EX_float_rm_out),
+        .float_rm_val(EX_float_rm_val),
+        .fflags_accured_exceptions(EX_fflags_accured_exceptions),
         .pc_sel(EX_pc_sel_out),
         .new_pc(EX_new_pc_out),
         .mask(EX_mask_out),
@@ -145,12 +169,16 @@ module TOP(
 
     // MEM output
     wire    [31:0]      MEM_rd_val_out;
+    wire    [31:0]      MEM_rd_float_val_out;
     wire    [4:0]       MEM_rd_idx_out;
-    wire    [4:0]       MEM_op_type_out;
+    wire    [5:0]       MEM_op_type_out;
     wire    [31:0]      MEM_rs1_val_out;
     wire    [31:0]      MEM_imm_out;
     wire    [11:0]      MEM_csr_idx_out;
     wire                MEM_next_ena_out;
+    wire    [2:0]       MEM_float_rm_out;
+    wire    [2:0]       MEM_float_rm_val_out;
+    wire    [4:0]       MEM_fflags_accured_exceptions_out;
 
     // MEM
      MEM mem_unit(
@@ -158,10 +186,16 @@ module TOP(
         .rst(rst),
         .start(EX_next_ena_out),
         .ex_output(EX_ex_output_out),
+        .ex_float_output(EX_ex_float_output),
+        .float_rm(EX_float_rm_out),
+        .float_rm_val(EX_float_rm_val),
+        .fflags_accured_exceptions(EX_fflags_accured_exceptions),
         .rd_idx(EX_rd_idx_out),
         .op_type(EX_op_type_out),
         .rs1_val(EX_rs1_val_out),
+        .rs1_float_val(EX_rs1_float_val_out),
         .rs2_val(EX_rs2_val_out),
+        .rs2_float_val(EX_rs2_float_val_out),
         .imm(EX_imm_out),
         .PC(EX_PC_out),
         .csr_idx(EX_csr_idx_out),
@@ -169,6 +203,10 @@ module TOP(
         .store_ena(EX_store_ena_out),
 
         .rd_val(MEM_rd_val_out),
+        .rd_float_val(MEM_rd_float_val_out),
+        .float_rm_out(MEM_float_rm_out),
+        .float_rm_val_out(MEM_float_rm_val_out),
+        .fflags_accured_exceptions_out(MEM_fflags_accured_exceptions_out),
         .rd_idx_out(MEM_rd_idx_out),
         .op_type_out(MEM_op_type_out),
         .rs1_val_out(MEM_rs1_val_out),
@@ -184,15 +222,22 @@ module TOP(
         .start(MEM_next_ena_out),
 
         .rd_val(MEM_rd_val_out),
+        .rd_float_val(MEM_rd_float_val_out),
         .rd_idx(MEM_rd_idx_out),
         .op_type(MEM_op_type_out),
         .rs1_val(MEM_rs1_val_out),
         .imm(MEM_imm_out),
         .csr_idx(MEM_csr_idx_out),
+        .float_rm(MEM_float_rm_out),
+        .float_rm_val(MEM_float_rm_val_out),
+        .fflags_accured_exceptions(MEM_fflags_accured_exceptions_out),
 
         .wb(WB_wb_out),
         .wb_idx(WB_wb_idx_out),
-        .wb_val(WB_wb_val_out)
+        .wb_val(WB_wb_val_out),
+        .wb_float(WB_wb_float_out),
+        .wb_float_idx(WB_wb_float_idx_out),
+        .wb_float_val(WB_wb_float_val_out)
     );
 
     

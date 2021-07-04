@@ -1,40 +1,45 @@
-`define     OPALU       5'b00000
+`define     OPALU       6'b0000000
 
-`define     OPLB        5'b00001
-`define     OPLH        5'b00010
-`define     OPLBU       5'b00011
-`define     OPLHU       5'b00100
-`define     OPLW        5'b00101
+`define     OPLB        6'b000001
+`define     OPLH        6'b000010
+`define     OPLBU       6'b000011
+`define     OPLHU       6'b000100
+`define     OPLW        6'b000101
 
-`define     OPSB        5'b00110
-`define     OPSH        5'b00111
-`define     OPSW        5'b01000
+`define     OPSB        6'b000110
+`define     OPSH        6'b000111
+`define     OPSW        6'b001000
 
-`define     OPBEQ       5'b01001
-`define     OPBNE       5'b01010
-`define     OPBLT       5'b01011
-`define     OPBLTU      5'b01100
-`define     OPBGE       5'b01101
-`define     OPBGEU      5'b01110
-`define     OPJAL       5'b01111
-`define     OPJALR      5'b10000
+`define     OPBEQ       6'b001001
+`define     OPBNE       6'b001010
+`define     OPBLT       6'b001011
+`define     OPBLTU      6'b001100
+`define     OPBGE       6'b001101
+`define     OPBGEU      6'b001110
+`define     OPJAL       6'b001111
+`define     OPJALR      6'b010000
 
-`define     OPCSRRW     5'b10001
-`define     OPCSRRS     5'b10010
-`define     OPCSRRC     5'b10011
-`define     OPCSRRWI    5'b10100
-`define     OPCSRRSI    5'b10101
-`define     OPCSRRCI    5'b10110
+`define     OPCSRRW     6'b010001
+`define     OPCSRRS     6'b010010
+`define     OPCSRRC     6'b010011
+`define     OPCSRRWI    6'b010100
+`define     OPCSRRSI    6'b010101
+`define     OPCSRRCI    6'b010110
 
-`define     OPMUL       5'b10111
-`define     OPMULH      5'b11000
-`define     OPMULHSU    5'b11001
-`define     OPMULHU     5'b11010
-`define     OPDIV       5'b11011
-`define     OPDIVU      5'b11100
-`define     OPREM       5'b11101
-`define     OPREMU      5'b11110
-`define     OPNO        5'b11111
+`define     OPMUL       6'b010111
+`define     OPMULH      6'b011000
+`define     OPMULHSU    6'b011001
+`define     OPMULHU     6'b011010
+`define     OPDIV       6'b011011
+`define     OPDIVU      6'b011100
+`define     OPREM       6'b011101
+`define     OPREMU      6'b011110
+`define     OPNO        6'b011111
+
+`define     OPFLD       6'b100000
+`define     OPFSD       6'b100001
+`define     OPFMULD     6'b100010
+`define     OPFDIVD     6'b100011
 
 
 `define ALUSL 4'b0000

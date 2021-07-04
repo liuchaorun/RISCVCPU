@@ -45,4 +45,7 @@
 `define SB 32'bxxxxxxxxxxxxxxxxx000xxxxx0100011
 `define SH 32'bxxxxxxxxxxxxxxxxx001xxxxx0100011
 `define SW 32'bxxxxxxxxxxxxxxxxx010xxxxx0100011
-
+`define FSD 32'bxxxxxxxxxxxxxxxxx011xxxxx0100111
+`define FLD 32'bxxxxxxxxxxxxxxxxx011xxxxx0000111
+`define FMULD 32'b0001001xxxxxxxxxx_xxx_xxxxx1010011
+`define FDIVD 32'b0001100xxxxxxxxxx_xxx_xxxxx1010011
