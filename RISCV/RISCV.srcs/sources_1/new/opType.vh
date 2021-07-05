@@ -59,5 +59,5 @@
 `define ALUAUIPC 4'b1100
 `define ALUNO 4'b1101
 
-`defien mepc 3'h341;
+`define mepc 3'h341
 
