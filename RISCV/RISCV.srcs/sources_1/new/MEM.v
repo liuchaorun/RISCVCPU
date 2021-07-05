@@ -114,7 +114,7 @@ module MEM(
                     end
                 endcase
             end
-            else if(op_type == `OPJAL || op_type == `OPJALR) begin
+            else if(op_type == `OPJAL || op_type == `OPJALR || op_type == `OPECALL) begin
                 next_ena <= 1'b1;
                 rd_val <= PC;
             end

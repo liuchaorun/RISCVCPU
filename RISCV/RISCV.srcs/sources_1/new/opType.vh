@@ -41,6 +41,8 @@
 `define     OPFMULD     6'b100010
 `define     OPFDIVD     6'b100011
 
+`define     OPECALL     6'b100100
+
 
 `define ALUSL 4'b0000
 `define ALUSR 4'b0001
@@ -57,5 +59,5 @@
 `define ALUAUIPC 4'b1100
 `define ALUNO 4'b1101
 
-
+`defien mepc 3'h341;
 

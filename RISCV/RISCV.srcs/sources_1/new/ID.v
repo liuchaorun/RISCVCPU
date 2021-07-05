@@ -354,6 +354,12 @@ module ID(
             end
             // ebreak ecall csr
             else if (IR[6:2] == 5'b11100) begin
+                // ecall
+                if(IR[14:12] == 3'b000 && IR[31:20] == 12'd0) begin
+                    op_type = `OPECALL;
+                    // mepc csr reg 0x341
+                    csr_idx = `mepc;
+                end
                 operand1_sel = 1'b0;
                 alu_type = `ALUNO;
                 // data_conflict

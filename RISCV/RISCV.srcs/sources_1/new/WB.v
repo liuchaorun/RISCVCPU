@@ -57,6 +57,9 @@ module WB(clk, rst, start, rd_val, rd_float_val, rd_idx, op_type, rs1_val, csr_i
         wb_float = 1'b0;
         if (start) begin
             case (op_type)
+            `OPECALL: begin
+                csr[csr_idx] = rd_val;
+            end
             // CSR
             `OPCSRRW: begin
                 wb = 1'b1;
