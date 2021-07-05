@@ -184,6 +184,20 @@ module WB(clk, rst, start, rd_val, rd_float_val, rd_idx, op_type, rs1_val, csr_i
                     fflags[4:3] = fflags_accured_exceptions[4:3];
                 end
                 else if (fflags_accured_exceptions[2] == 1'b1) begin
+                    wb = 1'b0;
+                    wb_float = 1'b1;
+                    wb_float_idx = rd_idx;
+                    if (rm == 3'b000 || rm == 3'b100) wb_float_val = {s, 11'b111_1111_1111, 52'b0};
+                    else if (rm == 3'b010 && wb_float_val[63] == 1'b1) wb_float_val = {1'b1, 11'b111_1111_1111, 52'b0};
+                    else if (rm == 3'b010 && wb_float_val[63] == 1'b0) wb_float_val = {1'b0, 11'b111_1111_1110, 52'hf_ffff_ffff_ffff};
+                    else if (rm == 3'b011 && wb_float_val[63] == 1'b1) wb_float_val = {1'b1, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                    else if (rm == 3'b011 && wb_float_val[63] == 1'b0) wb_float_val = {1'b0, 11'b111_1111_1111, 52'b0};
+                    else if (rm == 3'b001 && wb_float_val[63] == 1'b1) wb_float_val = {1'b1, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                    else if (rm == 3'b001 && wb_float_val[63] == 1'b0) wb_float_val = {1'b0, 11'b111_1111_1110, 52'hf_ffff_ffff_ffff};
+                end
+                else if (fflags_accured_exceptions[1] == 1'b1) begin
+                     if (wb_float_val[63] == 1'b1) wb_float_val = {1'b1, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                     else if (wb_float_val[63] == 1'b0) wb_float_val = {1'b0, 11'b000_0000_0000, 52'b0_0000_0000_0001};
                 end
                 else begin
                     if (float_rm == 3'b111) rm = fflags[7:5];

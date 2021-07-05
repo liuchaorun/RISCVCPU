@@ -58,11 +58,11 @@ module TOP(
     
     // ID output
     wire    [31:0]      ID_rs1_val_out;
-    wire    [31:0]      ID_rs1_float_val_out;
+    wire    [63:0]      ID_rs1_float_val_out;
     wire    [31:0]      ID_PC_out;
     wire                ID_operand1_sel_out;
     wire    [31:0]      ID_rs2_val_out;
-    wire    [31:0]      ID_rs2_float_val_out;
+    wire    [63:0]      ID_rs2_float_val_out;
     wire    [31:0]      ID_imm_out;
     wire                ID_operand2_sel_out;
     wire    [4:0]       ID_rd_idx_out;
@@ -77,6 +77,7 @@ module TOP(
     wire                WB_wb_float_out;
     wire    [4:0]       WB_wb_float_idx_out;
     wire    [63:0]      WB_wb_float_val_out;
+    wire    [2:0]       ID_float_rm;
 
     ID id_unit(
         .clk(clk),
@@ -103,6 +104,7 @@ module TOP(
         .rd_idx(ID_rd_idx_out),
         .op_type(ID_op_type_out),
         .alu_type(ID_alu_type_out),
+        .float_rm(ID_float_rm),
         .csr_idx(ID_csr_idx_out),
         .data_conflict(ID_data_conflict_out),
         .next_ena(ID_next_ena_out),
@@ -143,6 +145,7 @@ module TOP(
         .rd_idx(ID_rd_idx_out),
         .op_type(ID_op_type_out),
         .alu_type(ID_alu_type_out),
+        .float_rm(ID_float_rm),
         .csr_idx(ID_csr_idx_out),
   
         .rs1_val_out(EX_rs1_val_out),
@@ -169,7 +172,7 @@ module TOP(
 
     // MEM output
     wire    [31:0]      MEM_rd_val_out;
-    wire    [31:0]      MEM_rd_float_val_out;
+    wire    [63:0]      MEM_rd_float_val_out;
     wire    [4:0]       MEM_rd_idx_out;
     wire    [5:0]       MEM_op_type_out;
     wire    [31:0]      MEM_rs1_val_out;

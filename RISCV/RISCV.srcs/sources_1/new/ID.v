@@ -37,11 +37,11 @@ module ID(
     input                           pc_sel,
 
     output              [31:0]      rs1_val,
-    output              [63:0]      float_rs1_val,
+    output              [63:0]      rs1_float_val,
     output      reg     [31:0]      PC,
     output      reg                 operand1_sel,
     output              [31:0]      rs2_val,
-    output              [63:0]      float_rs2_val,
+    output              [63:0]      rs2_float_val,
     output      reg     [31:0]      imm,
     output      reg                 operand2_sel,
     output      reg     [4:0]       rd_idx,
@@ -86,8 +86,8 @@ module ID(
         // read
         .rs1_idx(rs1_idx),
         .rs2_idx(rs2_idx),
-        .rs1_val(float_rs1_val),
-        .rs2_val(float_rs2_val),
+        .rs1_val(rs1_float_val),
+        .rs2_val(rs2_float_val),
         // write
         .wb(wb_float),
         .wb_idx(wb_float_idx),

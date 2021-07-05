@@ -44,10 +44,10 @@ module EX(
         input                   [11:0]      csr_idx,
   
         output      reg         [31:0]      rs1_val_out,        // just forward
-        output      reg         [63:0]      float_rs1_val_out,
+        output      reg         [63:0]      rs1_float_val_out,
         output      reg         [31:0]      PC_out,
         output      reg         [31:0]      rs2_val_out,
-        output      reg         [63:0]      float_rs2_val_out,
+        output      reg         [63:0]      rs2_float_val_out,
         output      reg         [31:0]      imm_out,
         output      reg         [4:0]       rd_idx_out,
         output      reg         [5:0]       op_type_out,
