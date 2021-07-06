@@ -2,12 +2,12 @@
 # Webtalk v2018.3 (64-bit)
 # SW Build 2405991 on Thu Dec  6 23:38:27 MST 2018
 # IP Build 2404404 on Fri Dec  7 01:43:56 MST 2018
-# Start of session at: Mon Jul  5 10:22:23 2021
-# Process ID: 64312
-# Current directory: C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim
-# Command line: wbtcv.exe -mode batch -source C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/xsim.dir/TOP_behav/webtalk/xsim_webtalk.tcl -notrace
-# Log file: C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/webtalk.log
-# Journal file: C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim\webtalk.jou
+# Start of session at: Tue Jul  6 17:04:54 2021
+# Process ID: 8708
+# Current directory: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim
+# Command line: wbtcv.exe -mode batch -source C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/xsim.dir/TOP_behav/webtalk/xsim_webtalk.tcl -notrace
+# Log file: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/webtalk.log
+# Journal file: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim\webtalk.jou
 #-----------------------------------------------------------
-source C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/xsim.dir/TOP_behav/webtalk/xsim_webtalk.tcl -notrace
-INFO: [Common 17-206] Exiting Webtalk at Mon Jul  5 10:22:24 2021...
+source C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/xsim.dir/TOP_behav/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Tue Jul  6 17:04:55 2021...

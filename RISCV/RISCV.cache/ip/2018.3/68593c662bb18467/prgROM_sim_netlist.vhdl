@@ -1,7 +1,7 @@
 -- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
--- Date        : Sun Jun 20 20:14:57 2021
+-- Date        : Tue Jul  6 17:02:48 2021
 -- Host        : LABdesktop-xsy running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim -rename_top decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix -prefix
 --               decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix_ prgROM_sim_netlist.vhdl

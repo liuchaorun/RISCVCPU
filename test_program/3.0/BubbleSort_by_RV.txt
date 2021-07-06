@@ -1,0 +1,27 @@
+
+BubbleSort_ass.o:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <main>:
+   0:	00900613          	li	a2,9
+   4:	00000713          	li	a4,0
+
+00000008 <.L0>:
+   8:	00070793          	mv	a5,a4
+
+0000000c <.L1>:
+   c:	00279813          	slli	a6,a5,0x2
+  10:	00082283          	lw	t0,0(a6)
+  14:	00482303          	lw	t1,4(a6)
+  18:	0062c663          	blt	t0,t1,24 <.L3>
+  1c:	00582223          	sw	t0,4(a6)
+  20:	00682023          	sw	t1,0(a6)
+
+00000024 <.L3>:
+  24:	00178793          	addi	a5,a5,1
+  28:	fec7c2e3          	blt	a5,a2,c <.L1>
+  2c:	00170713          	addi	a4,a4,1
+  30:	fcc74ce3          	blt	a4,a2,8 <.L0>
+  34:	fcdff0ef          	jal	ra,0 <main>

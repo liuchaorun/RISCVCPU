@@ -2,11 +2,11 @@
 # Vivado v2018.3 (64-bit)
 # SW Build 2405991 on Thu Dec  6 23:38:27 MST 2018
 # IP Build 2404404 on Fri Dec  7 01:43:56 MST 2018
-# Start of session at: Mon Jul  5 10:30:07 2021
-# Process ID: 64952
-# Current directory: C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1
+# Start of session at: Tue Jul  6 22:26:58 2021
+# Process ID: 25760
+# Current directory: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1
 # Command line: vivado.exe -log prgROM.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source prgROM.tcl
-# Log file: C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM.vds
-# Journal file: C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1\vivado.jou
+# Log file: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/prgROM.vds
+# Journal file: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1\vivado.jou
 #-----------------------------------------------------------
 source prgROM.tcl -notrace
