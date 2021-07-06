@@ -37,10 +37,16 @@ module RAM(
 
     initial begin
         for (i = 0; i < 65535; i = i + 1) ram[i] = 32'b0;
-        ram[0] = 8'b00000111; 
-        ram[1] = 8'b0;
-        ram[2] = 8'b0;
-        ram[3] = 8'b0;
+        ram[0] = 8'd10; 
+        ram[4] = 8'd9;
+        ram[8] = 8'd8; 
+        ram[12] = 8'd7;
+        ram[16] = 8'd6; 
+        ram[20] = 8'd5;
+        ram[24] = 8'd4; 
+        ram[28] = 8'd3;
+        ram[32] = 8'd2; 
+        ram[36] = 8'd1;
     end
 
     assign data = {ram[r_addr[15:0]+7], ram[r_addr[15:0]+6], ram[r_addr[15:0]+4], ram[r_addr[15:0]+4],ram[r_addr[15:0]+3], ram[r_addr[15:0]+2], ram[r_addr[15:0]+1], ram[r_addr[15:0]]};

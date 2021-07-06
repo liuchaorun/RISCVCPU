@@ -58,6 +58,8 @@ module IF(
         else begin
             if(start & ~data_conflict)
                 next_PC[31:0] = PC_sel ? PC_jmp[31:0] : (PC[31:0] + 3'b100);
+            else if (PC_sel) 
+                next_PC[31:0] = PC_jmp[31:0];
             else if (flush) 
                 next_PC[31:0] = PC[31:0] - 3'b100;
             else
