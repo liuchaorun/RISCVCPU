@@ -267,28 +267,16 @@ module EX(
                     //other
                     else begin
                         if (m_result[105] == 1'b1) begin
-                            e_result = e1 + e2 + 1;
-                            if (e1+e2+1 < 12'd1023) begin
-                                fflags_accured_exceptions[1] = 1'b1;
-                                e_result = e_result - 1023;
-                            end
-                            else begin
-                                e_result = e_result - 1023;
-                                if (e_result[11] == 1'b1) fflags_accured_exceptions[2] = 1'b1;
-                            end
+                            e_result = e1 + e2 - 1023 + 1;
+                            if (e_result[11:10] == 2'b10 || e_result[10:0] == 11'b111_1111_1111) fflags_accured_exceptions[2] = 1'b1;
+                            else if (e_result[11:10] == 2'b11 || e_result[10:0] == 11'b000_0000_0000) fflags_accured_exceptions[1] = 1'b1;
                             ex_float_output = {s1^s2, e_result[10:0], m_result[104:53]};
                             float_rm_val = m_result[52:50];
                         end
                         else begin
-                            e_result = e1 + e2;
-                            if (e1+e2+1 < 12'd1023) begin
-                                fflags_accured_exceptions[1] = 1'b1;
-                                e_result = e_result - 1023;
-                            end
-                            else begin
-                                e_result = e_result - 1023;
-                                if (e_result[11] == 1'b1) fflags_accured_exceptions[2] = 1'b1;
-                            end
+                            e_result = e1 + e2 - 1023;
+                            if (e_result[11:10] == 2'b10 || e_result[10:0] == 11'b111_1111_1111) fflags_accured_exceptions[2] = 1'b1;
+                            else if (e_result[11:10] == 2'b11 || e_result[10:0] == 11'b000_0000_0000) fflags_accured_exceptions[1] = 1'b1;
                             ex_float_output = {s1^s2, e_result[10:0], m_result[103:52]};
                             float_rm_val = m_result[51:49];
                         end
@@ -346,7 +334,8 @@ module EX(
                     else begin
                         m_result = {m1, 55'b0}/m2;
                         e_result = e1 - e2 + 1023;
-                        if (e_result[11] == 1'b1) fflags_accured_exceptions[2] = 1'b1;
+                        if (e_result[11:10] == 2'b10 || e_result[10:0] == 11'b111_1111_1111) fflags_accured_exceptions[2] = 1'b1;
+                        else if (e_result[11:10] == 2'b11 || e_result[10:0] == 11'b000_0000_0000) fflags_accured_exceptions[1] = 1'b1;
                         ex_float_output = {s1^s2, e_result[10:0], m_result[54:3]};
                         float_rm_val = m_result[2:0];
                     end
