@@ -51,8 +51,8 @@ module FloatRegisterFiles(
     // write
     always @(posedge clk or posedge rst) begin
         if (rst) begin
-                registers[0]    <= 64'h3FF8000000000000; //1.5
-                registers[1]    <= 64'h3FFCCCCCCCCCCCCD; //1.8
+                registers[0]    <= 64'h0000_0000_0000_0000;
+                registers[1]    <= 64'h0000_0000_0000_0000;
                 registers[2]    <= 64'h0000_0000_0000_0000;
                 registers[3]    <= 64'h0000_0000_0000_0000;
                 registers[4]    <= 64'h0000_0000_0000_0000;

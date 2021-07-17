@@ -1,6 +1,7 @@
 
 Fibonacci.out:     file format elf32-littleriscv
-
+276497
+281798
 
 Disassembly of section .text:
 

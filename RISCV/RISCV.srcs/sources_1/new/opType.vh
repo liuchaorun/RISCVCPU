@@ -42,6 +42,7 @@
 `define     OPFDIVD     6'b100011
 
 `define     OPECALL     6'b100100
+`define     OPSRET      6'b100101
 
 
 `define ALUSL 4'b0000
@@ -59,5 +60,11 @@
 `define ALUAUIPC 4'b1100
 `define ALUNO 4'b1101
 
-`define mepc 3'h341
+`define mepc    12'h341
+`define mcause  12'h342
+`define mtval   12'h343
+`define mstatus 12'h300
+`define misa    12'h301
+`define mtvec   12'h305
+`define fflags  12'h333
 

@@ -3,17 +3,15 @@ Copyright 1986-1999, 2001-2018 Xilinx, Inc. All Rights Reserved.
 Running: C:/Xilinx/Vivado/2018.3/bin/unwrapped/win64.o/xelab.exe -wto bc0da3bf47fb43d3a91b2eb77b684d8c --incr --debug typical --relax --mt 2 -L blk_mem_gen_v8_4_2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot TOP_behav xil_defaultlib.TOP xil_defaultlib.glbl -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'next_ena' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:56]
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'start' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:85]
-WARNING: [VRFC 10-3091] actual bit length 64 differs from formal bit length 32 for port 'w_float_data' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:66]
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 64 for port 'data' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:69]
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 5 for port 'rs1_val' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:231]
-WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 13 for port 'csr_idx' [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:233]
-WARNING: [VRFC 10-3283] element index 63 into 'read_data' is out of bounds [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:110]
-WARNING: [VRFC 10-3283] element index 39 into 'w_float_data' is out of bounds [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:67]
-WARNING: [VRFC 10-3283] element index 47 into 'w_float_data' is out of bounds [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:68]
-WARNING: [VRFC 10-3283] element index 55 into 'w_float_data' is out of bounds [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:69]
-WARNING: [VRFC 10-3283] element index 63 into 'w_float_data' is out of bounds [C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:70]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'next_ena' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:56]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'start' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:85]
+WARNING: [VRFC 10-3091] actual bit length 64 differs from formal bit length 32 for port 'w_float_data' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:60]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 5 for port 'rs1_val' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:216]
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 13 for port 'csr_idx' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:218]
+WARNING: [VRFC 10-3283] element index 39 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:60]
+WARNING: [VRFC 10-3283] element index 47 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:61]
+WARNING: [VRFC 10-3283] element index 55 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:62]
+WARNING: [VRFC 10-3283] element index 63 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:63]
 Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis

@@ -1,0 +1,1 @@
+四个测试程序的目录下有.coe文件，可以将其导入instMem的ip核中，*_mem.txt(*指代BubbleSort或者Fibonacci)为ram初始化文件，需要修改ram.v中相关路径进行初始化。

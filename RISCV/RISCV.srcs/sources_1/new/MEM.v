@@ -27,9 +27,6 @@ module MEM(
 
         input                   [31:0]      ex_output,
         input                   [63:0]      ex_float_output,
-        input                   [2:0]       float_rm,
-        input                   [2:0]       float_rm_val,
-        input                   [4:0]       fflags_accured_exceptions,
         input                   [4:0]       rd_idx,
         input                   [5:0]       op_type,
         input                   [31:0]      rs1_val,
@@ -44,9 +41,6 @@ module MEM(
 
         output      reg         [31:0]      rd_val,
         output      reg         [63:0]      rd_float_val,
-        output      reg         [2:0]       float_rm_out,
-        output      reg         [2:0]       float_rm_val_out,
-        output      reg         [4:0]       fflags_accured_exceptions_out,
         output      reg         [4:0]       rd_idx_out,
         output      reg         [5:0]       op_type_out,
         output      reg         [31:0]      rs1_val_out,
@@ -55,7 +49,7 @@ module MEM(
         output      reg                     next_ena
     );
     
-    wire [31:0] read_data;
+    wire [63:0] read_data;
 
     RAM ram(
         .clk(clk),
@@ -80,9 +74,6 @@ module MEM(
             op_type_out = op_type;
             rs1_val_out = rs1_val;
             rd_float_val = ex_float_output;
-            float_rm_out = float_rm;
-            float_rm_val_out = float_rm_val;
-            fflags_accured_exceptions_out = fflags_accured_exceptions;
             imm_out = imm;
             csr_idx_out = csr_idx;
             // store
@@ -110,13 +101,13 @@ module MEM(
                         rd_float_val = read_data[63:0];
                     end
                     default: begin
-                        rd_val = read_data;
+                        rd_val = read_data[31:0];
                     end
                 endcase
             end
-            else if(op_type == `OPJAL || op_type == `OPJALR || op_type == `OPECALL) begin
+            else if(op_type == `OPJAL || op_type == `OPJALR) begin
                 next_ena <= 1'b1;
-                rd_val <= PC;
+                rd_val <= PC + 3'b100;
             end
             else if(op_type == `OPBEQ || op_type == `OPBNE || op_type == `OPBLT || op_type == `OPBLTU || op_type == `OPBGE || op_type == `OPBGEU) begin
                 next_ena <= 1'b0;

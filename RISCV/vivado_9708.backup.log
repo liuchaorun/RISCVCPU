@@ -1,0 +1,958 @@
+#-----------------------------------------------------------
+# Vivado v2018.3 (64-bit)
+# SW Build 2405991 on Thu Dec  6 23:38:27 MST 2018
+# IP Build 2404404 on Fri Dec  7 01:43:56 MST 2018
+# Start of session at: Sat Jul 17 14:14:17 2021
+# Process ID: 9708
+# Current directory: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent2536 C:\Users\X\Documents\GitHub\RISCVCPU\RISCV\RISCV.xpr
+# Log file: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/vivado.log
+# Journal file: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.xpr
+INFO: [Project 1-313] Project file moved from 'C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV' since last save.
+CRITICAL WARNING: [Project 1-311] Could not find the file 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/double_instruction.coe', nor could it be found using path 'C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/double_instruction.coe'.
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2018.3/data/ip'.
+update_compile_order -fileset sources_1
+export_ip_user_files -of_objects  [get_files C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/double_instruction.coe] -no_script -reset -force -quiet
+remove_files  C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/double_instruction.coe
+launch_simulation
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'C:/Xilinx/Vivado/2018.3/data/xsim/xsim.ini' copied to run dir:'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-54] Inspecting design source files for 'TOP' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/prgROM.mif'
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/BubbleSort.coe'
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/Fibonacci.coe'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj TOP_vlog.prj"
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/sim/prgROM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module prgROM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/EX.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module EX
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/FloatRegisterFiles.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module FloatRegisterFiles
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/ID.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RegisterFiles
+INFO: [VRFC 10-311] analyzing module ID
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/IF.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module IF
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module MEM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RAM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RegisterFiles.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RegisterFiles
+WARNING: [VRFC 10-3609] overwriting previous definition of module 'RegisterFiles' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RegisterFiles.v:23]
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/WB.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module WB
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module TOP
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+Vivado Simulator 2018.3
+Copyright 1986-1999, 2001-2018 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2018.3/bin/unwrapped/win64.o/xelab.exe -wto bc0da3bf47fb43d3a91b2eb77b684d8c --incr --debug typical --relax --mt 2 -L blk_mem_gen_v8_4_2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot TOP_behav xil_defaultlib.TOP xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'next_ena' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:56]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'start' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:85]
+WARNING: [VRFC 10-3091] actual bit length 64 differs from formal bit length 32 for port 'w_float_data' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:60]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 5 for port 'rs1_val' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:216]
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 13 for port 'csr_idx' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:218]
+WARNING: [VRFC 10-3283] element index 39 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:60]
+WARNING: [VRFC 10-3283] element index 47 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:61]
+WARNING: [VRFC 10-3283] element index 55 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:62]
+WARNING: [VRFC 10-3283] element index 63 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:63]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_output_stage(...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_output_stage(...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2(C_ELABORATION...
+Compiling module xil_defaultlib.prgROM
+Compiling module xil_defaultlib.IF
+Compiling module xil_defaultlib.RegisterFiles
+Compiling module xil_defaultlib.FloatRegisterFiles
+Compiling module xil_defaultlib.ID
+Compiling module xil_defaultlib.EX
+Compiling module xil_defaultlib.RAM
+Compiling module xil_defaultlib.MEM
+Compiling module xil_defaultlib.WB
+Compiling module xil_defaultlib.TOP
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot TOP_behav
+
+****** Webtalk v2018.3 (64-bit)
+  **** SW Build 2405991 on Thu Dec  6 23:38:27 MST 2018
+  **** IP Build 2404404 on Fri Dec  7 01:43:56 MST 2018
+    ** Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/xsim.dir/TOP_behav/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Jul 17 14:17:28 2021...
+INFO: [USF-XSim-69] 'elaborate' step finished in '3' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "TOP_behav -key {Behavioral:sim_1:Functional:TOP} -tclbatch {TOP.tcl} -view {C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/TOP_behav.wcfg} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator 2018.3
+Time resolution is 1 ps
+open_wave_config C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/TOP_behav.wcfg
+source TOP.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module TOP.if_unit.instMem.inst.native_mem_module.blk_mem_gen_v8_4_2_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+r_addr = 00010074, data = 93
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'TOP_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 936.805 ; gain = 59.258
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 111300 ns
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module TOP.if_unit.instMem.inst.native_mem_module.blk_mem_gen_v8_4_2_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+r_addr = 00010074, data = 93
+w_addr = 00026dbf, data = 00000000
+w_addr = 00026dbe, data = 00000000
+w_addr = 00026dbd, data = 00000000
+w_addr = 00026dbc, data = 00000000
+w_addr = 00026dbb, data = 00000000
+w_addr = 00026dba, data = 00000000
+w_addr = 00026db9, data = 00000000
+w_addr = 00026db8, data = 00000000
+w_addr = 00026db7, data = 00000000
+w_addr = 00026db6, data = 00000000
+w_addr = 00026db5, data = 00000000
+w_addr = 00026db4, data = 00000000
+w_addr = 00026dc0, data = 00000000
+w_addr = 00026dc4, data = 00000000
+w_addr = 00026dc8, data = 00000000
+w_addr = 00026dcc, data = 00000000
+w_addr = 00026dd0, data = 00000000
+w_addr = 00026dd4, data = 00000000
+w_addr = 00026dd8, data = 00000000
+w_addr = 00026ddc, data = 00000000
+w_addr = 00026de0, data = 00000000
+w_addr = 00026de4, data = 00000000
+w_addr = 00026de8, data = 00000000
+w_addr = 00026dec, data = 00000000
+w_addr = 00026df0, data = 00000000
+w_addr = 00026df4, data = 00000000
+w_addr = 00026df8, data = 00000000
+w_addr = 00026dfc, data = 00000000
+w_addr = 00026e00, data = 00000000
+w_addr = 00026e04, data = 00000000
+w_addr = 00026e08, data = 00000000
+w_addr = 00026e0c, data = 00000000
+w_addr = 00026530, data = 00026534
+w_addr = 00026538, data = 00000001
+w_addr = 0002653c, data = 00013978
+w_addr = 00004ff8, data = 00000000
+w_addr = 00004ff0, data = 00000000
+w_addr = 00004ffc, data = 000100c4
+w_addr = 00004ff4, data = 00000000
+w_addr = 00004ffc, data = 000100d4
+w_addr = 00004ff8, data = 00000000
+w_addr = 00004fe4, data = 0000000a
+w_addr = 00004fb8, data = 0000000a
+w_addr = 00004fbc, data = 00000009
+w_addr = 00004fc0, data = 00000008
+w_addr = 00004fc4, data = 00000007
+w_addr = 00004fc8, data = 00000006
+w_addr = 00004fcc, data = 00000001
+w_addr = 00004fd0, data = 00000002
+w_addr = 00004fd4, data = 00000003
+w_addr = 00004fd8, data = 00000004
+w_addr = 00004fdc, data = 00000005
+w_addr = 00004fec, data = 00000000
+w_addr = 00004fe8, data = 00000000
+w_addr = 00004fe0, data = 00000009
+w_addr = 00004fbc, data = 0000000a
+w_addr = 00004fb8, data = 00000009
+w_addr = 00004fe8, data = 00000001
+w_addr = 00004fe0, data = 00000008
+w_addr = 00004fc0, data = 0000000a
+w_addr = 00004fbc, data = 00000008
+w_addr = 00004fe8, data = 00000002
+w_addr = 00004fe0, data = 00000007
+w_addr = 00004fc4, data = 0000000a
+w_addr = 00004fc0, data = 00000007
+w_addr = 00004fe8, data = 00000003
+w_addr = 00004fe0, data = 00000006
+w_addr = 00004fc8, data = 0000000a
+w_addr = 00004fc4, data = 00000006
+w_addr = 00004fe8, data = 00000004
+w_addr = 00004fe0, data = 00000001
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+launch_simulation
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'C:/Xilinx/Vivado/2018.3/data/xsim/xsim.ini' copied to run dir:'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-54] Inspecting design source files for 'TOP' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/prgROM.mif'
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/BubbleSort.coe'
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/Fibonacci.coe'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj TOP_vlog.prj"
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/sim/prgROM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module prgROM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/EX.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module EX
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/FloatRegisterFiles.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module FloatRegisterFiles
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/ID.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RegisterFiles
+INFO: [VRFC 10-311] analyzing module ID
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/IF.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module IF
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module MEM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RAM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RegisterFiles.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RegisterFiles
+WARNING: [VRFC 10-3609] overwriting previous definition of module 'RegisterFiles' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RegisterFiles.v:23]
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/WB.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module WB
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module TOP
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+Vivado Simulator 2018.3
+Copyright 1986-1999, 2001-2018 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2018.3/bin/unwrapped/win64.o/xelab.exe -wto bc0da3bf47fb43d3a91b2eb77b684d8c --incr --debug typical --relax --mt 2 -L blk_mem_gen_v8_4_2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot TOP_behav xil_defaultlib.TOP xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'next_ena' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:56]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'start' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:85]
+WARNING: [VRFC 10-3091] actual bit length 64 differs from formal bit length 32 for port 'w_float_data' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:60]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 5 for port 'rs1_val' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:216]
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 13 for port 'csr_idx' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:218]
+WARNING: [VRFC 10-3283] element index 39 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:60]
+WARNING: [VRFC 10-3283] element index 47 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:61]
+WARNING: [VRFC 10-3283] element index 55 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:62]
+WARNING: [VRFC 10-3283] element index 63 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:63]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_output_stage(...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_output_stage(...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2(C_ELABORATION...
+Compiling module xil_defaultlib.prgROM
+Compiling module xil_defaultlib.IF
+Compiling module xil_defaultlib.RegisterFiles
+Compiling module xil_defaultlib.FloatRegisterFiles
+Compiling module xil_defaultlib.ID
+Compiling module xil_defaultlib.EX
+Compiling module xil_defaultlib.RAM
+Compiling module xil_defaultlib.MEM
+Compiling module xil_defaultlib.WB
+Compiling module xil_defaultlib.TOP
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot TOP_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '2' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "TOP_behav -key {Behavioral:sim_1:Functional:TOP} -tclbatch {TOP.tcl} -view {C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/TOP_behav.wcfg} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator 2018.3
+Time resolution is 1 ps
+open_wave_config C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/TOP_behav.wcfg
+source TOP.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module TOP.if_unit.instMem.inst.native_mem_module.blk_mem_gen_v8_4_2_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+r_addr = 00010074, data = 93
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'TOP_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:02 ; elapsed = 00:00:05 . Memory (MB): peak = 936.805 ; gain = 0.000
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 111300 ns
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module TOP.if_unit.instMem.inst.native_mem_module.blk_mem_gen_v8_4_2_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+r_addr = 00010074, data = 93
+w_addr = 00026dbf, data = 00000000
+w_addr = 00026dbe, data = 00000000
+w_addr = 00026dbd, data = 00000000
+w_addr = 00026dbc, data = 00000000
+w_addr = 00026dbb, data = 00000000
+w_addr = 00026dba, data = 00000000
+w_addr = 00026db9, data = 00000000
+w_addr = 00026db8, data = 00000000
+w_addr = 00026db7, data = 00000000
+w_addr = 00026db6, data = 00000000
+w_addr = 00026db5, data = 00000000
+w_addr = 00026db4, data = 00000000
+w_addr = 00026dc0, data = 00000000
+w_addr = 00026dc4, data = 00000000
+w_addr = 00026dc8, data = 00000000
+w_addr = 00026dcc, data = 00000000
+w_addr = 00026dd0, data = 00000000
+w_addr = 00026dd4, data = 00000000
+w_addr = 00026dd8, data = 00000000
+w_addr = 00026ddc, data = 00000000
+w_addr = 00026de0, data = 00000000
+w_addr = 00026de4, data = 00000000
+w_addr = 00026de8, data = 00000000
+w_addr = 00026dec, data = 00000000
+w_addr = 00026df0, data = 00000000
+w_addr = 00026df4, data = 00000000
+w_addr = 00026df8, data = 00000000
+w_addr = 00026dfc, data = 00000000
+w_addr = 00026e00, data = 00000000
+w_addr = 00026e04, data = 00000000
+w_addr = 00026e08, data = 00000000
+w_addr = 00026e0c, data = 00000000
+w_addr = 00000148, data = 0000014c
+w_addr = 00000150, data = 00000001
+w_addr = 00000154, data = 00013978
+w_addr = 00004ff8, data = 00000000
+w_addr = 00004ff0, data = 00000000
+w_addr = 00004ffc, data = 000100c4
+w_addr = 00004ff4, data = 00000000
+w_addr = 00006004, data = 00010370
+w_addr = 0000600c, data = 00026be8
+w_addr = 00006010, data = 00000000
+w_addr = 00006014, data = 000100a8
+w_addr = 00006018, data = 0000000f
+w_addr = 0000601c, data = 00000000
+w_addr = 00006020, data = 000263e0
+w_addr = 00006024, data = 00000001
+w_addr = 00006028, data = 00000000
+w_addr = 0000602c, data = 00013978
+w_addr = 00006030, data = 00000000
+w_addr = 00006034, data = 00000000
+w_addr = 00006038, data = 00000001
+w_addr = 0000603c, data = 00000000
+w_addr = 00006040, data = 00000000
+w_addr = 00006044, data = 00000000
+w_addr = 00006048, data = 00000002
+w_addr = 0000604c, data = 00000000
+w_addr = 00006050, data = 00000000
+w_addr = 00006054, data = 00000000
+w_addr = 00006058, data = 00000000
+w_addr = 0000605c, data = 00000000
+w_addr = 00006060, data = 00000000
+w_addr = 00006064, data = 00000000
+w_addr = 00006068, data = 00000000
+w_addr = 0000606c, data = 00000000
+w_addr = 00006070, data = 00000000
+w_addr = 00006074, data = 00000000
+w_addr = 00006078, data = 00000000
+w_addr = 0000607c, data = 00000000
+w_addr = 00006008, data = 00004ff0
+w_addr = 00006080, data = 00000000
+w_addr = 00006084, data = 00000000
+w_addr = 00006088, data = 00000000
+w_addr = 0000608c, data = 00000000
+w_addr = 00000000, data = 00000001
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+save_wave_config {C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/TOP_behav.wcfg}
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+launch_simulation
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'C:/Xilinx/Vivado/2018.3/data/xsim/xsim.ini' copied to run dir:'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-54] Inspecting design source files for 'TOP' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/prgROM.mif'
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/BubbleSort.coe'
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/Fibonacci.coe'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj TOP_vlog.prj"
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+Vivado Simulator 2018.3
+Copyright 1986-1999, 2001-2018 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2018.3/bin/unwrapped/win64.o/xelab.exe -wto bc0da3bf47fb43d3a91b2eb77b684d8c --incr --debug typical --relax --mt 2 -L blk_mem_gen_v8_4_2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot TOP_behav xil_defaultlib.TOP xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'next_ena' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:56]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'start' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:85]
+WARNING: [VRFC 10-3091] actual bit length 64 differs from formal bit length 32 for port 'w_float_data' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:60]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 5 for port 'rs1_val' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:216]
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 13 for port 'csr_idx' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:218]
+WARNING: [VRFC 10-3283] element index 39 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:60]
+WARNING: [VRFC 10-3283] element index 47 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:61]
+WARNING: [VRFC 10-3283] element index 55 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:62]
+WARNING: [VRFC 10-3283] element index 63 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:63]
+Completed static elaboration
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+INFO: [USF-XSim-69] 'elaborate' step finished in '1' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "TOP_behav -key {Behavioral:sim_1:Functional:TOP} -tclbatch {TOP.tcl} -view {C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/TOP_behav.wcfg} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator 2018.3
+Time resolution is 1 ps
+open_wave_config C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/TOP_behav.wcfg
+source TOP.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module TOP.if_unit.instMem.inst.native_mem_module.blk_mem_gen_v8_4_2_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+r_addr = 00010074, data = 93
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'TOP_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 111300 ns
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module TOP.if_unit.instMem.inst.native_mem_module.blk_mem_gen_v8_4_2_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+r_addr = 00010074, data = 93
+w_addr = 00026dbf, data = 00000000
+w_addr = 00026dbe, data = 00000000
+w_addr = 00026dbd, data = 00000000
+w_addr = 00026dbc, data = 00000000
+w_addr = 00026dbb, data = 00000000
+w_addr = 00026dba, data = 00000000
+w_addr = 00026db9, data = 00000000
+w_addr = 00026db8, data = 00000000
+w_addr = 00026db7, data = 00000000
+w_addr = 00026db6, data = 00000000
+w_addr = 00026db5, data = 00000000
+w_addr = 00026db4, data = 00000000
+w_addr = 00026dc0, data = 00000000
+w_addr = 00026dc4, data = 00000000
+w_addr = 00026dc8, data = 00000000
+w_addr = 00026dcc, data = 00000000
+w_addr = 00026dd0, data = 00000000
+w_addr = 00026dd4, data = 00000000
+w_addr = 00026dd8, data = 00000000
+w_addr = 00026ddc, data = 00000000
+w_addr = 00026de0, data = 00000000
+w_addr = 00026de4, data = 00000000
+w_addr = 00026de8, data = 00000000
+w_addr = 00026dec, data = 00000000
+w_addr = 00026df0, data = 00000000
+w_addr = 00026df4, data = 00000000
+w_addr = 00026df8, data = 00000000
+w_addr = 00026dfc, data = 00000000
+w_addr = 00026e00, data = 00000000
+w_addr = 00026e04, data = 00000000
+w_addr = 00026e08, data = 00000000
+w_addr = 00026e0c, data = 00000000
+w_addr = 00000148, data = 0000014c
+w_addr = 00000150, data = 00000001
+w_addr = 00000154, data = 00013978
+w_addr = 00004ff8, data = 00000000
+w_addr = 00004ff0, data = 00000000
+w_addr = 00004ffc, data = 000100c4
+w_addr = 00004ff4, data = 00000000
+w_addr = 00006004, data = 00010370
+w_addr = 0000600c, data = 00026be8
+w_addr = 00006010, data = 00000000
+w_addr = 00006014, data = 000100a8
+w_addr = 00006018, data = 0000000f
+w_addr = 0000601c, data = 00000000
+w_addr = 00006020, data = 000263e0
+w_addr = 00006024, data = 00000001
+w_addr = 00006028, data = 00000000
+w_addr = 0000602c, data = 00013978
+w_addr = 00006030, data = 00000000
+w_addr = 00006034, data = 00000000
+w_addr = 00006038, data = 00000001
+w_addr = 0000603c, data = 00000000
+w_addr = 00006040, data = 00000000
+w_addr = 00006044, data = 00000000
+w_addr = 00006048, data = 00000002
+w_addr = 0000604c, data = 00000000
+w_addr = 00006050, data = 00000000
+w_addr = 00006054, data = 00000000
+w_addr = 00006058, data = 00000000
+w_addr = 0000605c, data = 00000000
+w_addr = 00006060, data = 00000000
+w_addr = 00006064, data = 00000000
+w_addr = 00006068, data = 00000000
+w_addr = 0000606c, data = 00000000
+w_addr = 00006070, data = 00000000
+w_addr = 00006074, data = 00000000
+w_addr = 00006078, data = 00000000
+w_addr = 0000607c, data = 00000000
+w_addr = 00006008, data = 00004ff0
+w_addr = 00006080, data = 00000000
+w_addr = 00006084, data = 00000000
+w_addr = 00006088, data = 00000000
+w_addr = 0000608c, data = 00000000
+w_addr = 00000000, data = 00000001
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+launch_simulation
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'C:/Xilinx/Vivado/2018.3/data/xsim/xsim.ini' copied to run dir:'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-54] Inspecting design source files for 'TOP' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/prgROM.mif'
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/BubbleSort.coe'
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/Fibonacci.coe'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj TOP_vlog.prj"
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/sim/prgROM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module prgROM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/EX.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module EX
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/FloatRegisterFiles.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module FloatRegisterFiles
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/ID.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RegisterFiles
+INFO: [VRFC 10-311] analyzing module ID
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/IF.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module IF
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module MEM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RAM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RegisterFiles.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RegisterFiles
+WARNING: [VRFC 10-3609] overwriting previous definition of module 'RegisterFiles' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RegisterFiles.v:23]
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/WB.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module WB
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module TOP
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+Vivado Simulator 2018.3
+Copyright 1986-1999, 2001-2018 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2018.3/bin/unwrapped/win64.o/xelab.exe -wto bc0da3bf47fb43d3a91b2eb77b684d8c --incr --debug typical --relax --mt 2 -L blk_mem_gen_v8_4_2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot TOP_behav xil_defaultlib.TOP xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'next_ena' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:56]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'start' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:85]
+WARNING: [VRFC 10-3091] actual bit length 64 differs from formal bit length 32 for port 'w_float_data' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:60]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 5 for port 'rs1_val' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:216]
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 13 for port 'csr_idx' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:218]
+WARNING: [VRFC 10-3283] element index 39 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:60]
+WARNING: [VRFC 10-3283] element index 47 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:61]
+WARNING: [VRFC 10-3283] element index 55 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:62]
+WARNING: [VRFC 10-3283] element index 63 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:63]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_output_stage(...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_output_stage(...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2(C_ELABORATION...
+Compiling module xil_defaultlib.prgROM
+Compiling module xil_defaultlib.IF
+Compiling module xil_defaultlib.RegisterFiles
+Compiling module xil_defaultlib.FloatRegisterFiles
+Compiling module xil_defaultlib.ID
+Compiling module xil_defaultlib.EX
+Compiling module xil_defaultlib.RAM
+Compiling module xil_defaultlib.MEM
+Compiling module xil_defaultlib.WB
+Compiling module xil_defaultlib.TOP
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot TOP_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '2' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "TOP_behav -key {Behavioral:sim_1:Functional:TOP} -tclbatch {TOP.tcl} -view {C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/TOP_behav.wcfg} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator 2018.3
+Time resolution is 1 ps
+open_wave_config C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/TOP_behav.wcfg
+source TOP.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module TOP.if_unit.instMem.inst.native_mem_module.blk_mem_gen_v8_4_2_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+WARNING: File C:UsersXDocumentsGitHubRISCVCPURISCVRISCV.srcssources_1Fibonacci_mem.txt referenced on C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v at line 41 cannot be opened for reading. Please ensure that this file is available in the current working directory.
+r_addr = 00010074, data = 00
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'TOP_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 111300 ns
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module TOP.if_unit.instMem.inst.native_mem_module.blk_mem_gen_v8_4_2_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+WARNING: File C:UsersXDocumentsGitHubRISCVCPURISCVRISCV.srcssources_1Fibonacci_mem.txt referenced on C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v at line 41 cannot be opened for reading. Please ensure that this file is available in the current working directory.
+r_addr = 00010074, data = 00
+w_addr = 00026dbf, data = 00000000
+w_addr = 00026dbe, data = 00000000
+w_addr = 00026dbd, data = 00000000
+w_addr = 00026dbc, data = 00000000
+w_addr = 00026dbb, data = 00000000
+w_addr = 00026dba, data = 00000000
+w_addr = 00026db9, data = 00000000
+w_addr = 00026db8, data = 00000000
+w_addr = 00026db7, data = 00000000
+w_addr = 00026db6, data = 00000000
+w_addr = 00026db5, data = 00000000
+w_addr = 00026db4, data = 00000000
+w_addr = 00026dc0, data = 00000000
+w_addr = 00026dc4, data = 00000000
+w_addr = 00026dc8, data = 00000000
+w_addr = 00026dcc, data = 00000000
+w_addr = 00026dd0, data = 00000000
+w_addr = 00026dd4, data = 00000000
+w_addr = 00026dd8, data = 00000000
+w_addr = 00026ddc, data = 00000000
+w_addr = 00026de0, data = 00000000
+w_addr = 00026de4, data = 00000000
+w_addr = 00026de8, data = 00000000
+w_addr = 00026dec, data = 00000000
+w_addr = 00026df0, data = 00000000
+w_addr = 00026df4, data = 00000000
+w_addr = 00026df8, data = 00000000
+w_addr = 00026dfc, data = 00000000
+w_addr = 00026e00, data = 00000000
+w_addr = 00026e04, data = 00000000
+w_addr = 00026e08, data = 00000000
+w_addr = 00026e0c, data = 00000000
+w_addr = 00000148, data = 0000014c
+w_addr = 00000150, data = 00000001
+w_addr = 00000154, data = 00013978
+w_addr = 00004ff8, data = 00000000
+w_addr = 00004ff0, data = 00000000
+w_addr = 00004ffc, data = 000100c4
+w_addr = 00004ff4, data = 00000000
+w_addr = 00006004, data = 00010370
+w_addr = 0000600c, data = 00026be8
+w_addr = 00006010, data = 00000000
+w_addr = 00006014, data = 000100a8
+w_addr = 00006018, data = 0000000f
+w_addr = 0000601c, data = 00000000
+w_addr = 00006020, data = 000263e0
+w_addr = 00006024, data = 00000001
+w_addr = 00006028, data = 00000000
+w_addr = 0000602c, data = 00013978
+w_addr = 00006030, data = 00000000
+w_addr = 00006034, data = 00000000
+w_addr = 00006038, data = 00000001
+w_addr = 0000603c, data = 00000000
+w_addr = 00006040, data = 00000000
+w_addr = 00006044, data = 00000000
+w_addr = 00006048, data = 00000002
+w_addr = 0000604c, data = 00000000
+w_addr = 00006050, data = 00000000
+w_addr = 00006054, data = 00000000
+w_addr = 00006058, data = 00000000
+w_addr = 0000605c, data = 00000000
+w_addr = 00006060, data = 00000000
+w_addr = 00006064, data = 00000000
+w_addr = 00006068, data = 00000000
+w_addr = 0000606c, data = 00000000
+w_addr = 00006070, data = 00000000
+w_addr = 00006074, data = 00000000
+w_addr = 00006078, data = 00000000
+w_addr = 0000607c, data = 00000000
+w_addr = 00006008, data = 00004ff0
+w_addr = 00006080, data = 00000000
+w_addr = 00006084, data = 00000000
+w_addr = 00006088, data = 00000000
+w_addr = 0000608c, data = 00000000
+w_addr = 00000000, data = 00000001
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+INFO: [Device 21-403] Loading part xc7vx485tffg1157-1
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+INFO: [IP_Flow 19-3484] Absolute path of file 'c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/Fibonacci.coe' provided. It will be converted relative to IP Instance files '../../../../RISCV.srcs/sources_1/ip/prgROM/Fibonacci.coe'
+set_property -dict [list CONFIG.Coe_File {c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/Fibonacci.coe}] [get_ips prgROM]
+INFO: [IP_Flow 19-3484] Absolute path of file 'c:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/Fibonacci.coe' provided. It will be converted relative to IP Instance files 'Fibonacci.coe'
+generate_target all [get_files  C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.xci]
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'prgROM'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'prgROM'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'prgROM'...
+INFO: [IP_Flow 19-1686] Generating 'Miscellaneous' target for IP 'prgROM'...
+INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'prgROM'...
+catch { config_ip_cache -export [get_ips -all prgROM] }
+export_ip_user_files -of_objects [get_files C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.xci] -no_script -sync -force -quiet
+reset_run prgROM_synth_1
+launch_runs -jobs 10 prgROM_synth_1
+[Sat Jul 17 14:24:39 2021] Launched prgROM_synth_1...
+Run output will be captured here: C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.runs/prgROM_synth_1/runme.log
+export_simulation -of_objects [get_files C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/prgROM.xci] -directory C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files/sim_scripts -ip_user_files_dir C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files -ipstatic_source_dir C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.ip_user_files/ipstatic -lib_map_path [list {modelsim=C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.cache/compile_simlib/modelsim} {questa=C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.cache/compile_simlib/questa} {riviera=C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.cache/compile_simlib/riviera} {activehdl=C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+launch_simulation
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'C:/Xilinx/Vivado/2018.3/data/xsim/xsim.ini' copied to run dir:'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-54] Inspecting design source files for 'TOP' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/prgROM.mif'
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/Fibonacci.coe'
+INFO: [SIM-utils-43] Exported 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim/BubbleSort.coe'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj TOP_vlog.prj"
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/ip/prgROM/sim/prgROM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module prgROM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/EX.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module EX
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/FloatRegisterFiles.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module FloatRegisterFiles
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/ID.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RegisterFiles
+INFO: [VRFC 10-311] analyzing module ID
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/IF.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module IF
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module MEM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RAM
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RegisterFiles.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module RegisterFiles
+WARNING: [VRFC 10-3609] overwriting previous definition of module 'RegisterFiles' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RegisterFiles.v:23]
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/WB.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module WB
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module TOP
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+Vivado Simulator 2018.3
+Copyright 1986-1999, 2001-2018 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2018.3/bin/unwrapped/win64.o/xelab.exe -wto bc0da3bf47fb43d3a91b2eb77b684d8c --incr --debug typical --relax --mt 2 -L blk_mem_gen_v8_4_2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot TOP_behav xil_defaultlib.TOP xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'next_ena' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:56]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'start' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:85]
+WARNING: [VRFC 10-3091] actual bit length 64 differs from formal bit length 32 for port 'w_float_data' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/MEM.v:60]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 5 for port 'rs1_val' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:216]
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 13 for port 'csr_idx' [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/TOP.v:218]
+WARNING: [VRFC 10-3283] element index 39 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:60]
+WARNING: [VRFC 10-3283] element index 47 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:61]
+WARNING: [VRFC 10-3283] element index 55 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:62]
+WARNING: [VRFC 10-3283] element index 63 into 'w_float_data' is out of bounds [C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v:63]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_output_stage(...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_output_stage(...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_2.blk_mem_gen_v8_4_2(C_ELABORATION...
+Compiling module xil_defaultlib.prgROM
+Compiling module xil_defaultlib.IF
+Compiling module xil_defaultlib.RegisterFiles
+Compiling module xil_defaultlib.FloatRegisterFiles
+Compiling module xil_defaultlib.ID
+Compiling module xil_defaultlib.EX
+Compiling module xil_defaultlib.RAM
+Compiling module xil_defaultlib.MEM
+Compiling module xil_defaultlib.WB
+Compiling module xil_defaultlib.TOP
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot TOP_behav
+INFO: [USF-XSim-69] 'elaborate' step finished in '2' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "TOP_behav -key {Behavioral:sim_1:Functional:TOP} -tclbatch {TOP.tcl} -view {C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/TOP_behav.wcfg} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator 2018.3
+Time resolution is 1 ps
+open_wave_config C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/TOP_behav.wcfg
+source TOP.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module TOP.if_unit.instMem.inst.native_mem_module.blk_mem_gen_v8_4_2_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+WARNING: File C:UsersXDocumentsGitHubRISCVCPURISCVRISCV.srcssources_1Fibonacci_mem.txt referenced on C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v at line 41 cannot be opened for reading. Please ensure that this file is available in the current working directory.
+r_addr = 00010074, data = 00
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'TOP_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:03 ; elapsed = 00:00:05 . Memory (MB): peak = 1293.609 ; gain = 0.000
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run 111300 ns
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module TOP.if_unit.instMem.inst.native_mem_module.blk_mem_gen_v8_4_2_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+WARNING: File C:UsersXDocumentsGitHubRISCVCPURISCVRISCV.srcssources_1Fibonacci_mem.txt referenced on C:/Users/X/Documents/GitHub/RISCVCPU/RISCV/RISCV.srcs/sources_1/new/RAM.v at line 41 cannot be opened for reading. Please ensure that this file is available in the current working directory.
+r_addr = 00010074, data = 00
+w_addr = 00026cdf, data = 00000000
+w_addr = 00026cde, data = 00000000
+w_addr = 00026cdd, data = 00000000
+w_addr = 00026cdc, data = 00000000
+w_addr = 00026cdb, data = 00000000
+w_addr = 00026cda, data = 00000000
+w_addr = 00026cd9, data = 00000000
+w_addr = 00026cd8, data = 00000000
+w_addr = 00026cd7, data = 00000000
+w_addr = 00026cd6, data = 00000000
+w_addr = 00026cd5, data = 00000000
+w_addr = 00026cd4, data = 00000000
+w_addr = 00026ce0, data = 00000000
+w_addr = 00026ce4, data = 00000000
+w_addr = 00026ce8, data = 00000000
+w_addr = 00026cec, data = 00000000
+w_addr = 00026cf0, data = 00000000
+w_addr = 00026cf4, data = 00000000
+w_addr = 00026cf8, data = 00000000
+w_addr = 00026cfc, data = 00000000
+w_addr = 00026d00, data = 00000000
+w_addr = 00026d04, data = 00000000
+w_addr = 00026d08, data = 00000000
+w_addr = 00026d0c, data = 00000000
+w_addr = 00026d10, data = 00000000
+w_addr = 00026d14, data = 00000000
+w_addr = 00026d18, data = 00000000
+w_addr = 00026d1c, data = 00000000
+w_addr = 00026d20, data = 00000000
+w_addr = 00026d24, data = 00000000
+w_addr = 00026d28, data = 00000000
+w_addr = 00026d2c, data = 00000000
+w_addr = 00000148, data = 0000014c
+w_addr = 00000150, data = 00000001
+w_addr = 00000154, data = 000138c0
+w_addr = 00004ff8, data = 00000000
+w_addr = 00004ff0, data = 00000000
+w_addr = 00004ffc, data = 000100c4
+w_addr = 00004ff4, data = 00000000
+w_addr = 00006004, data = 000102b8
+w_addr = 0000600c, data = 00026b08
+w_addr = 00006010, data = 00000000
+w_addr = 00006014, data = 000100a8
+w_addr = 00006018, data = 0000000f
+w_addr = 0000601c, data = 00000000
+w_addr = 00006020, data = 00026300
+w_addr = 00006024, data = 00000001
+w_addr = 00006028, data = 00000000
+w_addr = 0000602c, data = 000138c0
+w_addr = 00006030, data = 00000000
+w_addr = 00006034, data = 00000000
+w_addr = 00006038, data = 00000001
+w_addr = 0000603c, data = 00000000
+w_addr = 00006040, data = 00000000
+w_addr = 00006044, data = 00000000
+w_addr = 00006048, data = 00000002
+w_addr = 0000604c, data = 00000000
+w_addr = 00006050, data = 00000000
+w_addr = 00006054, data = 00000000
+w_addr = 00006058, data = 00000000
+w_addr = 0000605c, data = 00000000
+w_addr = 00006060, data = 00000000
+w_addr = 00006064, data = 00000000
+w_addr = 00006068, data = 00000000
+w_addr = 0000606c, data = 00000000
+w_addr = 00006070, data = 00000000
+w_addr = 00006074, data = 00000000
+w_addr = 00006078, data = 00000000
+w_addr = 0000607c, data = 00000000
+w_addr = 00006008, data = 00004ff0
+w_addr = 00006080, data = 00000000
+w_addr = 00006084, data = 00000000
+w_addr = 00006088, data = 00000000
+w_addr = 0000608c, data = 00000000
+w_addr = 00000000, data = 00000001
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+reset_run prgROM_synth_1
+exit
+INFO: [Common 17-206] Exiting Vivado at Sat Jul 17 14:28:19 2021...

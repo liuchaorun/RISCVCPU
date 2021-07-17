@@ -60,10 +60,12 @@ module ID(
     reg    [4:0]       rs2_idx;
  
     // register write table to detect data conflict
-    reg [63:0]  registerWriteStatus;
-    reg [63:0]  registerReadStatus;
-    reg [63:0]  registerWriteStatusLast;
-    reg [63:0]  registerReadStatusLast;
+    reg [63:0] conflictRegisterRs1;
+    reg isConflictRegisterRs1;
+    reg [63:0] conflictRegisterRs2;
+    reg isConflictRegisterRs2;
+    reg [63:0]  registerWriteStatus[63:0];
+    reg [63:0]  registerWriteStatusLast[63:0];
     integer i;
 
     RegisterFiles RegisterFiles(
@@ -106,15 +108,24 @@ module ID(
             csr_idx[11:0]   = 12'b0000_0000_0000;
             data_conflict   = 1'b0;
             next_ena        = 1'b0;
-            registerWriteStatus = 32'b0;
-            registerReadStatus = 32'b0;
-            registerWriteStatusLast = registerWriteStatus;
-            registerReadStatusLast = registerReadStatus;
+            for (i=0;i<64;i=i+1) begin
+                registerWriteStatus[i] = 64'b0;
+                registerWriteStatusLast[i] = 64'b0;
+            end
+            conflictRegisterRs1 = 64'b0;
+            isConflictRegisterRs1 = 1'b0;
+            conflictRegisterRs2 = 64'b0;
+            isConflictRegisterRs2 = 1'b0;
         end
         else if (pc_sel) begin
             for (i=0;i<64;i=i+1) begin
-                if (registerWriteStatus[i] == 1 && registerWriteStatusLast[i] == 0) registerWriteStatus[i] = 0;
+                if(registerWriteStatus[i] > registerWriteStatusLast[i]) registerWriteStatus[i] = registerWriteStatusLast[i];
             end
+            if (registerWriteStatus[rd_idx] != 32'b0) registerWriteStatus[rd_idx] = registerWriteStatus[rd_idx] - 1'b1;
+            conflictRegisterRs1 = 64'b0;
+            isConflictRegisterRs1 = 1'b0;
+            conflictRegisterRs2 = 64'b0;
+            isConflictRegisterRs2 = 1'b0;
             PC[31:0]        = 32'h0000_0000;
             operand1_sel    = 1'b0;
             imm[31:0]       = 32'h0000_0000;
@@ -127,15 +138,16 @@ module ID(
         end 
         else if (data_conflict) flush = 1'b0;
         else if(start && ~data_conflict && ~pc_sel) begin
-            registerWriteStatusLast = registerWriteStatus;
-            registerReadStatusLast = registerReadStatus;
+            for (i=0;i<64;i=i+1) begin
+                registerWriteStatusLast[i] = registerWriteStatus[i];
+            end
             rs1_idx = IR[19:15];
             rs2_idx = IR[24:20];
             rd_idx  = IR[11:7];
             PC[31:0] = next_PC[31:0] -3'b100;
             csr_idx  = IR[31:20];
             next_ena = 1'b1;
-            registerReadStatus  = 32'b0;
+            data_conflict = 1'b0;
             
             if (IR == 32'b0) begin
                 next_ena = 1'b0;
@@ -149,14 +161,14 @@ module ID(
                 imm[31:0]       = {{20{IR[31]}}, IR[31:20]};
                 alu_type[3:0]   = `ALUADD;
                 // data_conflict
-                registerReadStatus[rs1_idx] = 1'b1;
-                if(registerWriteStatus[rs1_idx]) begin
+                if(registerWriteStatus[rs1_idx] != 64'b0) begin
                     data_conflict = 1'b1;
+                    conflictRegisterRs1 = rs1_idx;
+                    isConflictRegisterRs1 = 1'b1;
                     flush = 1'b1;
                     next_ena = 1'b0;
                 end
-                else data_conflict = 1'b0;
-                registerWriteStatus[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = registerWriteStatus[rd_idx] + 1'b1;
                 case(IR[14:12])
                     3'b000: op_type[5:0] = `OPLB;
                     3'b001: op_type[5:0] = `OPLH;
@@ -171,14 +183,14 @@ module ID(
                 operand1_sel    = 1'b0;   // select rs1
                 operand2_sel    = 1'b1;   // select imm
                 // data_conflict
-                registerReadStatus[rs1_idx] = 1'b1;
-                if(registerWriteStatus[rs1_idx]) begin
+                if(registerWriteStatus[rs1_idx]  != 64'b0) begin
                     data_conflict = 1'b1;
+                    conflictRegisterRs1 = rs1_idx;
+                    isConflictRegisterRs1 = 1'b1;
                     flush = 1'b1;
                     next_ena = 1'b0;
                 end
-                else data_conflict = 1'b0;
-                registerWriteStatus[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = registerWriteStatus[rd_idx] + 1'b1;
                 // slli srli srai
                 if(IR[14:12] == 3'b001 || IR[14:12] == 3'b101) begin
                     imm[31:0]       = {27'b0, IR[24:20]};
@@ -215,7 +227,7 @@ module ID(
                 op_type = `OPALU;
                 alu_type = `ALUADD;
                 // data_conflict
-                registerWriteStatus[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = registerWriteStatus[rd_idx] + 1'b1;
             end
             // S sb sh sw
             else if(IR[6:2] == 5'b01000) begin
@@ -223,14 +235,20 @@ module ID(
                 operand2_sel    = 1'b1;   // select imm
                 imm[31:0]       = {{20{IR[31]}}, IR[31:25], IR[11:7]};
                 alu_type[3:0]   = `ALUADD;
-                registerReadStatus[rs1_idx] = 1'b1;
-                registerReadStatus[rs2_idx] = 1'b1;
-                if(registerWriteStatus[rs1_idx] || registerWriteStatus[rs2_idx]) begin
+                if(registerWriteStatus[rs1_idx] != 64'b0) begin
                     data_conflict = 1'b1;
+                    conflictRegisterRs1 = rs1_idx;
+                    isConflictRegisterRs1 = 1'b1;
                     flush = 1'b1;
                     next_ena = 1'b0;
                 end
-                else data_conflict = 1'b0;
+                if(registerWriteStatus[rs2_idx] != 64'b0) begin
+                    data_conflict = 1'b1;
+                    conflictRegisterRs2 = rs2_idx;
+                    isConflictRegisterRs2 = 1'b1;
+                    flush = 1'b1;
+                    next_ena = 1'b0;
+                end
                 case(IR[14:12])
                     3'b000: op_type[5:0] = `OPSB;
                     3'b001: op_type[5:0] = `OPSH;
@@ -243,15 +261,21 @@ module ID(
                 operand1_sel    = 1'b0;   
                 operand2_sel    = 1'b0;
                 // data conflict
-                registerReadStatus[rs1_idx] = 1'b1;
-                registerReadStatus[rs2_idx] = 1'b1;
-                if(registerWriteStatus[rs1_idx] || registerWriteStatus[rs2_idx]) begin
+                if(registerWriteStatus[rs1_idx] != 64'b0) begin
                     data_conflict = 1'b1;
+                    conflictRegisterRs1 = rs1_idx;
+                    isConflictRegisterRs1 = 1'b1;
                     flush = 1'b1;
                     next_ena = 1'b0;
                 end
-                else data_conflict = 1'b0;
-                registerWriteStatus[rd_idx] = 1'b1;
+                if(registerWriteStatus[rs2_idx] != 64'b0) begin
+                    data_conflict = 1'b1;
+                    conflictRegisterRs2 = rs2_idx;
+                    isConflictRegisterRs2 = 1'b1;
+                    flush = 1'b1;
+                    next_ena = 1'b0;
+                end
+                registerWriteStatus[rd_idx] = registerWriteStatus[rd_idx] + 1'b1;
                 // RVM
                 if(IR[31:25] == 7'b0000001) begin
                     // MUL
@@ -306,21 +330,27 @@ module ID(
                 op_type = `OPALU;
                 alu_type = `ALUNO;
                 // data_conflict
-                registerWriteStatus[rd_idx] = 1'b1;
+                registerWriteStatus[rd_idx] = registerWriteStatus[rd_idx] + 1'b1;
             end
             // B
             else if(IR[6:2] == 5'b11000) begin
                 operand1_sel    = 1'b1;
                 operand2_sel    = 1'b1;   // select imm
                 imm = {{20{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
-                registerReadStatus[rs1_idx] = 1'b1;
-                registerReadStatus[rs2_idx] = 1'b1;
-                if(registerWriteStatus[rs1_idx] || registerWriteStatus[rs2_idx]) begin
+                if(registerWriteStatus[rs1_idx] != 64'b0) begin
                     data_conflict = 1'b1;
+                    conflictRegisterRs1 = rs1_idx;
+                    isConflictRegisterRs1 = 1'b1;
                     flush = 1'b1;
                     next_ena = 1'b0;
                 end
-                else data_conflict = 1'b0;
+                if(registerWriteStatus[rs2_idx] != 64'b0) begin
+                    data_conflict = 1'b1;
+                    conflictRegisterRs2 = rs2_idx;
+                    isConflictRegisterRs2 = 1'b1;
+                    flush = 1'b1;
+                    next_ena = 1'b0;
+                end
                 alu_type = `ALUADD;
                 case(IR[14:12])
                     3'b000: op_type = `OPBEQ;
@@ -337,11 +367,16 @@ module ID(
                 operand2_sel    = 1'b1;   // select imm
                 imm[31:0] = {{20{IR[31]}}, IR[31:20]};
                 op_type = `OPJALR;
-                alu_type = `ALUADD;
+                alu_type = `ALUNO;
                 // data_conflict
-                if(registerWriteStatus[rs1_idx]) data_conflict = 1'b1;
-                else data_conflict = 1'b0;
-                registerWriteStatus[rd_idx] = 1'b1;
+                if(registerWriteStatus[rs1_idx] != 64'b0) begin
+                    data_conflict = 1'b1;
+                    conflictRegisterRs1 = rs1_idx;
+                    isConflictRegisterRs1 = 1'b1;
+                    flush = 1'b1;
+                    next_ena = 1'b0;
+                end
+                registerWriteStatus[rd_idx] = registerWriteStatus[rd_idx] + 1'b1;
             end
             // jal
             else if(IR[6:2] == 5'b11011) begin
@@ -349,47 +384,53 @@ module ID(
                 operand2_sel    = 1'b1;   // select imm
                 imm = {{12{IR[31]}}, IR[19:12], IR[20], IR[30:21], 1'b0};
                 op_type = `OPJAL;
-                alu_type = `ALUADD;
+                alu_type = `ALUNO;
                 registerWriteStatus[IR[11:7]] = 1'b1;
             end
             // ebreak ecall csr
             else if (IR[6:2] == 5'b11100) begin
                 // ecall
-                if(IR[14:12] == 3'b000 && IR[31:20] == 12'd0) begin
-                    op_type = `OPECALL;
-                    // mepc csr reg 0x341
-                    csr_idx = `mepc;
-                end
-                operand1_sel = 1'b0;
-                alu_type = `ALUNO;
-                // data_conflict
-                if(registerWriteStatus[rs1_idx]) begin
-                    data_conflict = 1'b1;
-                    flush = 1'b1;
-                    next_ena = 1'b0;
-                end
-                else data_conflict = 1'b0;
-                registerWriteStatus[rd_idx] = 1'b1;
-                // csrrwi cssrrsi csrrci
-                if(IR[14] == 1'b1) begin
-                    operand2_sel = 1'b1;
-                    imm = {27'b0, IR[24:20]};
-                    case(IR[13:12])
-                        2'b01: op_type = `OPCSRRWI;
-                        2'b10: op_type = `OPCSRRSI;
-                        2'b11: op_type = `OPCSRRCI;
-                        default: op_type = `OPALU;
-                    endcase
+                if(IR[14:12] == 3'b000) begin
+                    if(IR[31:20] == 12'd0) begin
+                        op_type = `OPECALL;
+                    end
+                    else begin  // IR[31:20] == 12'd1;
+                        op_type = `OPSRET;
+                    end
                 end
                 else begin
-                    operand2_sel = 1'b0;
-                    case(IR[13:12])
-                        //2'b00: op_type <= `OPCSRRWI;
-                        2'b01: op_type = `OPCSRRW;
-                        2'b10: op_type = `OPCSRRS;
-                        2'b11: op_type = `OPCSRRC;
-                        default: op_type = `OPALU;
-                    endcase
+                    operand1_sel = 1'b0;
+                    alu_type = 4'b1111;
+                    // data_conflict
+                    if(registerWriteStatus[rs1_idx] != 64'b0) begin
+                        data_conflict = 1'b1;
+                        conflictRegisterRs1 = rs1_idx;
+                        isConflictRegisterRs1 = 1'b1;
+                        flush = 1'b1;
+                        next_ena = 1'b0;
+                    end
+                    registerWriteStatus[rd_idx] = registerWriteStatus[rd_idx] + 1'b1;
+                    // csrrwi cssrrsi csrrci
+                    if(IR[14] == 1'b1) begin
+                        operand2_sel = 1'b1;
+                        imm = {27'b0, IR[24:20]};
+                        case(IR[13:12])
+                            2'b01: op_type = `OPCSRRWI;
+                            2'b10: op_type = `OPCSRRSI;
+                            2'b11: op_type = `OPCSRRCI;
+                            default: op_type = `OPALU;
+                        endcase
+                    end
+                    else begin
+                        operand2_sel = 1'b0;
+                        case(IR[13:12])
+                            //2'b00: op_type <= `OPCSRRWI;
+                            2'b01: op_type = `OPCSRRW;
+                            2'b10: op_type = `OPCSRRS;
+                            2'b11: op_type = `OPCSRRC;
+                            default: op_type = `OPALU;
+                        endcase
+                    end
                 end
             end
             //fld
@@ -399,14 +440,14 @@ module ID(
                 imm[31:0]       = {{20{IR[31]}}, IR[31:20]};
                 alu_type[3:0]   = `ALUADD;
                 // data_conflict
-                registerReadStatus[rs1_idx] = 1'b1;
-                if(registerWriteStatus[rs1_idx]) begin
+                if(registerWriteStatus[rs1_idx] != 64'b0) begin
                     data_conflict = 1'b1;
+                    conflictRegisterRs1 = rs1_idx;
+                    isConflictRegisterRs1 = 1'b1;
                     flush = 1'b1;
                     next_ena = 1'b0;
                 end
-                else data_conflict = 1'b0;
-                registerWriteStatus[rd_idx + 32] = 1'b1;
+                registerWriteStatus[rd_idx + 32] = registerWriteStatus[rd_idx + 32] + 1'b1;
                 op_type[5:0] = `OPFLD;
             end
             //fsd
@@ -415,14 +456,20 @@ module ID(
                 operand2_sel    = 1'b1;   // select imm
                 imm[31:0]       = {{20{IR[31]}}, IR[31:25], IR[11:7]};
                 alu_type[3:0]   = `ALUADD;
-                registerReadStatus[rs1_idx] = 1'b1;
-                registerReadStatus[rs2_idx + 32] = 1'b1;
-                if(registerWriteStatus[rs1_idx] || registerWriteStatus[rs2_idx + 32]) begin
+                if(registerWriteStatus[rs1_idx] != 64'b0) begin
                     data_conflict = 1'b1;
+                    conflictRegisterRs1 = rs1_idx;
+                    isConflictRegisterRs1 = 1'b1;
                     flush = 1'b1;
                     next_ena = 1'b0;
                 end
-                else data_conflict = 1'b0;
+                if(registerWriteStatus[rs2_idx + 32] != 64'b0) begin
+                    data_conflict = 1'b1;
+                    conflictRegisterRs2 = rs1_idx + 64'd32;
+                    isConflictRegisterRs2 = 1'b1;
+                    flush = 1'b1;
+                    next_ena = 1'b0;
+                end
                 op_type[5:0] = `OPFSD;
             end
             //fdivd fmuld
@@ -430,15 +477,21 @@ module ID(
                 operand1_sel    = 1'b0;   
                 operand2_sel    = 1'b0;
                 // data conflict
-                registerReadStatus[rs1_idx + 32] = 1'b1;
-                registerReadStatus[rs2_idx + 32] = 1'b1;
-                if(registerWriteStatus[rs1_idx + 32] || registerWriteStatus[rs2_idx + 32]) begin
+                if(registerWriteStatus[rs1_idx + 64'd32] != 64'b0) begin
                     data_conflict = 1'b1;
+                    conflictRegisterRs1 = rs1_idx + 64'd32;
+                    isConflictRegisterRs1 = 1'b1;
                     flush = 1'b1;
                     next_ena = 1'b0;
                 end
-                else data_conflict = 1'b0;
-                registerWriteStatus[rd_idx + 32] = 1'b1;
+                if(registerWriteStatus[rs2_idx + 64'd32] != 64'b0) begin
+                    data_conflict = 1'b1;
+                    conflictRegisterRs1 = rs2_idx + 64'd32;
+                    isConflictRegisterRs2 = 1'b1;
+                    flush = 1'b1;
+                    next_ena = 1'b0;
+                end
+                registerWriteStatus[rd_idx + 32] = registerWriteStatus[rd_idx + 32] + 1'b1;
                 float_rm = IR[14:12];
                 //fmuld
                 if (IR[31:25] == 7'b0001001) begin
@@ -468,11 +521,35 @@ module ID(
 
     always @(posedge clk) begin
         if (wb) begin
-            registerWriteStatus[wb_idx] = 1'b0;
+            if (registerWriteStatus[wb_idx] != 64'b0) begin
+                registerWriteStatus[wb_idx] = registerWriteStatus[wb_idx] - 1'b1;
+            end
             if (data_conflict) begin
-                data_conflict = |(registerWriteStatus & registerReadStatus);
-                if (~data_conflict && wb_idx == rd_idx) registerWriteStatus[rd_idx] = 1'b1;
-                if (~data_conflict) registerReadStatus = 32'b0;
+                if(isConflictRegisterRs1 && conflictRegisterRs1 < 64'd32) begin
+                    if (registerWriteStatus[conflictRegisterRs1] == 64'b0) isConflictRegisterRs1=1'b0;
+                    if (registerWriteStatus[conflictRegisterRs1] == 64'b1 && rd_idx == wb_idx && conflictRegisterRs1 == rd_idx) isConflictRegisterRs1=1'b0;
+                end
+                if(isConflictRegisterRs2 && conflictRegisterRs2 < 64'd32) begin
+                    if (registerWriteStatus[conflictRegisterRs2] == 64'b0) isConflictRegisterRs2=1'b0;
+                    if (registerWriteStatus[conflictRegisterRs2] == 64'b1 && rd_idx == wb_idx && conflictRegisterRs2 == rd_idx) isConflictRegisterRs2=1'b0;
+                end
+                data_conflict = isConflictRegisterRs1 | isConflictRegisterRs2;
+            end
+        end
+        if (wb_float) begin
+            if (registerWriteStatus[wb_float_idx + 64'd32] != 64'b0) begin
+                registerWriteStatus[wb_float_idx + 64'd32] = registerWriteStatus[wb_float_idx + 64'd32] - 1'b1;
+            end
+            if (data_conflict) begin
+                if(isConflictRegisterRs1 && conflictRegisterRs1 > 64'd31) begin
+                    if (registerWriteStatus[conflictRegisterRs1] == 64'b0) isConflictRegisterRs1=1'b0;
+                    if (registerWriteStatus[conflictRegisterRs1] == 64'b1 && rd_idx == wb_float_idx && conflictRegisterRs1 == rd_idx) isConflictRegisterRs1=1'b0;
+                end
+                if(isConflictRegisterRs2 && conflictRegisterRs2 > 64'd31) begin
+                    if (registerWriteStatus[conflictRegisterRs2] == 64'b0) isConflictRegisterRs2=1'b0;
+                    if (registerWriteStatus[conflictRegisterRs2] == 64'b1 && rd_idx == wb_float_idx && conflictRegisterRs1 == rd_idx) isConflictRegisterRs2=1'b0;
+                end
+                data_conflict = isConflictRegisterRs1 | isConflictRegisterRs2;
             end
         end
     end

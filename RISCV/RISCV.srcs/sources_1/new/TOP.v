@@ -126,9 +126,6 @@ module TOP(
     wire                EX_next_ena_out;
     wire                EX_store_ena_out;
     wire    [63:0]      EX_ex_float_output;
-    wire    [2:0]       EX_float_rm_out;
-    wire    [2:0]       EX_float_rm_val;
-    wire    [4:0]       EX_fflags_accured_exceptions;
 
     EX ex_unit(
         .clk(clk),
@@ -160,9 +157,6 @@ module TOP(
 
         .ex_output(EX_ex_output_out),
         .ex_float_output(EX_ex_float_output),
-        .float_rm_out(EX_float_rm_out),
-        .float_rm_val(EX_float_rm_val),
-        .fflags_accured_exceptions(EX_fflags_accured_exceptions),
         .pc_sel(EX_pc_sel_out),
         .new_pc(EX_new_pc_out),
         .mask(EX_mask_out),
@@ -179,9 +173,6 @@ module TOP(
     wire    [31:0]      MEM_imm_out;
     wire    [11:0]      MEM_csr_idx_out;
     wire                MEM_next_ena_out;
-    wire    [2:0]       MEM_float_rm_out;
-    wire    [2:0]       MEM_float_rm_val_out;
-    wire    [4:0]       MEM_fflags_accured_exceptions_out;
 
     // MEM
      MEM mem_unit(
@@ -190,9 +181,6 @@ module TOP(
         .start(EX_next_ena_out),
         .ex_output(EX_ex_output_out),
         .ex_float_output(EX_ex_float_output),
-        .float_rm(EX_float_rm_out),
-        .float_rm_val(EX_float_rm_val),
-        .fflags_accured_exceptions(EX_fflags_accured_exceptions),
         .rd_idx(EX_rd_idx_out),
         .op_type(EX_op_type_out),
         .rs1_val(EX_rs1_val_out),
@@ -207,9 +195,6 @@ module TOP(
 
         .rd_val(MEM_rd_val_out),
         .rd_float_val(MEM_rd_float_val_out),
-        .float_rm_out(MEM_float_rm_out),
-        .float_rm_val_out(MEM_float_rm_val_out),
-        .fflags_accured_exceptions_out(MEM_fflags_accured_exceptions_out),
         .rd_idx_out(MEM_rd_idx_out),
         .op_type_out(MEM_op_type_out),
         .rs1_val_out(MEM_rs1_val_out),
@@ -231,9 +216,6 @@ module TOP(
         .rs1_val(MEM_rs1_val_out),
         .imm(MEM_imm_out),
         .csr_idx(MEM_csr_idx_out),
-        .float_rm(MEM_float_rm_out),
-        .float_rm_val(MEM_float_rm_val_out),
-        .fflags_accured_exceptions(MEM_fflags_accured_exceptions_out),
 
         .wb(WB_wb_out),
         .wb_idx(WB_wb_idx_out),
@@ -393,7 +375,8 @@ module TOP(
         // IF input
         clk = 1'b0;
         rst = 1'b1;
-        IF_PC_in = 32'b0;
+        IF_PC_in = 32'h0001008c;
+//        IF_PC_in = 32'h00000000;
         IF_start_in = 1'b1;
     end
     

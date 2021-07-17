@@ -54,7 +54,7 @@ module RegisterFiles(clk, rst, rs1_idx, rs2_idx, rs1_val, rs2_val, wb, wb_idx, w
         if (rst) begin
                 registers[0]    <= 32'h0000_0000;
                 registers[1]    <= 32'h0000_0000;
-                registers[2]    <= 32'h0000_0000;
+                registers[2]    <= 32'h0000_5000;
                 registers[3]    <= 32'h0000_0000;
                 registers[4]    <= 32'h0000_0000;
                 registers[5]    <= 32'h0000_0000;
@@ -86,7 +86,7 @@ module RegisterFiles(clk, rst, rs1_idx, rs2_idx, rs1_val, rs2_val, wb, wb_idx, w
                 registers[31]   <= 32'h0000_0000;
             end
         else if (wb)
-                registers[wb_idx] <= wb_val;
+                if (wb_idx != 32'b0) registers[wb_idx] <= wb_val;
     end
 
 

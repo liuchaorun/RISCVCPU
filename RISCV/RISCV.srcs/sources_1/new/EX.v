@@ -55,9 +55,6 @@ module EX(
 
         output      reg         [31:0]      ex_output,           // address or rd_val
         output      reg         [63:0]      ex_float_output,
-        output      reg         [2:0]       float_rm_out,
-        output      reg         [2:0]       float_rm_val,
-        output      reg         [4:0]       fflags_accured_exceptions,
         output      reg         [31:0]      new_pc,
         output      reg                     pc_sel,
         output      reg         [7:0]       mask,
@@ -72,6 +69,9 @@ module EX(
     reg compare;
     reg [63:0] rs1_val_64 = 64'b0;
     reg [63:0] rs2_val_64 = 64'b0;
+
+    // CSR
+    reg[31:0] csr[4095:0];
     
     //float
     reg s1;
@@ -82,9 +82,21 @@ module EX(
     reg [52:0] m2;
     reg [11:0] e_result;
     reg [105:0] m_result;
+    reg[2:0] rm;
+    reg float_flag;
+    reg [11:0] e;
+    reg s;
+    reg [53:0] m;
+    reg [2:0] float_rm_val;
     
     initial begin
         new_pc = 32'b0;
+        csr[`mtvec] = 32'h4;
+        csr[12'h140] = 32'h0000_6000;
+        csr[12'h141] = 32'h0000_0000;
+        csr[12'h142] = 32'h0000_0000;
+        csr[12'h143] = 32'h0000_0000;
+        csr[12'h100] = 32'h0000_0000;
     end
 
     always @(posedge clk or posedge rst) begin
@@ -95,7 +107,6 @@ module EX(
             next_ena            <= 1'b0;
             compare             <= 1'b0;
             store_ena            = 1'b0;
-            fflags_accured_exceptions = 5'b0;
         end
         else if(start & ~pc_sel) begin
             // just forward
@@ -109,7 +120,6 @@ module EX(
             next_ena            <= 1'b1;
             compare             <= 1'b0;
             store_ena            = 1'b0;
-            fflags_accured_exceptions = 5'b0;
             // PC
             case(op_type)
                 // store
@@ -181,9 +191,60 @@ module EX(
                 end
                 `OPJALR: begin    
                     pc_sel <= 1'b1;
-                    new_pc = PC + imm;
+                    new_pc = rs1_val + imm;
+                    new_pc[0] = 1'b0;
                     mask <= 4'b0000;
                 end
+                // CSR
+                `OPECALL: begin
+                    // 1. nextPC -> mepc
+                    csr[`mepc] = PC + 3'b100;
+                    // 2. supervisor software interupt -> mcause
+                    csr[`mcause] = 32'h80000001;
+                    // 3. exception information -> mtval
+                    csr[`mtval] = 32'b0;
+                    // 4. mstatus: MIE -> SPIE, machine mode(1) -> SPP, 0 -> SIE
+                    csr[`mstatus][5] = csr[`mstatus][3];
+                    csr[`mstatus][8] = 1'b1;
+                    csr[`mstatus][1] = 1'b0;
+                    // 5. mtvec -> new  PC
+                    pc_sel <= 1'b1;
+                    new_pc = csr[`mtvec];
+                end
+                `OPSRET: begin
+                    // 1. mepc -> new  PC
+                    pc_sel <= 1'b1;
+                    new_pc = csr[`mepc];
+                    // 2. SPIE -> SIE, 1 -> SPIE, machine mode(11) -> MPP
+                    csr[`mstatus][1] = csr[`mstatus][5];
+                    csr[`mstatus][5] = 1'b1;
+                    csr[`mstatus][12:11] = 2'b11;
+                end
+                `OPCSRRW: begin
+                    ex_output = csr[csr_idx];
+                    csr[csr_idx] = rs1_val;
+                end 
+                `OPCSRRWI: begin
+                    ex_output = csr[csr_idx];
+                    csr[csr_idx] = imm;
+                end
+                `OPCSRRS: begin
+                    ex_output = csr[csr_idx];
+                    csr[csr_idx] = rs1_val | csr[csr_idx];
+                end
+                `OPCSRRSI: begin
+                    ex_output = csr[csr_idx];
+                    csr[csr_idx] = imm | csr[csr_idx];
+                end
+                `OPCSRRC: begin
+                    ex_output = csr[csr_idx];
+                    csr[csr_idx] = ~rs1_val & csr[csr_idx];
+                end
+                `OPCSRRCI: begin
+                    ex_output = csr[csr_idx];
+                    csr[csr_idx] = ~imm & csr[csr_idx];
+                end
+
                 `OPMUL: begin
                     rs1_val_64 = {{32{rs1_val[31]}} ,rs1_val};
                     rs2_val_64 = {{32{rs1_val[31]}} ,rs2_val};
@@ -243,16 +304,16 @@ module EX(
                     //infine or nan?
                     if (e1 == 11'b111_1111_1111 || e2 == 11'b111_1111_1111) begin
                         if ((e1 == 11'b111_1111_1111 && rs1_float_val[51:0] != 52'b0) || (e2 == 11'b111_1111_1111 && rs2_float_val[51:0] != 52'b0)) begin
-                            fflags_accured_exceptions[4] = 1'b1;
+                            csr[`fflags][4] = 1'b1;
                             ex_float_output = {s1^s2, 11'b111_1111_1111, 52'hf_ffff_ffff_ffff};
                         end
                         else begin
                             if ((e1 == 11'b0 && rs1_float_val[51:0] == 52'b0) && (e2 == 11'b111_1111_1111 && rs2_float_val[51:0] == 52'b0)) begin
-                                fflags_accured_exceptions[4] = 1'b1;
+                                csr[`fflags][4] = 1'b1;
                                 ex_float_output = {s1^s2, 11'b111_1111_1111, 52'hf_ffff_ffff_ffff};
                             end
                             else if ((e1 == 11'b111_1111_1111 && rs1_float_val[51:0] == 52'b0) && (e2 == 11'b0 && rs2_float_val[51:0] == 52'b0)) begin
-                                fflags_accured_exceptions[4] = 1'b1;
+                                csr[`fflags][4] = 1'b1;
                                 ex_float_output = {s1^s2, 11'b111_1111_1111, 52'hf_ffff_ffff_ffff};
                             end
                             else begin
@@ -268,20 +329,90 @@ module EX(
                     else begin
                         if (m_result[105] == 1'b1) begin
                             e_result = e1 + e2 - 1023 + 1;
-                            if (e_result[11:10] == 2'b10 || e_result[10:0] == 11'b111_1111_1111) fflags_accured_exceptions[2] = 1'b1;
-                            else if (e_result[11:10] == 2'b11 || e_result[10:0] == 11'b000_0000_0000) fflags_accured_exceptions[1] = 1'b1;
+                            if (e_result[11:10] == 2'b10 || e_result[10:0] == 11'b111_1111_1111) csr[`fflags][2] = 1'b1;
+                            else if (e_result[11:10] == 2'b11 || e_result[10:0] == 11'b000_0000_0000) csr[`fflags][1] = 1'b1;
                             ex_float_output = {s1^s2, e_result[10:0], m_result[104:53]};
                             float_rm_val = m_result[52:50];
                         end
                         else begin
                             e_result = e1 + e2 - 1023;
-                            if (e_result[11:10] == 2'b10 || e_result[10:0] == 11'b111_1111_1111) fflags_accured_exceptions[2] = 1'b1;
-                            else if (e_result[11:10] == 2'b11 || e_result[10:0] == 11'b000_0000_0000) fflags_accured_exceptions[1] = 1'b1;
+                            if (e_result[11:10] == 2'b10 || e_result[10:0] == 11'b111_1111_1111) csr[`fflags][2] = 1'b1;
+                            else if (e_result[11:10] == 2'b11 || e_result[10:0] == 11'b000_0000_0000) csr[`fflags][1] = 1'b1;
                             ex_float_output = {s1^s2, e_result[10:0], m_result[103:52]};
                             float_rm_val = m_result[51:49];
                         end
+                        if (csr[`fflags][2] == 1'b1) begin
+                            if (float_rm == 3'b000 || float_rm == 3'b100) ex_float_output = {s, 11'b111_1111_1111, 52'b0};
+                            else if (float_rm == 3'b010 && ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b111_1111_1111, 52'b0};
+                            else if (float_rm == 3'b010 && ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b111_1111_1110, 52'hf_ffff_ffff_ffff};
+                            else if (float_rm == 3'b011 && ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                            else if (float_rm == 3'b011 && ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b111_1111_1111, 52'b0};
+                            else if (float_rm == 3'b001 && ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                            else if (float_rm == 3'b001 && ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b111_1111_1110, 52'hf_ffff_ffff_ffff};
+                            end
+                        else if (csr[`fflags][1] == 1'b1) begin
+                            if (ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                            else if (ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                        end
+                        if (float_rm == 3'b111) rm = csr[`fflags][7:5];
+                        else rm = float_rm;
+                        case(rm)
+                            //RNE
+                            3'b000: begin
+                                if (float_rm_val == 3'b100) begin
+                                    float_flag =  ex_float_output[0];
+                                end
+                                else begin
+                                    float_flag = float_rm_val[2];
+                                end
+                            end
+                            //RTZ
+                            3'b001: begin
+                                float_flag = 1'b0;
+                            end
+                            //RDN
+                            3'b010: begin
+                            if (ex_float_output[63] == 1'b1) float_flag = 1'b1;
+                            else float_flag = 1'b0;
+                            end
+                            //RUP
+                            3'b011: begin
+                                if (ex_float_output[63] == 1'b0) float_flag = 1'b1;
+                                else float_flag = 1'b0;
+                            end
+                            //RMM
+                            3'b100: begin
+                                if (float_rm_val == 3'b100) begin
+                                
+                                end
+                                else begin
+                                    float_flag = float_rm_val[2];
+                                end
+                            end
+                        endcase
+                        if (float_flag == 1'b1) begin
+                            s = ex_float_output[63];
+                            e[10:0] = ex_float_output[62:52];
+                            m[51:0] = ex_float_output[51:0];
+                            m[52] = 1'b1;
+                            m = m + 1'b1;
+                            if (m[53] == 1'b1) begin
+                                e = e + 1;
+                                if (e[11] == 1'b1) begin
+                                    csr[`fflags][2] = 1'b1;
+                                    if (rm == 3'b000 || rm == 3'b100) ex_float_output = {s, 11'b111_1111_1111, 52'b0};
+                                    else if (rm == 3'b010 && ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b111_1111_1111, 52'b0};
+                                    else if (rm == 3'b010 && ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b111_1111_1110, 52'hf_ffff_ffff_ffff};
+                                    else if (rm == 3'b011 && ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                                    else if (rm == 3'b011 && ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b111_1111_1111, 52'b0};
+                                end
+                                else ex_float_output = {s, e[10:0], m[52:1]};
+                            end
+                            else begin
+                                ex_float_output = {s, e[10:0], m[51:0]};
+                            end 
+                        end
                     end
-                    
                 end
                 `OPFDIVD: begin
                     s1 = rs1_float_val[63];
@@ -293,17 +424,17 @@ module EX(
                      //infine or nan?
                     if (e1 == 11'b111_1111_1111 || e2 == 11'b111_1111_1111) begin
                         if ((e1 == 11'b111_1111_1111 && rs1_float_val[51:0] != 52'b0) || (e2 == 11'b111_1111_1111 && rs2_float_val[51:0] != 52'b0)) begin
-                            fflags_accured_exceptions[4] = 1'b1;
+                            csr[`fflags][4] = 1'b1;
                             ex_float_output = {s1^s2, 11'b111_1111_1111, 52'hf_ffff_ffff_ffff};
                         end
                         else begin
                             if ((e1 == 11'b111_1111_1111 && rs1_float_val[51:0] == 52'b0) && (e2 == 11'b111_1111_1111 && rs2_float_val[51:0] == 52'b0)) begin
-                                fflags_accured_exceptions[4] = 1'b1;
+                                csr[`fflags][4] = 1'b1;
                                 ex_float_output = {s1^s2, 11'b111_1111_1111, 52'hf_ffff_ffff_ffff};
                             end
                             else if ((e1 == 11'b111_1111_1111 && rs1_float_val[51:0] == 52'b0)) begin
                                 if ((e2 == 11'b0 && rs2_float_val[51:0] == 52'b0)) begin
-                                    fflags_accured_exceptions[3] = 1'b1;
+                                    csr[`fflags][3] = 1'b1;
                                     ex_float_output = {s1^s2, 11'b111_1111_1111, 52'hf_ffff_ffff_ffff};
                                 end
                                 else begin
@@ -318,12 +449,12 @@ module EX(
                     //0
                     else if ((e1 == 11'b0 && rs1_float_val[51:0] == 52'b0) || (e2 == 11'b0 && rs2_float_val[51:0] == 52'b0)) begin
                         if ((e1 == 11'b0 && rs1_float_val[51:0] == 52'b0) && (e2 == 11'b0 && rs2_float_val[51:0] == 52'b0)) begin
-                            fflags_accured_exceptions[3] = 1'b1;
-                            fflags_accured_exceptions[4] = 1'b1;
+                            csr[`fflags][3] = 1'b1;
+                            csr[`fflags][4] = 1'b1;
                             ex_float_output = {s1^s2, 11'b111_1111_1111, 52'hf_ffff_ffff_ffff};
                         end
                         else if ((e2 == 11'b0 && rs2_float_val[51:0] == 52'b0)) begin
-                            fflags_accured_exceptions[3] = 1'b1;
+                            csr[`fflags][3] = 1'b1;
                             ex_float_output = {s1^s2, 11'b111_1111_1111, 52'hf_ffff_ffff_ffff};
                         end
                         else begin
@@ -334,10 +465,81 @@ module EX(
                     else begin
                         m_result = {m1, 55'b0}/m2;
                         e_result = e1 - e2 + 1023;
-                        if (e_result[11:10] == 2'b10 || e_result[10:0] == 11'b111_1111_1111) fflags_accured_exceptions[2] = 1'b1;
-                        else if (e_result[11:10] == 2'b11 || e_result[10:0] == 11'b000_0000_0000) fflags_accured_exceptions[1] = 1'b1;
+                        if (e_result[11:10] == 2'b10 || e_result[10:0] == 11'b111_1111_1111) csr[`fflags][2] = 1'b1;
+                        else if (e_result[11:10] == 2'b11 || e_result[10:0] == 11'b000_0000_0000) csr[`fflags][1] = 1'b1;
                         ex_float_output = {s1^s2, e_result[10:0], m_result[54:3]};
                         float_rm_val = m_result[2:0];
+                        if (csr[`fflags][2] == 1'b1) begin
+                            if (float_rm == 3'b000 || float_rm == 3'b100) ex_float_output = {s, 11'b111_1111_1111, 52'b0};
+                            else if (float_rm == 3'b010 && ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b111_1111_1111, 52'b0};
+                            else if (float_rm == 3'b010 && ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b111_1111_1110, 52'hf_ffff_ffff_ffff};
+                            else if (float_rm == 3'b011 && ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                            else if (float_rm == 3'b011 && ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b111_1111_1111, 52'b0};
+                            else if (float_rm == 3'b001 && ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                            else if (float_rm == 3'b001 && ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b111_1111_1110, 52'hf_ffff_ffff_ffff};
+                            end
+                        else if (csr[`fflags][1] == 1'b1) begin
+                            if (ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                            else if (ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                        end
+                        if (float_rm == 3'b111) rm = csr[`fflags][7:5];
+                        else rm = float_rm;
+                        case(rm)
+                            //RNE
+                            3'b000: begin
+                                if (float_rm_val == 3'b100) begin
+                                    float_flag =  ex_float_output[0];
+                                end
+                                else begin
+                                    float_flag = float_rm_val[2];
+                                end
+                            end
+                            //RTZ
+                            3'b001: begin
+                                float_flag = 1'b0;
+                            end
+                            //RDN
+                            3'b010: begin
+                            if (ex_float_output[63] == 1'b1) float_flag = 1'b1;
+                            else float_flag = 1'b0;
+                            end
+                            //RUP
+                            3'b011: begin
+                                if (ex_float_output[63] == 1'b0) float_flag = 1'b1;
+                                else float_flag = 1'b0;
+                            end
+                            //RMM
+                            3'b100: begin
+                                if (float_rm_val == 3'b100) begin
+                                
+                                end
+                                else begin
+                                    float_flag = float_rm_val[2];
+                                end
+                            end
+                        endcase
+                        if (float_flag == 1'b1) begin
+                            s = ex_float_output[63];
+                            e[10:0] = ex_float_output[62:52];
+                            m[51:0] = ex_float_output[51:0];
+                            m[52] = 1'b1;
+                            m = m + 1'b1;
+                            if (m[53] == 1'b1) begin
+                                e = e + 1;
+                                if (e[11] == 1'b1) begin
+                                    csr[`fflags][2] = 1'b1;
+                                    if (rm == 3'b000 || rm == 3'b100) ex_float_output = {s, 11'b111_1111_1111, 52'b0};
+                                    else if (rm == 3'b010 && ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b111_1111_1111, 52'b0};
+                                    else if (rm == 3'b010 && ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b111_1111_1110, 52'hf_ffff_ffff_ffff};
+                                    else if (rm == 3'b011 && ex_float_output[63] == 1'b1) ex_float_output = {1'b1, 11'b000_0000_0000, 52'b0_0000_0000_0001};
+                                    else if (rm == 3'b011 && ex_float_output[63] == 1'b0) ex_float_output = {1'b0, 11'b111_1111_1111, 52'b0};
+                                end
+                                else ex_float_output = {s, e[10:0], m[52:1]};
+                            end
+                            else begin
+                                ex_float_output = {s, e[10:0], m[51:0]};
+                            end 
+                        end
                     end
                 end
                 default: begin

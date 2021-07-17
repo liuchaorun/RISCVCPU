@@ -32,43 +32,37 @@ module RAM(
     output [63:0] data
     );
 
-    reg[7:0] ram[65534:0];
+    reg[7:0] ram[327674:0];
     integer i;
 
     initial begin
-        for (i = 0; i < 65535; i = i + 1) ram[i] = 32'b0;
-        ram[0] = 8'd10; 
-        ram[4] = 8'd9;
-        ram[8] = 8'd8; 
-        ram[12] = 8'd7;
-        ram[16] = 8'd6; 
-        ram[20] = 8'd5;
-        ram[24] = 8'd4; 
-        ram[28] = 8'd3;
-        ram[32] = 8'd2; 
-        ram[36] = 8'd1;
+        for (i = 0; i < 327675; i = i + 1) ram[i] = 8'b0;
+//        $readmemh("C:\\Users\\chaorunliu\\Desktop\\files\\RISCVCPU\\RISCV\\RISCV.srcs\\sources_1\\Fibonacci_mem.txt", ram);
+        $readmemh("C:\\Users\\X\\Documents\\GitHub\\RISCVCPU\\RISCV\\RISCV.srcs\\sources_1\\BubbleSort_mem.txt", ram);
+        $display("r_addr = %h, data = %h",32'h00010074, ram[32'h00010074]);
     end
 
-    assign data = {ram[r_addr[15:0]+7], ram[r_addr[15:0]+6], ram[r_addr[15:0]+4], ram[r_addr[15:0]+4],ram[r_addr[15:0]+3], ram[r_addr[15:0]+2], ram[r_addr[15:0]+1], ram[r_addr[15:0]]};
+    assign data = {ram[r_addr[31:0]+7], ram[r_addr[31:0]+6], ram[r_addr[31:0]+4], ram[r_addr[31:0]+4],ram[r_addr[31:0]+3], ram[r_addr[31:0]+2], ram[r_addr[31:0]+1], ram[r_addr[31:0]]};
 
     always @(posedge clk) begin
         if (wen) begin
             if (mask[4] == 1'b0) begin
-                if (mask[0]) ram[r_addr[15:0]] <= w_data[7:0];
-                if (mask[1]) ram[r_addr[15:0]+1] <= w_data[15:8];
-                if (mask[2]) ram[r_addr[15:0]+2] <= w_data[23:16];
-                if (mask[3]) ram[r_addr[15:0]+3] <= w_data[31:24];
+                if (mask[0]) ram[w_addr[31:0]] <= w_data[7:0];
+                if (mask[1]) ram[w_addr[31:0]+1] <= w_data[15:8];
+                if (mask[2]) ram[w_addr[31:0]+2] <= w_data[23:16];
+                if (mask[3]) ram[w_addr[31:0]+3] <= w_data[31:24];
             end
             else begin
-                if (mask[0]) ram[r_addr[15:0]] <= w_float_data[7:0];
-                if (mask[1]) ram[r_addr[15:0]+1] <= w_float_data[15:8];
-                if (mask[2]) ram[r_addr[15:0]+2] <= w_float_data[23:16];
-                if (mask[3]) ram[r_addr[15:0]+3] <= w_float_data[31:24];
-                if (mask[4]) ram[r_addr[15:0]+4] <= w_float_data[39:32];
-                if (mask[5]) ram[r_addr[15:0]+5] <= w_float_data[47:40];
-                if (mask[6]) ram[r_addr[15:0]+6] <= w_float_data[55:48];
-                if (mask[7]) ram[r_addr[15:0]+7] <= w_float_data[63:56];
+                if (mask[0]) ram[w_addr[31:0]] <= w_float_data[7:0];
+                if (mask[1]) ram[w_addr[31:0]+1] <= w_float_data[15:8];
+                if (mask[2]) ram[w_addr[31:0]+2] <= w_float_data[23:16];
+                if (mask[3]) ram[w_addr[31:0]+3] <= w_float_data[31:24];
+                if (mask[4]) ram[w_addr[31:0]+4] <= w_float_data[39:32];
+                if (mask[5]) ram[w_addr[31:0]+5] <= w_float_data[47:40];
+                if (mask[6]) ram[w_addr[31:0]+6] <= w_float_data[55:48];
+                if (mask[7]) ram[w_addr[31:0]+7] <= w_float_data[63:56];
             end
+            $display("w_addr = %h, data = %h",w_addr, w_data);
         end
     end
 

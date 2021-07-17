@@ -42,7 +42,7 @@ module IF(
     prgROM instMem(
         .clka(clk),             // input wire clka
         .ena(start),
-        .addra(PC[15:2]),       // input wire [13:0] addra
+        .addra(PC[19:2]),       // input wire [17:0] addra
         .douta(instruction)     // output wire [31:0] douta
     );
     
@@ -54,7 +54,8 @@ module IF(
     // next PC
     always @(posedge clk or posedge rst) begin
         if(rst)
-            next_PC[31:0] <= 32'd0;
+            next_PC[31:0] <= 32'h0001008c;
+//            next_PC[31:0] <= 32'h00000000;
         else begin
             if(start & ~data_conflict)
                 next_PC[31:0] = PC_sel ? PC_jmp[31:0] : (PC[31:0] + 3'b100);
