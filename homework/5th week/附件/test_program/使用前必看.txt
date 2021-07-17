@@ -1,0 +1,3 @@
+1. f.txt文件是ram初始化使用的，需要将ram中$readmemh("C:\\Users\\chaorunliu\\Desktop\\files\\RISCVCPU\\RISCV\\RISCV.srcs\\sources_1\\f.txt", ram);的地址换成本机使用的地址。
+
+2. Fibonacci.coe是指令寄存器使用的，需要在vivado下将instMem的初始化文件设置为它。

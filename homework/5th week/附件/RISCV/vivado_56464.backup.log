@@ -1,0 +1,23 @@
+#-----------------------------------------------------------
+# Vivado v2018.3 (64-bit)
+# SW Build 2405991 on Thu Dec  6 23:38:27 MST 2018
+# IP Build 2404404 on Fri Dec  7 01:43:56 MST 2018
+# Start of session at: Wed Jul 14 10:27:00 2021
+# Process ID: 56464
+# Current directory: C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent66900 C:\Users\chaorunliu\Desktop\files\RISCVCPU\RISCV\RISCV.xpr
+# Log file: C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/vivado.log
+# Journal file: C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/chaorunliu/Desktop/files/RISCVCPU/RISCV/RISCV.xpr
+INFO: [Project 1-313] Project file moved from 'C:/Users/X/Documents/GitHub/RISCVCPU/RISCV' since last save.
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [Common 17-41] Interrupt caught. Command should exit soon.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2018.3/data/ip'.
+INFO: [Common 17-344] 'open_project' was cupdate_coexit
+INFO: [Common 17-206] Exiting Vivado at Wed Jul 14 10:27:29 2021...
+at Wed Jul 14 10:27:26 2021...
